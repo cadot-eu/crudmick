@@ -2,7 +2,7 @@
 
 namespace App\Command\base;
 
-use App\Service\ParserDocblock;
+use App\Service\base\ParserDocblock;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -1,6 +1,7 @@
 {% extends '¤extends¤' %}
 {% set route =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))%}
 {% set action =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))| split('/')| last%}
+{% set current_path = app.request.get('_route') %}
 {#BLOCK#}
 {% block title %}
 	¤Entity¤
