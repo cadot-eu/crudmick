@@ -4,7 +4,7 @@ TWIG:join(',')
 OPT:{"multiple":true,"expanded":true}
 ATTR:{"data-controller":"onecheckbox"}
 
-Possibilités de surchargé les attr et opt
+Possibilités de surchargé les attr et opt .
 
 ## ALIAS
 
