@@ -28,6 +28,9 @@ Possibilités de surchargé les attr et opt .
 ## ID
 
 - hide:{"roles[0]":"ROLE_SUPERADMIN"}
+- no_created
+- no_deleted
+- no_updated
 
 ### TPL
 
