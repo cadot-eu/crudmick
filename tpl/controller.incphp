@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Service\FileUploader;
+use App\Service\base\FileUploader;
 //BLOCK
 /**
  * @Route("¤partie¤/¤entity¤")
