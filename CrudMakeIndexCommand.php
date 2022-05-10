@@ -48,28 +48,36 @@ class CrudMakeIndexCommand extends Command
                 $th[] = '<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "' . $name . '" ? \'active\' }} " href=\'?tri=' . $name . '&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}\'>' . $name . '</a></th>';
             }
         }
+        /* ------------------------- creation des idoptions ------------------------- */
+        $IDOptions = $docs->getOptions()['id'];
         //gestion du timetrait
-        $th[] = <<<'EOT'
+        $thtime = '';
+        if (!isset($IDOptions['tpl']['no_deleted']))
+            $thtime .= <<<'EOT'
         {%if action=="deleted" %}
             <th>
             <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'deletedAt' ? 'active' }} " href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a>
             </th>
         {% endif %}
+        EOT;
+        if (!isset($IDOptions['tpl']['no_created']))
+            $thtime .= <<<'EOT'
         <th>
             <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'createdAt' ? 'active' }} " href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a>
         </th>
+        EOT;
+        if (!isset($IDOptions['tpl']['no_updated']))
+            $thtime .= <<<'EOT'
         <th>
             <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'updatedAt' ? 'active' }} " href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a>
         </th>
         EOT;
+        $th[] = $thtime;
         /* ---------------------------------- body ---------------------------------- */
         $tableauChoice = '';
         foreach ($docs->getOptions() as $name => $options) {
             $class = []; //contient les class à insérer
-            /* ------------------------- creation des idoptions ------------------------- */
-            if ($name == 'id') {
-                $IDOptions = $options;
-            }
+
             /* ----------------------------- ajout des class ---------------------------- */
             if (isset($options['class'])) {
                 $class[] = implode(' ', array_keys($options['class']));
@@ -176,10 +184,12 @@ class CrudMakeIndexCommand extends Command
         //timestamptable
         $timestamptable = ['createdAt', 'updatedAt', 'deletedAt'];
         foreach ($timestamptable as $time) {
-            if ($name == 'deletedAt') {
-                $td[] .= "{%if action==\"deleted\" %}<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>{% endif %}";
-            } else {
-                $td[] .= "<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>";
+            if (!isset($IDOptions['tpl']['no_' . substr($time, 0, -2)])) {
+                if ($name == 'deletedAt') {
+                    $td[] .= "{%if action==\"deleted\" %}<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>{% endif %}";
+                } else {
+                    $td[] .= "<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>";
+                }
             }
         }
         /* --------------------------------- hide BY ID -------------------------------- */
