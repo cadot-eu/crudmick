@@ -88,6 +88,7 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'string':
                     case 'simple':
+                    case 'simplelanguage':
                     case 'choice':
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;

@@ -55,6 +55,10 @@ class CrudMakeTypeCommand extends Command
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
                         break;
+                    case 'simplelanguage':
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'simplelanguage';
+                        break;
                     case 'text':
                         $attrs['data-controller'] = 'base--ckeditor';
                         break;
