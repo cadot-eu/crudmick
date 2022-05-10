@@ -75,9 +75,10 @@ class CrudMakeIndexCommand extends Command
                 $class[] = implode(' ', array_keys($options['class']));
             }
             /* ---------------------------- gestion des twigs --------------------------- */
-            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(20, "...")';
+            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(20, \'...\')';
             /* ----------------------------- création des td ---------------------------- */
             if (!isset($options['tpl']['no_index'])) {
+                dump($docs->getSelect($name));
                 switch ($select = $docs->getSelect($name)) {
                     case 'generatedvalue': //id
                         /* Checking if the twig option is set, if it is, it will implode the array keys

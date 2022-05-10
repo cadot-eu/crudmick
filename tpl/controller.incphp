@@ -15,9 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\base\FileUploader;
 //BLOCK
-/**
- * @Route("¤partie¤/¤entity¤")
- */ class ¤Entity¤Controller extends AbstractController
+#[Route('¤partie¤/¤entity¤')]
+class ¤Entity¤Controller extends AbstractController
 {
     //BLOCK
     protected $em;
@@ -32,9 +31,7 @@ use App\Service\base\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                    INDEX                                   */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/", name="¤entity¤_index", methods={"GET"})
-     */
+    #[Route('/', name: '¤entity¤_index', methods: ['GET'])]
     public function index(¤Entity¤Repository $¤entity¤Repository, Request $request): Response
     {
         //BLOCK
@@ -55,9 +52,7 @@ use App\Service\base\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                   DELETED                                  */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/deleted", name="¤entity¤_deleted", methods={"GET"})
-     */
+    #[Route('/deleted', name: '¤entity¤_deleted', methods: ['GET'])]
     public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request): Response
     {
         //BLOCK
@@ -77,7 +72,7 @@ use App\Service\base\FileUploader;
             //BLOCK
             '¤entity¤s' => $tab¤Entity¤s,
             'pagesMaxi' => $maxi
-        ]);
+        ], Response::HTTP_SEE_OTHER);
     }
     //BLOCK
     /* -------------------------------------------------------------------------- */
@@ -96,17 +91,15 @@ use App\Service\base\FileUploader;
             $this->em->flush();
         }
         //BLOCK
-        return $this->redirectToRoute('¤entity¤_index');
+        return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
     }
     //BLOCK
 
     /* -------------------------------------------------------------------------- */
     /*                                NEW AND EDIT                                */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/new", name="¤entity¤_new", methods={"GET","POST"})
-     *  @Route("/{id}/edit", name="¤entity¤_edit", methods={"GET","POST"})
-     */
+    #[Route('/new', name: '¤entity¤_new', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: '¤entity¤_edit', methods: ['GET', 'POST'])]
     public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null, EntityManagerInterface $em): Response
     {
         //BLOCK
@@ -146,27 +139,13 @@ use App\Service\base\FileUploader;
                     //BLOCK
                 }
             //BLOCK
-            /* -------------------------------- language -------------------------------- */
-            // $list = $request->request->get('¤entity¤');
-            // $tab = [];
-            // foreach ($list as $name => $data) {
-            //     if (strpos($name, '_LANGUAGE_') !== false) {
-            //         $exp = explode('_LANGUAGE_', $name);
-            //         $tab[$exp[0]][$exp[1]] = $data;
-            //     }
-            // }
-            // foreach ($tab as $name => $value) {
-            //     $set = 'set' . ucfirst($name);
-            //     $¤entity¤->$set(json_encode($value));
-            // }
-            //BLOCK
             //TODO: par listener
             if ($¤entity¤->getcreatedAt() == 'null') $¤entity¤->setCreatedAt(new DateTime('now'));
             $¤entity¤->setUpdatedAt(new DateTime('now'));
             $em->persist($¤entity¤);
             $em->flush();
             //BLOCK
-            return $this->redirectToRoute('¤entity¤_index');
+            return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
         }
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/new.html.twig', [
@@ -179,9 +158,7 @@ use App\Service\base\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                    SHOW                                    */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/{id}", name="¤entity¤_show", methods={"GET"})
-     */
+    #[Route('/{id}', name: '¤entity¤_show', methods: ['GET'])]
     public function show(¤Entity¤ $¤entity¤): Response
     {
         //BLOCK
@@ -191,9 +168,7 @@ use App\Service\base\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                    CLONE                                   */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/{id}/clone", name="¤entity¤_clone", methods={"GET","POST"})
-     */
+    #[Route('/{id}/clone', name: '¤entity¤_clone', methods: ['GET', 'POST'])]
     public function clone(¤Entity¤ $¤entity¤c, EntityManagerInterface $em): Response
     {
         //BLOCK
@@ -209,15 +184,13 @@ use App\Service\base\FileUploader;
         $em->persist($¤entity¤);
         $em->flush();
         //BLOCK
-        return $this->redirectToRoute('¤entity¤_index');
+        return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
     }
     //BLOCK
     /* -------------------------------------------------------------------------- */
     /*                                   DELETE                                   */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/{id}", name="¤entity¤_delete", methods={"POST"})
-     */
+    #[Route('/{id}', name: '¤entity¤_delete', methods: ['POST'])]
     public function delete(Request $request, ¤Entity¤ $¤entity¤, EntityManagerInterface $em): Response
     {
         //BLOCK
@@ -236,9 +209,9 @@ use App\Service\base\FileUploader;
         }
         //BLOCK
         if ($request->request->has('delete_softdelete'))
-            return $this->redirectToRoute('¤entity¤_index');
+            return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
         else
-            return $this->redirectToRoute('¤entity¤_deleted');
+            return $this->redirectToRoute('¤entity¤_deleted', [], Response::HTTP_SEE_OTHER);
     }
     //BLOCK
 }

@@ -52,11 +52,11 @@ class CrudMakeTypeCommand extends Command
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
                     case 'simple':
-                        $attrs['data-controller'] = 'ckeditor';
-                        $attrs['data-ckeditor-toolbar-value'] = 'simple';
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
                         break;
                     case 'text':
-                        $attrs['data-controller'] = 'ckeditor';
+                        $attrs['data-controller'] = 'base--ckeditor';
                         break;
                     case 'password':
                         $tempadds = "->add('$name',RepeatedType::class,";
