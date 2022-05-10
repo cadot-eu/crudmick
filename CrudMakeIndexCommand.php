@@ -185,8 +185,8 @@ class CrudMakeIndexCommand extends Command
         /* --------------------------------- hide BY ID -------------------------------- */
         $ifhide = 'true ';
         if ((isset($IDOptions['hide']))) {
-            foreach ($IDOptions['hide'] as $hide) {
-                $ifhide .= "and $Entity." . key($hide) . "  != '" . $hide[key($hide)] . "'";
+            foreach ($IDOptions['hide'] as $champ => $hide) {
+                $ifhide .= "and $Entity." . $champ . "  != '" . $hide . "'";
             }
         }
 
