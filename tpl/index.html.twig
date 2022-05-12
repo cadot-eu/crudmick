@@ -135,6 +135,7 @@
 				{% endfor %}
 			{% endif %}
 			{# suivant #}
+
 			<li class="page-item {{ app.request.query.get('page') >= (pagesMaxi/10)|number_format ? 'disabled' }}">
 				{% if app.request.query.get('page')==0 %}
 					{% set suivant = 2 %}
