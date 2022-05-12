@@ -63,6 +63,7 @@ class ¤Entity¤Controller extends AbstractController
         $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
         $maxi = count($tab¤Entity¤s);
         if ($page * 10  > $maxi) $page = round($maxi / 10, 0);
+        if ($page == 0) $page = 1;
         $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [¤ordre¤];
         $¤entity¤s = array_slice($tab¤Entity¤s, ($page - 1) * 10, 10);
 
