@@ -9,6 +9,7 @@ Possibilités de surchargé les attr et opt .
 ## ALIAS
 
 - simple
+- simplelanguage
 - choice (options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"])
 - choiceenplace (options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"})
 - entity
