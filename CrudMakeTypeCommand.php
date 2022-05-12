@@ -45,11 +45,17 @@ class CrudMakeTypeCommand extends Command
         $uses = []; //content uses
         //variable
         $adds = [];
+        $IDOptions = $docs->getOptions()['id'];
         foreach ($docs->getOptions() as $name => $options) {
             $tempadds = '->add(\'' . $name . '\',null,';
             $opts = [];
             $attrs = [];
-            if (!isset($options['tpl']['no_form']) && $name != 'id') {
+            //timetrait
+            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
+                continue;
+            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated']))
+                continue;
+            if ((!isset($options['tpl']['no_form']) && $name != 'id')) {
                 switch ($select = $docs->getSelect($name)) {
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';

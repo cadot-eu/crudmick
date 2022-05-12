@@ -47,7 +47,13 @@ class CrudMakeNewCommand extends Command
         $uses = []; //content uses
         //variable
         $rows = [];
+        $IDOptions = $docs->getOptions()['id'];
         foreach ($docs->getOptions() as $name => $options) {
+            //timetrait
+            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
+                continue;
+            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated']))
+                continue;
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
                     case 'collection':

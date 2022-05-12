@@ -25,6 +25,11 @@ Possibilités de surchargé les attr et opt .
 - index_FileImage
 - index_FileImageNom
 
+## OPT et ATTR
+
+  - OPT:{"multiple":true,"expanded":true}
+  - ATTR:{"data-controller":"onecheckbox"}
+
 ## ID
 
 - hide:{"roles[0]":"ROLE_SUPERADMIN"}
@@ -37,3 +42,4 @@ Possibilités de surchargé les attr et opt .
 - no_action_add
 - no_access_deleted
 - ORDRE=nom=>ASC
+
