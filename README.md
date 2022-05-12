@@ -27,8 +27,8 @@ Possibilités de surchargé les attr et opt .
 
 ## OPT et ATTR
 
-  - OPT:{"multiple":true,"expanded":true}
-  - ATTR:{"data-controller":"onecheckbox"}
+  - `OPT:{"multiple":true,"expanded":true}`
+  - `ATTR:{"data-controller":"onecheckbox"}`
 
 ## ID
 
