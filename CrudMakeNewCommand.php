@@ -59,7 +59,7 @@ class CrudMakeNewCommand extends Command
                     </div>
                     <div class="col-sm-2 my-auto">
                     {% if ' . $entity . '.' . $name . ' %}
-                        <img  data-controller="bigpicture" bpsrc="{{asset(' . $entity . '.' . $name . ')}}" src="{{asset(form.vars.value.image)|imagine_filter(\'icone\')}}">
+                        <img  data-controller="base--bigpicture" bpsrc="{{asset(' . $entity . '.' . $name . ')}}" src="{{asset(form.vars.value.image)|imagine_filter(\'icone\')}}">
                     {% endif %}
                     </div>
                 </div>';
