@@ -58,14 +58,14 @@ class CrudMakeNewCommand extends Command
                 switch ($select = $docs->getSelect($name)) {
                     case 'collection':
                         break;
-                    case 'file':
+                    case 'image':
                         $rows[] = '<div class="mb-3 row"> {{form_label(form.image)}}
                     <div class="col-sm-8">
                         {{form_widget(form.image)}}
                     </div>
-                    <div class="col-sm-2 my-auto">
+                    <div class="col-sm-2 p-0 m-0">
                     {% if ' . $entity . '.' . $name . ' %}
-                        <img  data-controller="base--bigpicture" bpsrc="{{asset(' . $entity . '.' . $name . ')}}" src="{{asset(form.vars.value.image)|imagine_filter(\'icone\')}}">
+                        <img  title="{{asset(form.vars.value.image)}}" class="h-100 p-0" data-controller="base--bigpicture" bpsrc="{{asset(' . $entity . '.' . $name . ')}}" src="{{asset(form.vars.value.image)|imagine_filter(\'icone\')}}">
                     {% endif %}
                     </div>
                 </div>';
