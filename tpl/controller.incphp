@@ -73,7 +73,7 @@ class ¤Entity¤Controller extends AbstractController
             //BLOCK
             '¤entity¤s' => $tab¤Entity¤s,
             'pagesMaxi' => $maxi
-        ], Response::HTTP_SEE_OTHER);
+        ]);
     }
     //BLOCK
     /* -------------------------------------------------------------------------- */

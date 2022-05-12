@@ -87,7 +87,7 @@ class CrudMakeTypeCommand extends Command
                         $tempadds = "\n->add('$name',FileType::class,";
                         $attrs['accept'] = 'image/*';
                         $opts['mapped'] = false;
-                        $opts['required'] = false;
+                        //$opts['required'] = false;
                         break;
                     case 'hidden':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
@@ -122,7 +122,12 @@ class CrudMakeTypeCommand extends Command
                     case 'choiceenplace':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ChoiceType;";
                         $tempadds = "\n->add('$name',ChoiceType::class,";
-                        $opts['choices'] =  $options['options'];
+                        //on garde que ce qui est affiché
+                        $finalOpts = [];
+                        foreach ($options['options'] as $key => $value) {
+                            $finalOpts[$key] = $key;
+                        }
+                        $opts['choices'] =  $finalOpts;
                         break;
                     case 'color':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ColorType;";
