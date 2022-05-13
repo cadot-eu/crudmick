@@ -87,7 +87,7 @@ class CrudMakeTypeCommand extends Command
                         $tempadds = "\n->add('$name',FileType::class,";
                         $attrs['accept'] = 'image/*';
                         $opts['mapped'] = false;
-                        //$opts['required'] = false;
+                        $opts['required'] = false;
                         break;
                     case 'hidden':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
