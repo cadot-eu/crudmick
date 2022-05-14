@@ -110,13 +110,13 @@ class CrudMakeIndexCommand extends Command
                         $tdtemp = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ';
                         if (isset($options['tpl']) && isset($options['tpl']['index_FileImage'])) {
                             //retourne une miniature
-                            $tdtemp .= "{% if $Entity.$name is not empty %}<span title=\"{{TBgetFilename($Entity.$name)$twig}}\" data-controller='base--bigpicture' bPsrc='{{asset($Entity.$name)}}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid\"></span> {% endif %}";
+                            $tdtemp .= "{% if $Entity.$name is not empty %}<span title=\"{{TBgetFilename($Entity.$name)$twig}}\" data-controller='base--bigpicture' data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset($Entity.$name)|imagine_filter('icone')}}\"}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid\"></span> {% endif %}";
                         } elseif (isset($options['tpl']) && isset($options['tpl']['index_FileImageNom'])) {
                             //retourne une miniature et le nom du fichier
-                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='base--bigpicture' bPsrc='{{asset($Entity.$name)}}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid me-2\">{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
+                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='base--bigpicture' data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset($Entity.$name)}}\"}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid me-2\">{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
                         } else {
                             //retoune que le nom du fichier
-                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='base--bigpicture' bPsrc='{{asset($Entity.$name)}}'>{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
+                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='base--bigpicture' data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset($Entity.$name)}}\"}'>{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
                         }
                         $td[] = $tdtemp . '' . "\n</td>";
                         break;
