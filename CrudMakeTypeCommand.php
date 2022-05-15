@@ -92,7 +92,7 @@ class CrudMakeTypeCommand extends Command
                         break;
                     case 'hidden':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
-                        $tempadds = "\n->add('$name',HiddenType::class";
+                        $tempadds = "\n->add('$name',HiddenType::class,";
                         break;
                     case 'money':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\MoneyType;";
