@@ -2,6 +2,7 @@
 
 namespace App\Command\base;
 
+use App\Service\base\ArrayHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -93,6 +94,10 @@ class CrudMakeTypeCommand extends Command
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                         $tempadds = "\n->add('$name',HiddenType::class";
                         break;
+                    case 'money':
+                        $uses[] = "use Symfony\Component\Form\Extension\Core\Type\MoneyType;";
+                        $tempadds = "\n->add('$name',MoneyType::class,";
+                        break;
                     case 'collection':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\CollectionType;";
 
@@ -117,7 +122,17 @@ class CrudMakeTypeCommand extends Command
                     case 'choice':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ChoiceType;";
                         $tempadds = "->add('$name',ChoiceType::class,";
-                        $opts['choices'] =  $options['options'];
+                        $finalOpts = [];
+                        if (ArrayHelper::isAssoc($options['options'])) {
+                            foreach ($options['options'] as $key => $value) {
+                                $finalOpts[$key] = $value;
+                            }
+                        } else {
+                            foreach ($options['options'] as  $value) {
+                                $finalOpts[$value] = $value;
+                            }
+                        }
+                        $opts['choices'] =  $finalOpts;
                         break;
                     case 'choiceenplace':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ChoiceType;";
