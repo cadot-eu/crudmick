@@ -37,6 +37,7 @@ Possibilités de surchargé les attr et opt .
 - no_created
 - no_deleted
 - no_updated
+- nocrud
 
 ### TPL
 
