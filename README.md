@@ -20,7 +20,8 @@ Possibilités de surchargé les attr et opt .
 - image (possibilité d'ajouter tpl index_FileImage ou index_FileImageNom)
 
 ## TPL
-
+- no_created
+- no_updated
 - no_index
 - no_form
 - index_FileImage

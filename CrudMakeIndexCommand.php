@@ -98,7 +98,8 @@ class CrudMakeIndexCommand extends Command
                     case 'simple':
                     case 'simplelanguage':
                     case 'choice':
-                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
+                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;
                     case 'integer':
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
