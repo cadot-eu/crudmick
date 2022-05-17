@@ -65,7 +65,8 @@ class CrudMakeNewCommand extends Command
                     </div>
                     <div class="col-sm-2 p-0 m-0">
                     {% if ' . $entity . '.' . $name . ' %}
-                        <img  title="{{asset(form.vars.value.image)}}" class="h-100 p-0" data-controller="base--bigpicture" bpsrc="{{asset(' . $entity . '.' . $name . ')}}" src="{{asset(form.vars.value.image)|imagine_filter(\'icone\')}}">
+                        <img  title="{{asset(form.vars.value.image)}}" class="h-100 p-0" data-controller="base--bigpicture" ' . "
+                        data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.image)}}\"}' src='{{asset(form.vars.value.image)|imagine_filter(\"icone\")}}' />" . '
                     {% endif %}
                     </div>
                 </div>';
