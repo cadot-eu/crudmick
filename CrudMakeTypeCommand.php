@@ -164,7 +164,7 @@ class CrudMakeTypeCommand extends Command
                                 ->andwhere(\"u.deletedAt IS  NULL\");
                         }
                         ¤";
-                        if ($docs->getAttributes($name)[0]->getName() == 'Doctrine\ORM\Mapping\OneToMany') {
+                        if (substr($docs->getAttributes($name)[0]->getName(), -4) == 'Many') {
                             $opts['multiple'] = true;
                         }
                         $opts['choice_label'] = array_keys($options['label'])[0];

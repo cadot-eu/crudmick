@@ -86,7 +86,6 @@ class CrudMakeIndexCommand extends Command
             $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(20, \'...\')';
             /* ----------------------------- création des td ---------------------------- */
             if (!isset($options['tpl']['no_index'])) {
-                dump($docs->getSelect($name));
                 switch ($select = $docs->getSelect($name)) {
                     case 'generatedvalue': //id
                         /* Checking if the twig option is set, if it is, it will implode the array keys
@@ -94,6 +93,8 @@ class CrudMakeIndexCommand extends Command
                         $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n</td>";;
                         break;
+                    case 'slug':
+                        dump($options['tpl']);
                     case 'string':
                     case 'simple':
                     case 'simplelanguage':
