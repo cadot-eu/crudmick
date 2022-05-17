@@ -48,36 +48,45 @@ class CrudMakeIndexCommand extends Command
                 $th[] = '<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "' . $name . '" ? \'active\' }} " href=\'?tri=' . $name . '&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}\'>' . $name . '</a></th>';
             }
         }
+        /* ------------------------- creation des idoptions ------------------------- */
+        $IDOptions = $docs->getOptions()['id'];
         //gestion du timetrait
-        $th[] = <<<'EOT'
+        $thtime = '';
+        if (!isset($IDOptions['tpl']['no_deleted']))
+            $thtime .= <<<'EOT'
         {%if action=="deleted" %}
             <th>
             <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'deletedAt' ? 'active' }} " href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a>
             </th>
         {% endif %}
+        EOT;
+        if (!isset($IDOptions['tpl']['no_created']))
+            $thtime .= <<<'EOT'
         <th>
             <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'createdAt' ? 'active' }} " href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a>
         </th>
+        EOT;
+        if (!isset($IDOptions['tpl']['no_updated']))
+            $thtime .= <<<'EOT'
         <th>
             <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'updatedAt' ? 'active' }} " href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a>
         </th>
         EOT;
+        $th[] = $thtime;
         /* ---------------------------------- body ---------------------------------- */
         $tableauChoice = '';
         foreach ($docs->getOptions() as $name => $options) {
             $class = []; //contient les class à insérer
-            /* ------------------------- creation des idoptions ------------------------- */
-            if ($name == 'id') {
-                $IDOptions = $options;
-            }
+
             /* ----------------------------- ajout des class ---------------------------- */
             if (isset($options['class'])) {
                 $class[] = implode(' ', array_keys($options['class']));
             }
             /* ---------------------------- gestion des twigs --------------------------- */
-            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(20, "...")';
+            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(20, \'...\')';
             /* ----------------------------- création des td ---------------------------- */
             if (!isset($options['tpl']['no_index'])) {
+                dump($docs->getSelect($name));
                 switch ($select = $docs->getSelect($name)) {
                     case 'generatedvalue': //id
                         /* Checking if the twig option is set, if it is, it will implode the array keys
@@ -87,6 +96,7 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'string':
                     case 'simple':
+                    case 'simplelanguage':
                     case 'choice':
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;
@@ -100,13 +110,13 @@ class CrudMakeIndexCommand extends Command
                         $tdtemp = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ';
                         if (isset($options['tpl']) && isset($options['tpl']['index_FileImage'])) {
                             //retourne une miniature
-                            $tdtemp .= "{% if $Entity.$name is not empty %}<span title=\"{{TBgetFilename($Entity.$name)$twig}}\" data-controller='bigpicture' bPsrc='{{TBgetPublic($Entity.$name)}}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid\"></span> {% endif %}";
+                            $tdtemp .= "{% if $Entity.$name is not empty %}<span title=\"{{TBgetFilename($Entity.$name)$twig}}\" data-controller='base--bigpicture' data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset($Entity.$name)|imagine_filter('icone')}}\"}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid\"></span> {% endif %}";
                         } elseif (isset($options['tpl']) && isset($options['tpl']['index_FileImageNom'])) {
-                            //retourne une miniature
-                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='bigpicture' bPsrc='{{TBgetPublic($Entity.$name)}}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid\">{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
+                            //retourne une miniature et le nom du fichier
+                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='base--bigpicture' data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset($Entity.$name)}}\"}'><img src=\"{{asset($Entity.$name)|imagine_filter('icone')}}\" class=\"img-fluid me-2\">{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
                         } else {
                             //retoune que le nom du fichier
-                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='bigpicture' bPsrc='{{TBgetPublic($Entity.$name)}}'>{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
+                            $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='base--bigpicture' data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset($Entity.$name)}}\"}'>{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
                         }
                         $td[] = $tdtemp . '' . "\n</td>";
                         break;
@@ -174,17 +184,19 @@ class CrudMakeIndexCommand extends Command
         //timestamptable
         $timestamptable = ['createdAt', 'updatedAt', 'deletedAt'];
         foreach ($timestamptable as $time) {
-            if ($name == 'deletedAt') {
-                $td[] .= "{%if action==\"deleted\" %}<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>{% endif %}";
-            } else {
-                $td[] .= "<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>";
+            if (!isset($IDOptions['tpl']['no_' . substr($time, 0, -2)])) {
+                if ($name == 'deletedAt') {
+                    $td[] .= "{%if action==\"deleted\" %}<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>{% endif %}";
+                } else {
+                    $td[] .= "<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>";
+                }
             }
         }
         /* --------------------------------- hide BY ID -------------------------------- */
         $ifhide = 'true ';
         if ((isset($IDOptions['hide']))) {
-            foreach ($IDOptions['hide'] as $hide) {
-                $ifhide .= "and $Entity." . key($hide) . "  != '" . $hide[key($hide)] . "'";
+            foreach ($IDOptions['hide'] as $champ => $hide) {
+                $ifhide .= "and $Entity." . $champ . "  != '" . $hide . "'";
             }
         }
 

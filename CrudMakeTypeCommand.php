@@ -2,6 +2,7 @@
 
 namespace App\Command\base;
 
+use App\Service\base\ArrayHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -45,18 +46,28 @@ class CrudMakeTypeCommand extends Command
         $uses = []; //content uses
         //variable
         $adds = [];
+        $IDOptions = $docs->getOptions()['id'];
         foreach ($docs->getOptions() as $name => $options) {
             $tempadds = '->add(\'' . $name . '\',null,';
             $opts = [];
             $attrs = [];
-            if (!isset($options['tpl']['no_form']) && $name != 'id') {
+            //timetrait
+            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
+                continue;
+            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated']))
+                continue;
+            if ((!isset($options['tpl']['no_form']) && $name != 'id')) {
                 switch ($select = $docs->getSelect($name)) {
                     case 'simple':
-                        $attrs['data-controller'] = 'ckeditor';
-                        $attrs['data-ckeditor-toolbar-value'] = 'simple';
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
+                        break;
+                    case 'simplelanguage':
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'simplelanguage';
                         break;
                     case 'text':
-                        $attrs['data-controller'] = 'ckeditor';
+                        $attrs['data-controller'] = 'base--ckeditor';
                         break;
                     case 'password':
                         $tempadds = "->add('$name',RepeatedType::class,";
@@ -81,7 +92,11 @@ class CrudMakeTypeCommand extends Command
                         break;
                     case 'hidden':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
-                        $tempadds = "\n->add('$name',HiddenType::class";
+                        $tempadds = "\n->add('$name',HiddenType::class,";
+                        break;
+                    case 'money':
+                        $uses[] = "use Symfony\Component\Form\Extension\Core\Type\MoneyType;";
+                        $tempadds = "\n->add('$name',MoneyType::class,";
                         break;
                     case 'collection':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\CollectionType;";
@@ -107,12 +122,27 @@ class CrudMakeTypeCommand extends Command
                     case 'choice':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ChoiceType;";
                         $tempadds = "->add('$name',ChoiceType::class,";
-                        $opts['choices'] =  $options['options'];
+                        $finalOpts = [];
+                        if (ArrayHelper::isAssoc($options['options'])) {
+                            foreach ($options['options'] as $key => $value) {
+                                $finalOpts[$key] = $value;
+                            }
+                        } else {
+                            foreach ($options['options'] as  $value) {
+                                $finalOpts[$value] = $value;
+                            }
+                        }
+                        $opts['choices'] =  $finalOpts;
                         break;
                     case 'choiceenplace':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ChoiceType;";
                         $tempadds = "\n->add('$name',ChoiceType::class,";
-                        $opts['choices'] =  $options['options'];
+                        //on garde que ce qui est affiché
+                        $finalOpts = [];
+                        foreach ($options['options'] as $key => $value) {
+                            $finalOpts[$key] = $key;
+                        }
+                        $opts['choices'] =  $finalOpts;
                         break;
                     case 'color':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ColorType;";
