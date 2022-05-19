@@ -65,7 +65,9 @@ class CrudMakeNewCommand extends Command
                         </label>
                         <div class="col-sm-8">
                         {{form_widget(form.' . $name . ')}}
-                        <p id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
+                        {% if ' . $entity . '.' . $name . ' %}
+                        <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
+                        {% endif %}
                         </div>
                         <div class="col-sm-2 p-0 m-0">
                     {% if ' . $entity . '.' . $name . ' %}
@@ -80,9 +82,11 @@ class CrudMakeNewCommand extends Command
                         <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
                         {{form_label(form.' . $name . ')}}
                         </label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-10" >
                         {{form_widget(form.' . $name . ')}}
-                        <p id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
+                        {% if ' . $entity . '.' . $name . ' %}
+                        <p id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text" data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '">{{form.vars.value.' . $name . '}}</p>
+                        {% endif %}
                         </div>
                        
                     </div>

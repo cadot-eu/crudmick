@@ -131,17 +131,21 @@ class ¤Entity¤Controller extends AbstractController
                                 }
                             }
                         } else {
-                            $fichierName = $fileUploader->upload($fichier, "¤entity¤/$name/");
-                            $function = 'set' . $name;
-                            $¤entity¤->$function($fichierName);
+                           
+                                $fichierName = $fileUploader->upload($fichier, "¤entity¤/$name/");
+                                $function = 'set' . $name;
+                                $¤entity¤->$function($fichierName);
                         }
                         //BLOCK
                     }
                     //delete value
                     else
                     {
+                         if($request->get("¤entity¤_" . $name)=='à retirer')
+                                {
                          $function = 'set' . $name;
                          $¤entity¤->$function('');
+                         }
                     }
                     //BLOCK
                 }
