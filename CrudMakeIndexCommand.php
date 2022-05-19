@@ -93,19 +93,19 @@ class CrudMakeIndexCommand extends Command
                         $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n</td>";;
                         break;
+                    case 'money':
                     case 'slug':
-                        dump($options['tpl']);
                     case 'string':
                     case 'simple':
                     case 'simplelanguage':
+                    case 'full':
+                    case 'normal':
+                    case 'text':
                     case 'choice':
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;
                     case 'integer':
-                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
-                        break;
-                    case 'text':
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;
                     case 'image':
@@ -120,6 +120,12 @@ class CrudMakeIndexCommand extends Command
                             //retoune que le nom du fichier
                             $tdtemp .= "{% if $Entity.$name is not empty %}<span data-controller='base--bigpicture' data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset($Entity.$name)}}\"}'>{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}";
                         }
+                        $td[] = $tdtemp . '' . "\n</td>";
+                        break;
+                    case 'fichier':
+                        $tdtemp = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ';
+                        //retoune que le nom du fichier
+                        $tdtemp .= "{% if $Entity.$name is not empty %}<a href=\"{{asset($Entity.$name)}}\" target=\"_blank\">{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}</a>";
                         $td[] = $tdtemp . '' . "\n</td>";
                         break;
                     case 'choiceenplace':

@@ -137,6 +137,12 @@ class ¤Entity¤Controller extends AbstractController
                         }
                         //BLOCK
                     }
+                    //delete value
+                    else
+                    {
+                         $function = 'set' . $name;
+                         $¤entity¤->$function('');
+                    }
                     //BLOCK
                 }
             //BLOCK

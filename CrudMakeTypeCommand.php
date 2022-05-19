@@ -66,6 +66,14 @@ class CrudMakeTypeCommand extends Command
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simplelanguage';
                         break;
+                    case 'full':
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'full';
+                        break;
+                    case 'normal':
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'normal';
+                        break;
                     case 'text':
                         $attrs['data-controller'] = 'base--ckeditor';
                         break;
@@ -79,9 +87,11 @@ class CrudMakeTypeCommand extends Command
                         $opts['second_options'] = array('label' => 'Répétez le');
                         $opts['invalid_message'] = 'Les mots de passe ne correspondent pas';
                         break;
-                    case 'file':
+                    case 'fichier':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\FileType;";
                         $tempadds = "\n->add('$name',FileType::class,";
+                        $opts['mapped'] = false;
+                        $opts['required'] = false;
                         break;
                     case 'image':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\FileType;";

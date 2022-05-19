@@ -59,17 +59,35 @@ class CrudMakeNewCommand extends Command
                     case 'collection':
                         break;
                     case 'image':
-                        $rows[] = '<div class="mb-3 row"> {{form_label(form.image)}}
-                    <div class="col-sm-8">
-                        {{form_widget(form.image)}}
-                    </div>
-                    <div class="col-sm-2 p-0 m-0">
+                        $rows[] = '<div class="mb-3 row"> 
+                        <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
+                        {{form_label(form.' . $name . ')}}
+                        </label>
+                        <div class="col-sm-8">
+                        {{form_widget(form.' . $name . ')}}
+                        <p id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
+                        </div>
+                        <div class="col-sm-2 p-0 m-0">
                     {% if ' . $entity . '.' . $name . ' %}
-                        <img  title="{{asset(form.vars.value.image)}}" class="h-100 p-0" data-controller="base--bigpicture" ' . "
-                        data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.image)}}\"}' src='{{asset(form.vars.value.image)|imagine_filter(\"icone\")}}' />" . '
+                        <img  title="{{asset(form.vars.value.' . $name . ')}}" class="h-100 p-0" data-controller="base--bigpicture" ' . "
+                        data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"icone\")}}' />" . '
                     {% endif %}
-                    </div>
+                        </div>
                 </div>';
+                        break;
+                    case 'fichier':
+                        $rows[] = '<div class="mb-3 row">
+                        <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
+                        {{form_label(form.' . $name . ')}}
+                        </label>
+                        <div class="col-sm-10">
+                        {{form_widget(form.' . $name . ')}}
+                        <p id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
+                        </div>
+                       
+                    </div>
+
+                    </div>';
                         break;
                     default: {
                             $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';

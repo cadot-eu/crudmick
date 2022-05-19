@@ -18,6 +18,7 @@ Possibilités de surchargé les attr et opt .
 - password
 - hidden
 - image (possibilité d'ajouter tpl index_FileImage ou index_FileImageNom)
+- money
 
 ## TPL
 - no_created
