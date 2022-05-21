@@ -69,10 +69,10 @@ class CrudMakeNewCommand extends Command
                         <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
                         {% endif %}
                         </div>
-                        <div class="col-sm-2 p-0 m-0">
+                        <div class="col-sm-2 ">
                     {% if ' . $entity . '.' . $name . ' %}
-                        <img  title="{{asset(form.vars.value.' . $name . ')}}" class="h-100 p-0" data-controller="base--bigpicture" ' . "
-                        data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"icone\")}}' />" . '
+                        <img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid" data-controller="base--bigpicture" ' . "
+                        data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"petit\")}}' />" . '
                     {% endif %}
                         </div>
                 </div>';
