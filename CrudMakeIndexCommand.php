@@ -179,15 +179,16 @@ class CrudMakeIndexCommand extends Command
         }
         /* --------------------------- gestion des actions -------------------------- */
         $actions = [
-            'new' => 'icone bi bi-file-plus',
-            'edit' => 'icone bi bi-pencil-square',
-            'clone' => 'bi bi-file-earmark-plus',
+            // 'new' => 'icone bi bi-file-plus',
+            'edit' => 'icone bi bi-pencil-square'
         ];
         foreach ($actions as $action => $title) {
             if (!isset($IDOptions['tpl']['no_action_' . $action])) {
                 $resaction[$action] =  "<a class='btn btn-xs btn-primary'  title='$action' href=\"{{ path('$entity" . "_$action" . "', {'id': $Entity.id }) }}\"><i class='icone $title'></i></a>";
             }
         }
+        if (isset($IDOptions['tpl']['action_clone']))
+            $resaction['clone'] =  "<a class='btn btn-xs btn-primary'  title='clone' href=\"{{ path('$entity" . "_clone" . "', {'id': $Entity.id }) }}\"><i class='icone  bi bi-file-earmark-plus'></i></a>";
         /* ----------------------------- timestamptable ----------------------------- */
         //timestamptable
         $timestamptable = ['createdAt', 'updatedAt', 'deletedAt'];
@@ -219,7 +220,7 @@ class CrudMakeIndexCommand extends Command
             'entete' => implode("\n", $th),
             'entity' => $entity,
             'Entity' => $Entity,
-            'no_action_edit' => $resaction['edit'],
+            'no_action_edit' => implode("\n", $resaction),
             'extends' => '/admin/base.html.twig',
             'no_action_add' => !isset($IDOptions['tpl']['no_action_add']) ? "true" : "false",
             'no_access_deleted' => !isset($IDOptions['tpl']['no_action_deleted']) ? "true" : "false",

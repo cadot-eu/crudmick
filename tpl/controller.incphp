@@ -185,12 +185,8 @@ class ¤Entity¤Controller extends AbstractController
         //BLOCK
         $¤entity¤ = clone $¤entity¤c;
         if (property_exists($¤entity¤, 'slug')) {
-            $sfunc = 'set' . ucfirst('¤fieldslug¤');
-            $gfunc = 'get' . ucfirst('¤fieldslug¤');
-            $¤entity¤->$sfunc($¤entity¤->$gfunc() . uniqid());
-            $¤entity¤->setslug();
+            $¤entity¤->setslug($¤entity¤c->getslug().uniqid());
         }
-        $em = $this->getDoctrine()->getManager();
         $¤entity¤->setCreatedAt(new DateTime('now'));
         $em->persist($¤entity¤);
         $em->flush();
