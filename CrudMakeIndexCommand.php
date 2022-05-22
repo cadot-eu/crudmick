@@ -45,7 +45,8 @@ class CrudMakeIndexCommand extends Command
         foreach ($docs->getOptions() as $name => $options) {
             //creation des th
             if (!isset($options['tpl']['no_index']) && $name != 'deletedAt' && $name != 'createdAt' && $name != 'updatedAt') {
-                $th[] = '<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "' . $name . '" ? \'active\' }} " href=\'?tri=' . $name . '&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}\'>' . $name . '</a></th>';
+                $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, '$name', 'a.$name') }}</th>";
             }
         }
         /* ------------------------- creation des idoptions ------------------------- */
@@ -61,18 +62,11 @@ class CrudMakeIndexCommand extends Command
         {% endif %}
         EOT;
         if (!isset($IDOptions['tpl']['no_created']))
-            $thtime .= <<<'EOT'
-        <th>
-            <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'createdAt' ? 'active' }} " href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a>
-        </th>
-        EOT;
+            $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
+        {{ knp_pagination_sortable(pagination, 'créé', 'a.createdAt') }}</th>";
         if (!isset($IDOptions['tpl']['no_updated']))
-            $thtime .= <<<'EOT'
-        <th>
-            <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'updatedAt' ? 'active' }} " href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a>
-        </th>
-        EOT;
-        $th[] = $thtime;
+            $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
+        {{ knp_pagination_sortable(pagination, 'mis à jour', 'a.updatedAt') }}</th>";
         /* ---------------------------------- body ---------------------------------- */
         $tableauChoice = '';
         foreach ($docs->getOptions() as $name => $options) {

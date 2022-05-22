@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\base\FileUploader;
+use Knp\Component\Pager\PaginatorInterface;
 //BLOCK
 #[Route('¤partie¤/¤entity¤')]
 class ¤Entity¤Controller extends AbstractController
@@ -32,19 +33,15 @@ class ¤Entity¤Controller extends AbstractController
     /*                                    INDEX                                   */
     /* -------------------------------------------------------------------------- */
     #[Route('/', name: '¤entity¤_index', methods: ['GET'])]
-    public function index(¤Entity¤Repository $¤entity¤Repository, Request $request): Response
+    public function index(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-        $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
-        $maxi = count($¤entity¤Repository->findBy(['deletedAt' => null]));
-        if ($maxi > 10 && $page * 10  > $maxi) $page = round($maxi / 10, 0);
-        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [¤ordre¤];
-        $¤entity¤s = $¤entity¤Repository->findBy(['deletedAt' => null], $tri, 10, ($page - 1) * 10);
+        $dql   = "SELECT a FROM App:Article a WHERE a.deletedAt is NULL";
+        $query = $this->em->createQuery($dql);
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             /*¤index_render¤*/
-            '¤entity¤s' => $¤entity¤s,
-            'pagesMaxi' => $maxi
+            'pagination' =>$paginator->paginate($query,$request->query->getInt('page', 1),8)
         ]);
         //BLOCK
     }
@@ -53,26 +50,15 @@ class ¤Entity¤Controller extends AbstractController
     /*                                   DELETED                                  */
     /* -------------------------------------------------------------------------- */
     #[Route('/deleted', name: '¤entity¤_deleted', methods: ['GET'])]
-    public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request): Response
+    public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-        $tab¤Entity¤s = [];
-        foreach ($¤entity¤Repository->findAll() as $¤entity¤) {
-            if ($¤entity¤->getDeletedAt() != null) $tab¤Entity¤s[] = $¤entity¤;
-        }
-        $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
-        $maxi = count($tab¤Entity¤s);
-        if ($page * 10  > $maxi) $page = round($maxi / 10, 0);
-        if ($page == 0) $page = 1;
-        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [¤ordre¤];
-        $¤entity¤s = array_slice($tab¤Entity¤s, ($page - 1) * 10, 10);
-
-
+        $dql   = "SELECT a FROM App:Article a WHERE a.deletedAt is not NULL";
+        $query = $this->em->createQuery($dql);
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
-            //BLOCK
-            '¤entity¤s' => $tab¤Entity¤s,
-            'pagesMaxi' => $maxi
+            /*¤index_render¤*/
+            'pagination' =>$paginator->paginate($query,$request->query->getInt('page', 1),8)
         ]);
     }
     //BLOCK
