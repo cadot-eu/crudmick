@@ -52,7 +52,7 @@ class CrudInitCommand extends Command
         @mkdir("templates/$sdir/$entity", 0777, true);
         //control des paramètres et ajout si nécessaires
         $trait = [
-            "use App\Entity\TimeTrait;" => "use",
+            "use App\Entity\base\TimeTrait;" => "use",
             "use Gedmo\Mapping\Annotation as Gedmo;" => "use",
             "use Symfony\Component\Validator\Constraints as Assert;" => "use",
             "#[ORM\HasLifecycleCallbacks()]" => "#[ORM",
