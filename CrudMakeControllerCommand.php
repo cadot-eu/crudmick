@@ -54,7 +54,7 @@ class CrudMakeControllerCommand extends Command
             'extends' => '/admin/base.html.twig',
             'sdir' =>  '',
             'ssdir' => '',
-            'ordre' => isset($options['id']['ORDRE']) ? $options['id']['ORDRE'] : null,
+            'ordre' => isset($options['id']['ORDRE']) ? $options['id']['ORDRE'] : null
         ]);
         /** @var string $html */
         $blocks = (explode('//BLOCK', $html));

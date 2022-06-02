@@ -171,8 +171,12 @@ class CrudMakeTypeCommand extends Command
                         function (EntityRepository \$er) {
                             return \$er->createQueryBuilder(\"u\")
                                 ->orderBy(\"u.nom\", \"ASC\")
-                                ->andwhere(\"u.deletedAt IS  NULL\");
+                                ->andwhere(\"u.deletedAt IS  NULL\")";
+                        //si on a un formoptions
+                        if ($options) {
+                            $opts['query_builder'] .= " ->andWhere(\"u.compte = :user_id\")->setParameter(\"user_id\", \$AtypeOption[\"compte_id\"])";
                         }
+                        $opts['query_builder'] .= ";}
                         ¤";
                         if (substr($docs->getAttributes($name)[0]->getName(), -4) == 'Many') {
                             $opts['multiple'] = true;
