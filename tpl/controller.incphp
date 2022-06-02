@@ -63,12 +63,12 @@ class ¤Entity¤Controller extends AbstractController
     }
     //BLOCK
     /* -------------------------------------------------------------------------- */
-    /*                                    ETAT                                    */
+    /*                                    CHAMP                                    */
     /* -------------------------------------------------------------------------- */
     /**
-     * @Route("/etat/{id}/{type}/{valeur}", name="¤entity¤_etat", methods={"GET"})
+     * @Route("/champ/{id}/{type}/{valeur}", name="¤entity¤_champ", methods={"GET"})
      */
-    public function etat(¤Entity¤ $¤entity¤, $type = null, $valeur = null): Response
+    public function champ(¤Entity¤ $¤entity¤, $type = null, $valeur = null): Response
     {
         //BLOCK
         if ($type) {
