@@ -138,7 +138,7 @@ class CrudMakeIndexCommand extends Command
                                 {% else %}
                                     {% set numr=retour+1 %}
                                 {% endif %}
-                                <a href=\"{{path('" . $entity . "_etat',{'id':$Entity.id,'type':'" . $name . "','valeur':choice_" . $name . "|keys[numr]})}}\" style='font-size:2rem;'  title='{{ choice_" . $name . "|keys[retour]}}'> {{ choice_" . $name . "[ choice_" . $name . "|keys[retour]]$twig|raw}}</a>\n</td>";
+                                <a href=\"{{path('" . $entity . "_champ',{'id':$Entity.id,'type':'" . $name . "','valeur':choice_" . $name . "|keys[numr]})}}\" style='font-size:2rem;'  title='{{ choice_" . $name . "|keys[retour]}}'> {{ choice_" . $name . "[ choice_" . $name . "|keys[retour]]$twig|raw}}</a>\n</td>";
                         break;
                     case 'color':
                         $td[] = '<td class="my-auto"><div class="boxcolor" style="background-color:{{' . $Entity . '.' . $name . '}}"></div>' . "\n</td>";
