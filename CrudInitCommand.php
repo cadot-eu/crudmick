@@ -87,6 +87,7 @@ class CrudInitCommand extends Command
         $input = new ArgvInput();
         $output = new ConsoleOutput();
         $io = new SymfonyStyle($input, $output);
+        $modification = false; //pour ne pas faire de modif et juste afficher qu'il y a eu une modification
         //open old json file if exist and cut by block
         if (file_exists("savecrud/" . $filename . ".json") && file_exists($filename) && $force == false) {
             //get old blocks
@@ -123,7 +124,7 @@ class CrudInitCommand extends Command
                     if ($pos === false) {
                         $io->error("Dans le fichier:$filename.Ce block a été modifié:" . $block);
                         $io->info("Arrêt du script.Merci de vérifier que vous n'avez pas écris en dehors des blocks");
-                        exit();
+                        $modification = true;
                     }
                 }
                 //maj du block
@@ -153,13 +154,17 @@ class CrudInitCommand extends Command
                 $html .= $block;
             }
         }
-        // save new file
-        @mkdir('savecrud/' . pathinfo($filename)['dirname'], 0777, true);
-        file_put_contents("savecrud/" . $filename . ".json", json_encode($blocks));
-        $retour = file_put_contents($filename, $html);
-        if ($retour === false) throw new Exception("Erreru sur la création du fichier:" . $filename, 1);
-        if (file_exists($filename)) {
-            $io->info('File ' . $filename . ' généré ');
+        if ($modification == false) {
+            // save new file
+            @mkdir('savecrud/' . pathinfo($filename)['dirname'], 0777, true);
+            file_put_contents("savecrud/" . $filename . ".json", json_encode($blocks));
+            $retour = file_put_contents($filename, $html);
+            if ($retour === false) {
+                throw new Exception("Erreru sur la création du fichier:" . $filename, 1);
+            }
+            if (file_exists($filename)) {
+                $io->info('File ' . $filename . ' généré ');
+            }
         }
     }
     /**
