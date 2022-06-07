@@ -23,7 +23,9 @@ class ¤Entity¤Type extends AbstractType
         //BLOCK
         $resolver->setDefaults([
             'data_class' => ¤Entity¤::class,
+            //¤vars¤
             //BLOCK
         ]);
+        //¤resolver¤;
     }
 }

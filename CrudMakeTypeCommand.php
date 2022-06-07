@@ -47,10 +47,13 @@ class CrudMakeTypeCommand extends Command
         //variable
         $adds = [];
         $IDOptions = $docs->getOptions()['id'];
+        $vars = [];
+        $resolver = [];
         foreach ($docs->getOptions() as $name => $options) {
             $tempadds = '->add(\'' . $name . '\',null,';
             $opts = [];
             $attrs = [];
+
             //timetrait
             if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
                 continue;
@@ -110,24 +113,21 @@ class CrudMakeTypeCommand extends Command
                         break;
                     case 'collection':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\CollectionType;";
-
                         //field for show
-                        $return = isset($options['options']['label']) ? $options['options']['label'] : 'id';
+                        isset($options['options']['label']) ? $options['options']['label'] : 'id';
                         //get name of entity
-                        foreach ($options['AUTRE'] as $num => $autre) {
-                            $target = (explode('::class', explode('targetEntity=', $autre)[1])[0]); //error * empty ;-)
-                            $uses[] = "use App\Form\site\\" . ucfirst($target) . "Type;";
-                        }
-                        $tempadds = "\n->add('$name',CollectionType::class,['entry_type' => " . ucfirst($target) . "Type::class,";
-                        //for entry use XTRA for add option
-                        if (isset($options['XTRA'])) {
-                            foreach ($options['XTRA'] as $entry) {
-                                $pos = strpos($entry, '=>');
-                                $tempadds = "'" . substr($entry, 0, $pos) . "'" . substr($entry, $pos) . ',';
+                        $target = substr($docs->getArgumentOfAttributes($name, 0, 'targetEntity'), strlen('App\Entity\\'));
+                        $uses[] = "use App\Form\\" . $target . "Type;";
+                        $tempadds = "->add('$name',CollectionType::class,";
+                        $opts['entry_type'] = $target . "Type::class //retirer les apostrophes";
+                        //for entry use xtra for add option
+                        if (isset($options['xtra'])) {
+                            foreach ($options['xtra'] as $clef => $entry) {
+                                $opts[$clef] = $entry;
                             }
                         }
-                        $tempadds = "'by_reference' => false";
-                        $tempadds = ']';
+                        $opts['by_reference'] = false;
+
                         break;
                     case 'choice':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ChoiceType;";
@@ -168,13 +168,19 @@ class CrudMakeTypeCommand extends Command
                         $tempadds = "\n->add('$name',EntityType::class,";
                         $opts['class'] = "¤$EntityTarget::class¤";
                         $opts['query_builder'] = "¤
-                        function (EntityRepository \$er) {
+                        function (EntityRepository \$er)";
+                        if ($options)
+                            $opts['query_builder'] .= 'use ($AtypeOption) ';
+
+                        $opts['query_builder'] .= "{
                             return \$er->createQueryBuilder(\"u\")
                                 ->orderBy(\"u.nom\", \"ASC\")
                                 ->andwhere(\"u.deletedAt IS  NULL\")";
                         //si on a un formoptions
                         if ($options) {
-                            $opts['query_builder'] .= " ->andWhere(\"u.compte = :user_id\")->setParameter(\"user_id\", \$AtypeOption[\"compte_id\"])";
+                            $opts['query_builder'] .= "\n->andWhere(\"u.compte = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"compte_id\"])";
+                            $vars[] = "'compte_id' => 0";
+                            $resolver[] = '$resolver->setAllowedTypes(\'compte_id\', \'int\')';
                         }
                         $opts['query_builder'] .= ";}
                         ¤";
@@ -205,8 +211,9 @@ class CrudMakeTypeCommand extends Command
                     $finalOpts['attr'] = $finalAttrs;
                 }
                 $tempopts = isset($finalOpts) ? CrudInitCommand::ArrayToKeyValue($finalOpts) : "";
+
                 // ($select == 'image') dd($tempopts);
-                $adds[] = $tempadds . "\n" . $tempopts . ')';
+                $adds[] = $tempadds .  "\n" . $tempopts . ')';
             }
         }
         $fileType = dirname(__FILE__) . '/tpl/type.incphp';
@@ -219,6 +226,8 @@ class CrudMakeTypeCommand extends Command
                 'sdir' => '',
                 'adds' => ' $builder' . implode("\n", $adds),
                 'uses' => implode("\n", array_unique($uses)),
+                'vars' => isset($vars) ? implode("\n,", $vars) : '',
+                'resolver' => isset($resolver) ? implode("\n,", $resolver) : ''
             ]
         );
         /* ------------------------------ RETURN BLOCKS ----------------------------- */

@@ -74,7 +74,8 @@ class CrudInitCommand extends Command
     }
     static function ArrayToKeyValue(array $array)
     {
-        return str_replace(['¤\'', '\'¤'], '', var_export($array, true));
+        $vars = var_export($array, true);
+        return str_replace(['¤\'', '\'¤'], '', $vars);
     }
     /**
      * It takes a filename and an array of blocks, and updates the file with the blocks

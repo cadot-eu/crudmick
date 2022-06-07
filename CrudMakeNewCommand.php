@@ -56,8 +56,6 @@ class CrudMakeNewCommand extends Command
                 continue;
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
-                    case 'collection':
-                        break;
                     case 'image':
                         $rows[] = '<div class="mb-3 row"> 
                         <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
