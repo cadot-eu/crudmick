@@ -12,6 +12,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Service\base\ParserDocblock;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 #[AsCommand(
     name: 'crud:generate:type',
@@ -53,7 +59,7 @@ class CrudMakeTypeCommand extends Command
             $tempadds = '->add(\'' . $name . '\',null,';
             $opts = [];
             $attrs = [];
-
+            $tab = [];
             //timetrait
             if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
                 continue;
@@ -113,13 +119,12 @@ class CrudMakeTypeCommand extends Command
                         break;
                     case 'collection':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\CollectionType;";
-                        //field for show
-                        isset($options['options']['label']) ? $options['options']['label'] : 'id';
-                        //get name of entity
                         $target = substr($docs->getArgumentOfAttributes($name, 0, 'targetEntity'), strlen('App\Entity\\'));
                         $uses[] = "use App\Form\\" . $target . "Type;";
                         $tempadds = "->add('$name',CollectionType::class,";
-                        $opts['entry_type'] = $target . "Type::class //retirer les apostrophes";
+                        $opts['entry_type!'] = $target . "Type::class";
+                        $attrs['data-controller'] = 'base--collection';
+                        $attrs['data-base--collection-valeurs-value!'] = 'json_encode($' . $name . ')';
                         //for entry use xtra for add option
                         if (isset($options['xtra'])) {
                             foreach ($options['xtra'] as $clef => $entry) {
@@ -127,7 +132,9 @@ class CrudMakeTypeCommand extends Command
                             }
                         }
                         $opts['by_reference'] = false;
-
+                        $boucle[] = '$' . $name . ' = [];' . "\n" .
+                            'foreach ($AtypeOption[\'data\']->get' . ucfirst($name) . '() as $prod) {' . "\n" .
+                            '$' . $name . '[] = $prod->get' . ucfirst($options['options']['field']) . '();' . "\n" . '}';
                         break;
                     case 'choice':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\ChoiceType;";
@@ -212,8 +219,19 @@ class CrudMakeTypeCommand extends Command
                 }
                 $tempopts = isset($finalOpts) ? CrudInitCommand::ArrayToKeyValue($finalOpts) : "";
 
-                // ($select == 'image') dd($tempopts);
-                $adds[] = $tempadds .  "\n" . $tempopts . ')';
+                $chaine = $tempadds .  "\n" . $tempopts . ')';
+                //on modifie les champs qui doivent ne pas être entre apostrophe
+                $pos = 0;
+                foreach (explode("\n", $chaine) as $key => $ligne) {
+                    $pos = strpos($ligne, "!' => '");
+                    if ($pos !== false) {
+                        $ligne = str_replace("!' => '", "' =>", $ligne);
+                        $ligne = substr($ligne, 0, -2) . ",";
+                    }
+                    $tab[] = $ligne;
+                }
+
+                $adds[] = implode("\n", $tab);
             }
         }
         $fileType = dirname(__FILE__) . '/tpl/type.incphp';
@@ -227,7 +245,8 @@ class CrudMakeTypeCommand extends Command
                 'adds' => ' $builder' . implode("\n", $adds),
                 'uses' => implode("\n", array_unique($uses)),
                 'vars' => isset($vars) ? implode("\n,", $vars) : '',
-                'resolver' => isset($resolver) ? implode("\n,", $resolver) : ''
+                'resolver' => isset($resolver) ? implode("\n,", $resolver) : '',
+                'boucle' => isset($boucle) ? implode("\n", $boucle) : ''
             ]
         );
         /* ------------------------------ RETURN BLOCKS ----------------------------- */

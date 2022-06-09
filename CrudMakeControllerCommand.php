@@ -43,9 +43,32 @@ class CrudMakeControllerCommand extends Command
         $Entity = ucfirst($entity);
         /* ----------------------- on récupère tous les champs ---------------------- */
         $docs = new ParserDocblock($entity);
-        $options = $docs->getOptions();
+        $gets = [];
+        $formoptions = [];
+        foreach ($options = $docs->getOptions() as $name => $options) {
+            if ($name != 'id') {
+                switch ($select = $docs->getSelect($name)) {
+                    case 'manytoone':
+                        if ($name == 'compte')
+                            $gets[] = '$' . $entity . '->setCompte($this->getUser());';
+                        //else
+                        //$gets[] = '$' . $entity . '->set' . ucfirst($name) . '($' . $entity . ');';
+                        break;
+
+                    case 'entity':
+                        // $nom = substr($name, -1) == 's' ? substr($name, 0, -1) : $name;
+                        // $gets[] = '$' . $entity . '->add' . $nom . '($' . $entity . ');';
+                        $formoptions['compte_id'] = '$this->getUser()->getId()';
+                        break;
+                }
+            }
+        }
         $fieldslug = isset($options['slug']) ? $docs->getArgumentOfAttributes('slug', "Gedmo\Mapping\Annotation\Slug", 'fields')[0] : '';
         $fileController = __DIR__ . '/tpl/controller.incphp';
+        $Lformoptions = '';
+        foreach ($formoptions as $key => $value) {
+            $Lformoptions .= "'$key'" . '=>' . $value . ',';
+        }
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
             'partie' => "/admin//",
             'fieldslug' => $fieldslug,
@@ -54,7 +77,10 @@ class CrudMakeControllerCommand extends Command
             'extends' => '/admin/base.html.twig',
             'sdir' =>  '',
             'ssdir' => '',
-            'ordre' => isset($options['id']['ORDRE']) ? $options['id']['ORDRE'] : null
+            'ordre' => isset($options['id']['ORDRE']) ? $options['id']['ORDRE'] : null,
+            'gets' => isset($gets) ? implode("\n", $gets) : '',
+            'formoptions' => isset($Lformoptions) ? $Lformoptions : ''
+
         ]);
         /** @var string $html */
         $blocks = (explode('//BLOCK', $html));

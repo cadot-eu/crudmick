@@ -92,7 +92,7 @@ class ¤Entity¤Controller extends AbstractController
         //BLOCK
         if (!$¤entity¤) $¤entity¤ = new ¤Entity¤(); //for new
         //BLOCK
-        $form = $this->createForm(¤Entity¤Type::class, $¤entity¤);
+        $form = $this->createForm(¤Entity¤Type::class, $¤entity¤,[¤formoptions¤]);
         //BLOCK
         $form->handleRequest($request);
         //BLOCK
@@ -139,6 +139,7 @@ class ¤Entity¤Controller extends AbstractController
             //TODO: par listener
             if ($¤entity¤->getcreatedAt() == 'null') $¤entity¤->setCreatedAt(new DateTime('now'));
             $¤entity¤->setUpdatedAt(new DateTime('now'));
+            ¤gets¤
             $em->persist($¤entity¤);
             $em->flush();
             //BLOCK

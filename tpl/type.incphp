@@ -11,8 +11,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ¤Entity¤Type extends AbstractType
 {
     //BLOCK
+    
     public function buildForm(FormBuilderInterface $builder, array $AtypeOption)
     {
+         //BLOCK
+        ¤boucle¤
         //BLOCK
         //¤adds¤;
         //BLOCK
