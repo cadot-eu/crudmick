@@ -160,9 +160,15 @@ class CrudMakeIndexCommand extends Command
                             $separation = isset($options['separation']) ? $options['separation'] : ';';
                             $td[] = '<td class="my-auto">' . "{% for " . $name . "_item in " . $Entity . ".$name %}\n{{" . $name . "_item.$return$twig}}{{loop.last?'':'$separation'}}\n{% endfor %}" . "\n</td>";
                         } else {
-                            $td[] = '<td class="my-auto">kkk' . '{{ ' . $Entity . '.' . $name . '.' . $return . ' is defined ? ' . $Entity . '.' . $name . '.' . $return . '}}' . "\n</td>";
+                            $td[] = '<td class="my-auto">VERIF SI UTILE' . '{{ ' . $Entity . '.' . $name . '.' . $return . ' is defined ? ' . $Entity . '.' . $name . '.' . $return . '}}' . "\n</td>";
                         }
                         break;
+                    case 'array':
+                        $return = isset($options['label']) ? array_keys($options['label'])[0] : 'id';
+                        $separation = isset($options['separation']) ? $options['separation'] : ';';
+                        $td[] = '<td class="my-auto">' . "{% for " . $name . "_item in " . $Entity . ".$name %}\n{{" . $name . "_item.$return$twig}}{{loop.last?'':'$separation'}}\n{% endfor %}" . "\n</td>";
+                        break;
+
                     default:
                         dump('non géré dans makeindex:' . $select);
                         break;
