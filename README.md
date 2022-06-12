@@ -44,9 +44,16 @@ Possibilités de surchargé les attr et opt .
 - no_updated
 - nocrud
 
-### TPL
 
-- no_action_add
-- no_access_deleted
-- ORDRE=nom=>ASC
+### TWIG
 
+```php
+date('d/m à H:i', "Europe/Paris")
+TWIG=JsonPretty\|raw //use cadot.info/twigbundle
+TWIG=u.truncate(8, '...')
+split('¤')[1]
+```
+
+### Erreurs fréquentes
+
+- An invalid form control with name='' is not focusable est du à un champ qui est required et ` hiddden ` ou  ` display:none `, ckeditor cache le champ et donc si il est required crè cette erreur. On peut utiliser ` * OPT=required=>false`
