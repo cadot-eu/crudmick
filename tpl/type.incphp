@@ -19,6 +19,7 @@ class ¤Entity¤Type extends AbstractType
         //BLOCK
         //¤adds¤;
         //BLOCK
+        //¤transform¤
     }
 
     public function configureOptions(OptionsResolver $resolver)

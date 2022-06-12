@@ -67,6 +67,17 @@ class CrudMakeTypeCommand extends Command
                 continue;
             if ((!isset($options['tpl']['no_form']) && $name != 'id')) {
                 switch ($select = $docs->getSelect($name)) {
+                    case 'json':
+                        $transform[] = "\$builder->get('keywords')\n->addModelTransformer(new CallbackTransformer(\n" .
+                            "function (\$keywordsAsArray) {\n" .
+                            "return implode(', ', \$keywordsAsArray);\n" .
+                            "},\n" .
+                            "function (\$keywordsAsString) {\n" .
+                            "return explode(', ', \$keywordsAsString);\n" .
+                            "}\n" .
+                            "));\n";
+                        $uses[] = "use Symfony\Component\Form\CallbackTransformer;";
+                        break;
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
@@ -184,10 +195,10 @@ class CrudMakeTypeCommand extends Command
                                 ->orderBy(\"u.nom\", \"ASC\")
                                 ->andwhere(\"u.deletedAt IS  NULL\")";
                         //si on a un formoptions
-                        if ($options) {
-                            $opts['query_builder'] .= "\n->andWhere(\"u.compte = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"compte_id\"])";
-                            $vars[] = "'compte_id' => 0";
-                            $resolver[] = '$resolver->setAllowedTypes(\'compte_id\', \'int\')';
+                        if (isset($options['form'])) {
+                            $opts['query_builder'] .= "\n->andWhere(\"u." . $options['form'] . " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" . $options['form'] . "_id\"])";
+                            $vars[] = "'" . $options['form'] . "_id' => 0";
+                            $resolver[] = '$resolver->setAllowedTypes(\'' . $options['form'] . '_id\', \'int\')';
                         }
                         $opts['query_builder'] .= ";}
                         ¤";
@@ -246,7 +257,8 @@ class CrudMakeTypeCommand extends Command
                 'uses' => implode("\n", array_unique($uses)),
                 'vars' => isset($vars) ? implode("\n,", $vars) : '',
                 'resolver' => isset($resolver) ? implode("\n,", $resolver) : '',
-                'boucle' => isset($boucle) ? implode("\n", $boucle) : ''
+                'boucle' => isset($boucle) ? implode("\n", $boucle) : '',
+                'transform' => isset($transform) ? implode("\n", $transform) : ''
             ]
         );
         /* ------------------------------ RETURN BLOCKS ----------------------------- */

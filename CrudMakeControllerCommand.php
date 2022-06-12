@@ -58,7 +58,7 @@ class CrudMakeControllerCommand extends Command
                     case 'entity':
                         // $nom = substr($name, -1) == 's' ? substr($name, 0, -1) : $name;
                         // $gets[] = '$' . $entity . '->add' . $nom . '($' . $entity . ');';
-                        $formoptions['compte_id'] = '$this->getUser()->getId()';
+                        if (isset($options['form']))  $formoptions['compte_id'] = '$this->getUser()->getId()';
                         break;
                 }
             }

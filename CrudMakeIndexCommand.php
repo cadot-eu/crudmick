@@ -168,6 +168,10 @@ class CrudMakeIndexCommand extends Command
                         $separation = isset($options['separation']) ? $options['separation'] : ';';
                         $td[] = '<td class="my-auto">' . "{% for " . $name . "_item in " . $Entity . ".$name %}\n{{" . $name . "_item.$return$twig}}{{loop.last?'':'$separation'}}\n{% endfor %}" . "\n</td>";
                         break;
+                    case 'json':
+                        $twig = isset($options['twig']) ? $options['twig'] : '|join(",")';
+                        $td[] = '<td class="my-auto text-center' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-zoom-in"></i>' . "\n</td>";
+                        break;
 
                     default:
                         dump('non géré dans makeindex:' . $select);
