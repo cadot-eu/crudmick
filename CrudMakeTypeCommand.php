@@ -78,24 +78,24 @@ class CrudMakeTypeCommand extends Command
                             "));\n";
                         $uses[] = "use Symfony\Component\Form\CallbackTransformer;";
                         break;
+                    case 'text':
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
                         break;
                     case 'simplelanguage':
-                        $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simplelanguage';
+                        $attrs['data-controller'] = 'base--ckeditor';
                         break;
                     case 'full':
                         $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-upload-value'] = $entity . '_simpleupload';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'full';
                         break;
                     case 'normal':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'normal';
-                        break;
-                    case 'text':
-                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-upload-value'] = $entity . '_simpleupload';
                         break;
                     case 'password':
                         $tempadds = "->add('$name',RepeatedType::class,";
