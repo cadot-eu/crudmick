@@ -36,7 +36,7 @@ class ¤Entity¤Controller extends AbstractController
     public function index(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-        $dql   = "SELECT a FROM App:¤Entity¤ a WHERE a.deletedAt is NULL";
+        $dql   = "SELECT a FROM App:¤Entity¤ a WHERE a.deletedAt is NULL "¤index¤  ;
         $query = $this->em->createQuery($dql);
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
@@ -53,7 +53,7 @@ class ¤Entity¤Controller extends AbstractController
     public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-        $dql   = "SELECT a FROM App:¤Entity¤ a WHERE a.deletedAt is not NULL";
+        $dql   = "SELECT a FROM App:¤Entity¤ a WHERE a.deletedAt is not NULL "¤index¤;
         $query = $this->em->createQuery($dql);
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
@@ -137,8 +137,6 @@ class ¤Entity¤Controller extends AbstractController
                 }
             //BLOCK
             //TODO: par listener
-            if ($¤entity¤->getcreatedAt() == 'null') $¤entity¤->setCreatedAt(new DateTime('now'));
-            $¤entity¤->setUpdatedAt(new DateTime('now'));
             ¤gets¤
             $em->persist($¤entity¤);
             $em->flush();
@@ -188,7 +186,7 @@ class ¤Entity¤Controller extends AbstractController
     public function delete(Request $request, ¤Entity¤ $¤entity¤, EntityManagerInterface $em): Response
     {
         //BLOCK
-        if ($this->isCsrfTokenValid('delete' . $¤entity¤->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $¤entity¤->getId(), $request->request->get('_token')) ¤delete¤) {
             //BLOCK
             if ($request->request->has('delete_delete')) {
                 //BLOCK

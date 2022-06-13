@@ -43,6 +43,9 @@ Possibilités de surchargé les attr et opt .
 - no_deleted
 - no_updated
 - nocrud
+- pour ajouter du code dans index/deleted pour le query  et pour protéger delete 
+- index:'AND a.compte=' . $this->getUser()->getId()
+- delete:and $groupe=$this->getUser()->getId()
 
 
 ### TWIG

@@ -49,7 +49,7 @@ class CrudMakeControllerCommand extends Command
             if ($name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
                     case 'manytoone':
-                        if ($name == 'compte')
+                        if ($name == 'user' || $name == 'compte')
                             $gets[] = '$' . $entity . '->setCompte($this->getUser());';
                         //else
                         //$gets[] = '$' . $entity . '->set' . ucfirst($name) . '($' . $entity . ');';
@@ -78,6 +78,8 @@ class CrudMakeControllerCommand extends Command
             'sdir' =>  '',
             'ssdir' => '',
             'ordre' => isset($options['id']['ORDRE']) ? $options['id']['ORDRE'] : null,
+            'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) : null,
+            'delete' => isset($docs->getOptions()['id']['delete']) ?  array_key_first($docs->getOptions()['id']['delete']) : null,
             'gets' => isset($gets) ? implode("\n", $gets) : '',
             'formoptions' => isset($Lformoptions) ? $Lformoptions : ''
 
