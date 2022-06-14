@@ -64,7 +64,7 @@ class CrudMakeControllerCommand extends Command
                 }
             }
             //création des recherche
-            $search[] = 'a.titre LIKE \'%" . $request->query->get(\'filterValue\') . "%\'';
+            $search[] = 'a.id LIKE \'%" . $request->query->get(\'filterValue\') . "%\'';
         }
         $searchString = '." AND (' . implode(' OR ', $search) . ')"';
         $fieldslug = isset($options['slug']) ? $docs->getArgumentOfAttributes('slug', "Gedmo\Mapping\Annotation\Slug", 'fields')[0] : '';
@@ -99,24 +99,5 @@ class CrudMakeControllerCommand extends Command
         //create file
         CrudInitCommand::updateFile("src/Controller/" . $Entity . 'Controller.php', $blocks, $input->getOption('force'));
         return Command::SUCCESS;
-    }
-
-    public function ReturnBlocksController(): array
-    {
-
-
-        //pour le slug
-        $fieldslug = '';
-        if (isset($this->attrs['slug'])) {
-            foreach ($this->attrs['slug']['AUTRE'] as $item) {
-                if (strpos($item, '@Gedmo\Slug') !== false) {
-                    $deb = strpos($item, 'fields={"');
-                    $end = strpos($item, '"}', $deb);
-                    $fieldslug = substr($item, $deb + strlen('fields={"'), $end - $deb - strlen('fields={"'));
-                }
-            }
-        }
-
-        return $blocks;
     }
 }
