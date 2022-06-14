@@ -36,12 +36,18 @@ class ¤Entity¤Controller extends AbstractController
     public function index(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-        $dql   = "SELECT a FROM App:¤Entity¤ a WHERE a.deletedAt is NULL "¤index¤  ;
-        $query = $this->em->createQuery($dql)->getArrayResult();
+        if(method_exists($¤entity¤Repository,'index'))
+         $dql = $¤entity¤Repository->index($request->query->get('filterValue'));
+         else
+         $dql=$¤entity¤Repository->createQueryBuilder('p')
+            ->Where('p.deletedAt is NULL')
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             /*¤index_render¤*/
-            'pagination' =>$paginator->paginate($query,$request->query->getInt('page', 1),8)
+            'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
         ]);
         //BLOCK
     }

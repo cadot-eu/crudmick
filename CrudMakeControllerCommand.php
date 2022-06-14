@@ -64,7 +64,7 @@ class CrudMakeControllerCommand extends Command
                 }
             }
             //création des recherche
-            $search[] = 'a.id LIKE \'%" . $request->query->get(\'filterValue\') . "%\'';
+            $search[] = 'a.' . $name . ' LIKE \'%" . $request->query->get(\'filterValue\') . "%\'';
         }
         $searchString = '." AND (' . implode(' OR ', $search) . ')"';
         $fieldslug = isset($options['slug']) ? $docs->getArgumentOfAttributes('slug', "Gedmo\Mapping\Annotation\Slug", 'fields')[0] : '';
