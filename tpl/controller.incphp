@@ -37,7 +37,7 @@ class ¤Entity¤Controller extends AbstractController
     {
         //BLOCK
         $dql   = "SELECT a FROM App:¤Entity¤ a WHERE a.deletedAt is NULL "¤index¤  ;
-        $query = $this->em->createQuery($dql);
+        $query = $this->em->createQuery($dql)->getArrayResult();
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             /*¤index_render¤*/
@@ -138,6 +138,7 @@ class ¤Entity¤Controller extends AbstractController
             //BLOCK
             //TODO: par listener
             ¤gets¤
+            if($¤entity¤->getUpdated)
             $em->persist($¤entity¤);
             $em->flush();
             //BLOCK

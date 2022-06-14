@@ -45,6 +45,7 @@ class CrudMakeControllerCommand extends Command
         $docs = new ParserDocblock($entity);
         $gets = [];
         $formoptions = [];
+        $search = [];
         foreach ($options = $docs->getOptions() as $name => $options) {
             if ($name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
@@ -62,13 +63,17 @@ class CrudMakeControllerCommand extends Command
                         break;
                 }
             }
+            //création des recherche
+            $search[] = 'a.titre LIKE \'%" . $request->query->get(\'filterValue\') . "%\'';
         }
+        $searchString = '." AND (' . implode(' OR ', $search) . ')"';
         $fieldslug = isset($options['slug']) ? $docs->getArgumentOfAttributes('slug', "Gedmo\Mapping\Annotation\Slug", 'fields')[0] : '';
         $fileController = __DIR__ . '/tpl/controller.incphp';
         $Lformoptions = '';
         foreach ($formoptions as $key => $value) {
             $Lformoptions .= "'$key'" . '=>' . $value . ',';
         }
+        //AND (a.titre LIKE '%" . $request->query->get('filterValue') . "%' OR a.titre LIKE '%" . $request->query->get('filterValue') . "%')
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
             'partie' => "/admin//",
             'fieldslug' => $fieldslug,
@@ -78,7 +83,7 @@ class CrudMakeControllerCommand extends Command
             'sdir' =>  '',
             'ssdir' => '',
             'ordre' => isset($options['id']['ORDRE']) ? $options['id']['ORDRE'] : null,
-            'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) : null,
+            'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) :  $searchString,
             'delete' => isset($docs->getOptions()['id']['delete']) ?  array_key_first($docs->getOptions()['id']['delete']) : null,
             'gets' => isset($gets) ? implode("\n", $gets) : '',
             'formoptions' => isset($Lformoptions) ? $Lformoptions : ''
