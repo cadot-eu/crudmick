@@ -91,7 +91,6 @@ class CrudMakeNewCommand extends Command
 
                     </div>';
                         break;
-
                     default: {
                             $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
                             $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
