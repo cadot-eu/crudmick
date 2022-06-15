@@ -124,6 +124,14 @@ class CrudMakeTypeCommand extends Command
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                         $tempadds = "\n->add('$name',HiddenType::class,";
                         break;
+                    case 'hiddenroot':
+                        $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
+                        $tempadds = "\n->add('$name',HiddenType::class,";
+                        $attrs['data-controller'] = 'base--hiddenroot';
+                        $attrs['data-base--hiddenroot-code-value'] = "§\$AtypeOption[\"username\"]§";
+                        $vars['username'] = "''";
+                        $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')'; //mis le nom pour ne pas avoir de doublon
+                        break;
                     case 'money':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\MoneyType;";
                         $tempadds = "\n->add('$name',MoneyType::class,";
@@ -197,7 +205,7 @@ class CrudMakeTypeCommand extends Command
                         //si on a un formoptions
                         if (isset($options['form'])) {
                             $opts['query_builder'] .= "\n->andWhere(\"u." . $options['form'] . " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" . $options['form'] . "_id\"])";
-                            $vars[] = "'" . $options['form'] . "_id' => 0";
+                            $vars[$options['form'] . "_id"] = 0;
                             $resolver[] = '$resolver->setAllowedTypes(\'' . $options['form'] . '_id\', \'int\')';
                         }
                         $opts['query_builder'] .= ";}
@@ -254,6 +262,10 @@ class CrudMakeTypeCommand extends Command
                 $adds[] = implode("\n", $tab);
             }
         }
+        $Lvars = '';
+        foreach ($vars as $key => $value) {
+            $Lvars .= "'$key'" . '=>' . $value . ',';
+        }
         $fileType = dirname(__FILE__) . '/tpl/type.incphp';
         $html = CrudInitCommand::twigParser(
             file_get_contents($fileType),
@@ -264,13 +276,14 @@ class CrudMakeTypeCommand extends Command
                 'sdir' => '',
                 'adds' => ' $builder' . implode("\n", $adds),
                 'uses' => implode("\n", array_unique($uses)),
-                'vars' => isset($vars) ? implode("\n,", $vars) : '',
+                'vars' => isset($Lvars) ? $Lvars : '',
                 'resolver' => isset($resolver) ? implode("\n,", $resolver) : '',
                 'boucle' => isset($boucle) ? implode("\n", $boucle) : '',
                 'transform' => isset($transform) ? implode("\n", $transform) : ''
             ]
         );
         /* ------------------------------ RETURN BLOCKS ----------------------------- */
+        $html = str_replace(["'§", "§'", '"§', '§"'], '', $html);
         $blocks = (explode('//BLOCK', $html));
         CrudInitCommand::updateFile("src/Form/" . $Entity . 'Type.php', $blocks, $input->getOption('force'));
         return Command::SUCCESS;

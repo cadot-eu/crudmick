@@ -61,6 +61,9 @@ class CrudMakeControllerCommand extends Command
                         // $gets[] = '$' . $entity . '->add' . $nom . '($' . $entity . ');';
                         if (isset($options['form']))  $formoptions['compte_id'] = '$this->getUser()->getId()';
                         break;
+                    case 'hiddenroot':
+                        $formoptions['username'] = '$this->getUser()->getEmail()';
+                        break;
                 }
             }
             //création des recherche

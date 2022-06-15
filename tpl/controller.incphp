@@ -144,7 +144,6 @@ class ¤Entity¤Controller extends AbstractController
             //BLOCK
             //TODO: par listener
             ¤gets¤
-            if($¤entity¤->getUpdated)
             $em->persist($¤entity¤);
             $em->flush();
             //BLOCK
