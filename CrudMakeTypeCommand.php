@@ -65,6 +65,7 @@ class CrudMakeTypeCommand extends Command
                 continue;
             if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated']))
                 continue;
+            dump($options);
             if ((!isset($options['tpl']['no_form']) && $name != 'id')) {
                 switch ($select = $docs->getSelect($name)) {
                     case 'json':
@@ -81,7 +82,8 @@ class CrudMakeTypeCommand extends Command
                     case 'text':
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';
-                        $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
+                        if (!array_key_exists('data-base--ckeditor-toolbar-value', $options['attr']))
+                            $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
                         break;
                     case 'simplelanguage':
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simplelanguage';

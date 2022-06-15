@@ -91,7 +91,11 @@ class CrudMakeNewCommand extends Command
 
                     </div>';
                         break;
-
+                    case 'disabledroot': {
+                            $resattrs = '';
+                            $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . $resattrs . ',{"disabled":disabled}) }}' . "\n";
+                        }
+                        break;
                     default: {
                             $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
                             $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";

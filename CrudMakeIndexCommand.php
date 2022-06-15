@@ -82,9 +82,6 @@ class CrudMakeIndexCommand extends Command
             if (!isset($options['tpl']['no_index'])) {
                 switch ($select = $docs->getSelect($name)) {
                     case 'generatedvalue': //id
-                        /* Checking if the twig option is set, if it is, it will implode the array keys
-                       of the twig option and add a pipe to the beginning of the string. */
-                        $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n</td>";;
                         break;
                     case 'simple':
@@ -92,9 +89,15 @@ class CrudMakeIndexCommand extends Command
                     case 'full':
                     case 'normal':
                     case 'text':
-                        $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(20, \'...\')';
+                        $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(20, \'...\')';
+                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
+                        break;
                     case 'string':
-                        $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(40, \'...\')';
+                        $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
+                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
+                        break;
                     case 'money':
                     case 'slug':
                     case 'choice':
