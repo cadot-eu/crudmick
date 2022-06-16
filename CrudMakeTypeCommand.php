@@ -71,10 +71,10 @@ class CrudMakeTypeCommand extends Command
                     case 'json':
                         $transform[] = "\$builder->get('keywords')\n->addModelTransformer(new CallbackTransformer(\n" .
                             "function (\$keywordsAsArray) {\n" .
-                            "return implode(', ', \$keywordsAsArray);\n" .
+                            "return implode(',', \$keywordsAsArray);\n" .
                             "},\n" .
                             "function (\$keywordsAsString) {\n" .
-                            "return explode(', ', \$keywordsAsString);\n" .
+                            "return explode(',', \$keywordsAsString);\n" .
                             "}\n" .
                             "));\n";
                         $uses[] = "use Symfony\Component\Form\CallbackTransformer;";
