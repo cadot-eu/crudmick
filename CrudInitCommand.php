@@ -69,18 +69,22 @@ class CrudInitCommand extends Command
             }
         }
         // 
-        $find = "
-            public function index(\$search, \$sort = 'a.id', \$direction = 'ASC')
+        $find = <<<'EOT'
+        public function index($search, $sort = 'a.id', $direction = 'ASC', $deleted = false)
     {
-            return \$this->createQueryBuilder('a')
-        ->Where('a.deletedAt is NULL')
-        ->andWhere('a.article LIKE :val')
-        ->orWhere('a.titre LIKE :val')
-        ->setParameter('val', \"%\$search%\")
-        ->orderBy(\$sort, \$direction)
-        ->getQuery()
-        ->getResult();
-}";
+        $qb = $this->createQueryBuilder('a');
+        if ($deleted == false) $qb->where($qb->expr()->isNull('a.deletedAt'));
+        else
+            $qb->where($qb->expr()->isNotNull('a.deletedAt'));
+        $qb->andwhere($qb->expr()->orX(
+            $qb->expr()->like('a.article', ':val'),
+            $qb->expr()->like('a.titre', ':val')
+        ))->setParameter('val', "%$search%");
+        return $qb->orderBy($sort, $direction)
+            ->getQuery()
+            ->getResult();
+    }
+      EOT;
         $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
         if (strpos($repo, ' public function index($search') === false) {
             $place = strrpos($repo, '}');

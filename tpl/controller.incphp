@@ -36,9 +36,7 @@ class ¤Entity¤Controller extends AbstractController
     public function index(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-       if (!method_exists($¤entity¤Repository, 'index'))
-            dd('manque le filtre index dans le repository');
-        $dql = $¤entity¤Repository->index($request->query->get('filterValue', ''), $request->query->get('sort', 'a.id'), $request->query->get('direction'), 'ASC');
+        $dql = $¤entity¤Repository->index($request->query->get('filterValue', ''), $request->query->get('sort', 'a.id'), $request->query->get('direction'),false);
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             /*¤index_render¤*/
@@ -54,12 +52,12 @@ class ¤Entity¤Controller extends AbstractController
     public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-        $dql   = "SELECT a FROM App:¤Entity¤ a WHERE a.deletedAt is not NULL "¤index¤;
-        $query = $this->em->createQuery($dql);
+         $dql = $¤entity¤Repository->index($request->query->get('filterValue', ''), $request->query->get('sort', 'a.id'), $request->query->get('direction'),true);
+      
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             /*¤index_render¤*/
-            'pagination' =>$paginator->paginate($query,$request->query->getInt('page', 1),8)
+            'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
         ]);
     }
     //BLOCK
