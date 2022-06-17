@@ -68,6 +68,25 @@ class CrudInitCommand extends Command
                 $io->info("Paramètre `$test` ajouter dans la partie $comment ");
             }
         }
+        // 
+        $find = "
+            public function index(\$search, \$sort = 'a.id', \$direction = 'ASC')
+    {
+            return \$this->createQueryBuilder('a')
+        ->Where('a.deletedAt is NULL')
+        ->andWhere('a.article LIKE :val')
+        ->orWhere('a.titre LIKE :val')
+        ->setParameter('val', \"%\$search%\")
+        ->orderBy(\$sort, \$direction)
+        ->getQuery()
+        ->getResult();
+}";
+        $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
+        if (strpos($repo, ' public function index($search') === false) {
+            $place = strrpos($repo, '}');
+            file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $place) . "\n" . $find . substr($repo, $place));
+        }
+
         $io->success('All necessary parameters are presents');
 
         return Command::SUCCESS;
