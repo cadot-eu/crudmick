@@ -71,7 +71,7 @@ class CrudInitCommand extends Command
         // 
         $find = <<<'EOT'
         public function index($search, $sort = 'a.id', $direction = 'ASC', $deleted = false)
-    {
+            {
         $qb = $this->createQueryBuilder('a');
         if ($deleted == false) $qb->where($qb->expr()->isNull('a.deletedAt'));
         else
@@ -83,7 +83,7 @@ class CrudInitCommand extends Command
         return $qb->orderBy($sort, $direction)
             ->getQuery()
             ->getResult();
-    }
+            }
       EOT;
         $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
         if (strpos($repo, ' public function index($search') === false) {
