@@ -82,8 +82,7 @@ class CrudMakeTypeCommand extends Command
                     case 'text':
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';
-                        if (isset($options['attr']) and !array_key_exists('data-base--ckeditor-toolbar-value', $options['attr']))
-                            $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
                         break;
                     case 'simplelanguage':
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simplelanguage';

@@ -76,7 +76,7 @@ class CrudInitCommand extends Command
         if ($deleted == false) $qb->where($qb->expr()->isNull('a.deletedAt'));
         else
             $qb->where($qb->expr()->isNotNull('a.deletedAt'));
-        $qb->andwhere($qb->expr()->orX(
+        if ($search)$qb->andwhere($qb->expr()->orX(
             $qb->expr()->like('a.article', ':val'),
             $qb->expr()->like('a.titre', ':val')
         ))->setParameter('val', "%$search%");
