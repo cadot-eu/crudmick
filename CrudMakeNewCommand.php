@@ -62,6 +62,7 @@ class CrudMakeNewCommand extends Command
                         {{form_label(form.' . $name . ')}}
                         </label>
                         <div class="col-sm-8">
+                        <p class="form-text mb-0 help-text"><i>pensez à nommer le fichier (accents conservés, majuscule et minuscule)</i></p>
                         {{form_widget(form.' . $name . ')}}
                         {% if ' . $entity . '.' . $name . ' %}
                         <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
