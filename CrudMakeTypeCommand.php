@@ -65,7 +65,6 @@ class CrudMakeTypeCommand extends Command
                 continue;
             if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated']))
                 continue;
-            dump($options);
             if ((!isset($options['tpl']['no_form']) && $name != 'id')) {
                 switch ($select = $docs->getSelect($name)) {
                     case 'json':
@@ -80,6 +79,8 @@ class CrudMakeTypeCommand extends Command
                         $uses[] = "use Symfony\Component\Form\CallbackTransformer;";
                         break;
                     case 'text':
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        break;
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
@@ -130,6 +131,12 @@ class CrudMakeTypeCommand extends Command
                         $tempadds = "\n->add('$name',HiddenType::class,";
                         $attrs['data-controller'] = 'base--hiddenroot';
                         $attrs['data-base--hiddenroot-code-value'] = "§\$AtypeOption[\"username\"]§";
+                        $vars['username'] = "''";
+                        $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')'; //mis le nom pour ne pas avoir de doublon
+                        break;
+                    case 'disabledroot':
+                        $attrs['data-controller'] = 'base--disabledroot';
+                        $attrs['data-base--disabledroot-code-value'] = "§\$AtypeOption[\"username\"]§";
                         $vars['username'] = "''";
                         $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')'; //mis le nom pour ne pas avoir de doublon
                         break;

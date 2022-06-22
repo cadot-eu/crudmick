@@ -82,6 +82,7 @@ class CrudMakeIndexCommand extends Command
             if (!isset($options['tpl']['no_index'])) {
                 switch ($select = $docs->getSelect($name)) {
                     case 'generatedvalue': //id
+                    case 'hiddenroot':
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n</td>";;
                         break;
                     case 'simple':
