@@ -134,9 +134,9 @@ class CrudMakeTypeCommand extends Command
                         $vars['username'] = "''";
                         $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')'; //mis le nom pour ne pas avoir de doublon
                         break;
-                    case 'disabledroot':
-                        $attrs['data-controller'] = 'base--disabledroot';
-                        $attrs['data-base--disabledroot-code-value'] = "§\$AtypeOption[\"username\"]§";
+                    case 'readonlyroot':
+                        $attrs['data-controller'] = 'base--readonlyroot';
+                        $attrs['data-base--readonlyroot-code-value'] = "§\$AtypeOption[\"username\"]§";
                         $vars['username'] = "''";
                         $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')'; //mis le nom pour ne pas avoir de doublon
                         break;
