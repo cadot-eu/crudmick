@@ -122,6 +122,10 @@ class CrudMakeTypeCommand extends Command
                         $opts['mapped'] = false;
                         $opts['required'] = false;
                         break;
+                    case 'email':
+                        $uses[] = "use Symfony\Component\Form\Extension\Core\Type\EmailType;";
+                        $tempadds = "\n->add('$name',EmailType::class,";
+                        break;
                     case 'hidden':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                         $tempadds = "\n->add('$name',HiddenType::class,";
