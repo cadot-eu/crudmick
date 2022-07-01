@@ -70,20 +70,32 @@ class CrudInitCommand extends Command
         }
         // 
         $find = <<<'EOT'
-        public function index($search, $sort = 'a.id', $direction = 'ASC', $deleted = false)
-            {
-        $qb = $this->createQueryBuilder('a');
-        if ($deleted == false) $qb->where($qb->expr()->isNull('a.deletedAt'));
-        else
-            $qb->where($qb->expr()->isNotNull('a.deletedAt'));
-        if ($search)$qb->andwhere($qb->expr()->orX(
-            $qb->expr()->like('a.article', ':val'),
-            $qb->expr()->like('a.titre', ':val')
-        ))->setParameter('val', "%$search%");
-        return $qb->orderBy($sort, $direction)
-            ->getQuery()
-            ->getResult();
+        public function index($search, $fields, $sort = 'a.id', $direction = 'ASC', $deleted = false, $etat = null)
+        {
+            $fields = $fields == null ? [] : [];
+            $qb = $this->createQueryBuilder('a');
+            if ($deleted) {
+                $qb->where($qb->expr()->isNotNull('a.deletedAt'));
+            } else {
+                $qb->where($qb->expr()->isNull('a.deletedAt'));
             }
+            if ($etat != null) {
+                $qb->andwhere($qb->expr()->eq('a.etat', ':etat'))
+                    ->setParameter('etat', $etat);
+            }
+            $ORX = $qb->expr()->orx();
+            foreach ($fields as $field) {
+                $ors = [];
+                foreach (explode(' ', $search) as $s) {
+                    $ors[] = $qb->expr()->orx("a.$field LIKE '%$s%' ");
+                }
+                $ORX->add(join(' AND ', $ors));
+            }
+            $qb->andWhere($ORX);
+            return $qb->orderBy($sort, $direction)
+                ->getQuery()
+                ->getResult();
+        }
       EOT;
         $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
         if (strpos($repo, ' public function index($search') === false) {
