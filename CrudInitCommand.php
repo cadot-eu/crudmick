@@ -70,9 +70,10 @@ class CrudInitCommand extends Command
         }
         // 
         $find = <<<'EOT'
-        public function index($search, $fields, $sort = 'a.id', $direction = 'ASC', $deleted = false, $etat = null)
+        public function index($search, $fields, $sort, $direction = 'ASC', $deleted = false, $etat = null)
         {
-            $fields = $fields == null ? [] : [];
+            $sort = is_null($sort) ? 'a.id' : $sort;
+            $fields = $fields == null ? ['id'] : []; //premier array à compléter
             $qb = $this->createQueryBuilder('a');
             if ($deleted) {
                 $qb->where($qb->expr()->isNotNull('a.deletedAt'));
