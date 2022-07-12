@@ -45,8 +45,12 @@ class CrudMakeIndexCommand extends Command
         foreach ($docs->getOptions() as $name => $options) {
             //creation des th
             if (!isset($options['tpl']['no_index']) && $name != 'deletedAt' && $name != 'createdAt' && $name != 'updatedAt') {
-                $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
+                if (isset($docs->getOptions()['id']['order'])) {
+                    $th[] = "<th >$name</th>";
+                } else {
+                    $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
                 {{ knp_pagination_sortable(pagination, '$name', 'a.$name') }}</th>";
+                }
             }
         }
         /* ------------------------- creation des idoptions ------------------------- */
@@ -106,7 +110,21 @@ class CrudMakeIndexCommand extends Command
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;
                     case 'integer':
-                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
+                        if (isset($IDOptions['order']) && array_key_exists($name, $IDOptions['order'])) {
+                            $actions = ['top' => 'arrow-bar-up', 'up' => 'arrow-up', 'down' => 'arrow-down', 'bottom' => 'arrow-bar-down'];
+                            $chaine = '';
+                            foreach ($actions as $action => $icon) {
+                                $chaine .= "
+                                    <a href=\"{{path('change_ordre',{'entity':'$Entity','id':$Entity.id,'ordre':'$Entity.$name','action':'$action'})}}\" class=\"text-decoration-none\">
+                                    <i class=\"bi bi-$icon\"></i>
+                                    </a>
+                                ";
+                            }
+                            $td[] = " <td class='my-auto " . implode(' ', $class) . "' >" . $chaine . "</td>";
+                        } else {
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
+                        }
                         break;
                     case 'image':
                         $tdtemp = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ';
@@ -230,6 +248,7 @@ class CrudMakeIndexCommand extends Command
             'entete' => implode("\n", $th),
             'entity' => $entity,
             'Entity' => $Entity,
+            'order' => isset($IDOptions['order']) ?: 'false',
             'no_action_edit' => implode("\n", $resaction),
             'extends' => '/admin/base.html.twig',
             'no_action_add' => !isset($IDOptions['tpl']['no_action_add']) ? "true" : "false",

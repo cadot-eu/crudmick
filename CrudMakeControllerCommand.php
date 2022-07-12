@@ -69,6 +69,7 @@ class CrudMakeControllerCommand extends Command
             //création des recherche
             $search[] = 'a.' . $name . ' LIKE \'%" . $request->query->get(\'filterValue\') . "%\'';
         }
+        $IDOptions = $docs->getOptions()['id'];
         $searchString = '." AND (' . implode(' OR ', $search) . ')"';
         $fieldslug = isset($options['slug']) ? $docs->getArgumentOfAttributes('slug', "Gedmo\Mapping\Annotation\Slug", 'fields')[0] : '';
         $fileController = __DIR__ . '/tpl/controller.incphp';
@@ -76,16 +77,23 @@ class CrudMakeControllerCommand extends Command
         foreach ($formoptions as $key => $value) {
             $Lformoptions .= "'$key'" . '=>' . $value . ',';
         }
-        //AND (a.titre LIKE '%" . $request->query->get('filterValue') . "%' OR a.titre LIKE '%" . $request->query->get('filterValue') . "%')
+        if (isset($IDOptions['order'])) {
+            $search = '$dql= $' . $entity . 'Repository->findby([\'deletedAt\'=>null],[\'ordre\'=>\'ASC\']);';
+            $paginator = "1, 1000";
+        } else {
+            $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'),null, $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
+            $paginator = " \$request->query->getInt('page', 1)";
+        }
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
             'partie' => "/admin//",
             'fieldslug' => $fieldslug,
             'entity' => $entity,
             'Entity' => $Entity,
             'extends' => '/admin/base.html.twig',
+            'paginator' => $paginator,
             'sdir' =>  '',
             'ssdir' => '',
-            'ordre' => isset($options['id']['ORDRE']) ? $options['id']['ORDRE'] : null,
+            'search' => $search,
             'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) :  $searchString,
             'delete' => isset($docs->getOptions()['id']['delete']) ?  array_key_first($docs->getOptions()['id']['delete']) : null,
             'gets' => isset($gets) ? implode("\n", $gets) : '',

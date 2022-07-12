@@ -14,18 +14,20 @@
 	<h1>¤Entity¤</h1>
 	{#BLOCK#}
 	<div class="row">
-		<div class="col-8">
-			{{ knp_pagination_filter(pagination, {
+		{% if not ¤order¤ %}
+			<div class="col-8">
+				{{ knp_pagination_filter(pagination, {
                     'r.recherche': 'Recherche',
                 }) }}
-		</div>
-		<div class="col-4 my-auto">
-			{% if pagination.getTotalItemCount>0  %}
-				<b class="ms-auto text-bold">
-					{{ pagination.getTotalItemCount }}
-					trouvés</b>
-			{% endif %}
-		</div>
+			</div>
+			<div class="col-4 my-auto">
+				{% if pagination.getTotalItemCount>0  %}
+					<b class="ms-auto text-bold">
+						{{ pagination.getTotalItemCount }}
+						trouvés</b>
+				{% endif %}
+			</div>
+		{% endif %}
 		<table class="table table-striped table-hover align-middle">
 			<thead>
 				<tr>
@@ -110,10 +112,12 @@
 		{% endif %}
 	</div>
 	{#BLOCK#}
-	<div class="row">
-		<div class="navigation col-auto mx-auto">
-			{{ knp_pagination_render(pagination) }}
+	{% if not ¤order¤ %}
+		<div class="row">
+			<div class="navigation col-auto mx-auto">
+				{{ knp_pagination_render(pagination) }}
+			</div>
 		</div>
-	</div>
+	{% endif %}
 
 </div>{%endblock %}

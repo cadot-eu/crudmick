@@ -36,11 +36,11 @@ class ¤Entity¤Controller extends AbstractController
     public function index(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         //BLOCK
-        $dql = $¤entity¤Repository->index($request->query->get('filterValue', ''),null, $request->query->get('sort'), $request->query->get('direction'),false);
+        ¤search¤
         //BLOCK
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             /*¤index_render¤*/
-            'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
+            'pagination' =>$paginator->paginate($dql,¤paginator¤)
         ]);
         //BLOCK
     }
