@@ -81,6 +81,7 @@ class LinksCheckerCommand extends Command
     }
     function returnAllLinks($base, $descent = 0,  $links = [])
     {
+        echo ('page:' . $base);
         $html = $this->client->request('GET', $base)->getContent();
         $crawler = new Crawler($html, $base);
         $crawler->filter('a')->each(function (Crawler $node) use ($base, $descent, &$links) {
