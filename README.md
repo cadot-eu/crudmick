@@ -11,6 +11,7 @@ Possibilités de surchargé les attr et opt .
 - simple
 - simplelanguage
 - normal
+- full
 - choice (options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"] ou options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"} et possibilté d'imposé un choix seul sur un json ou array ATTR:{"data-controller":"base--onecheckbox"})
 - choiceenplace
 - entity
@@ -30,6 +31,7 @@ Possibilités de surchargé les attr et opt .
 - no_form
 - index_FileImage
 - index_FileImageNom
+
 
 ## OPT et ATTR
 
@@ -56,3 +58,12 @@ split('¤')[1]
 ### Erreurs fréquentes
 
 - An invalid form control with name='' is not focusable est du à un champ qui est required et ` hiddden ` ou  ` display:none `, ckeditor cache le champ et donc si il est required crè cette erreur. On peut utiliser ` * OPT=required=>false`
+
+### Trait
+
+- etat: brouillon, en ligne à vérifier par ajax
+- situation: actif / inactif
+- time: updated, created, deleted
+- categories
+- vérified: on off
+- 

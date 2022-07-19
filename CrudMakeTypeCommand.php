@@ -236,7 +236,8 @@ class CrudMakeTypeCommand extends Command
                             $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                             $tempadds = "\n->add('$name',HiddenType::class,";
                         }
-                        if ($name == 'updatedAt') {
+
+                        if ($name == 'updatedAt' && !isset($IDOptions['tpl']['no_updated'])) {
                             $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                             $opts['help'] = "Vide pour la date et l'heure d'enregistrement";
                             $adds[] = "->add('exupdatedAt',HiddenType::class,\narray ('mapped'=>false,'data'=>\$AtypeOption['data']->getupdatedAt()?\$AtypeOption['data']->getupdatedAt()->format('Y-m-d H:i:s'):null,\n'attr' =>\narray (\n),\n))";
