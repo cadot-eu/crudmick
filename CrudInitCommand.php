@@ -88,6 +88,7 @@ class CrudInitCommand extends Command
             foreach ($fields as $field) {
                 $ors = [];
                 foreach (explode(' ', $search) as $s) {
+                    $s = str_replace("'", "''", $s);
                     $ors[] = $qb->expr()->orx("a.$field LIKE '%$s%' ");
                 }
                 $ORX->add(join(' AND ', $ors));
