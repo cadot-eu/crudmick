@@ -79,25 +79,25 @@ class CrudMakeTypeCommand extends Command
                         $uses[] = "use Symfony\Component\Form\CallbackTransformer;";
                         break;
                     case 'text':
-                        $attrs['data-controller'] = 'ckeditor';
+                        $attrs['data-controller'] = 'base--ckeditor';
                         break;
                     case 'simple':
-                        $attrs['data-controller'] = 'ckeditor';
-                        $attrs['data-ckeditor-toolbar-value'] = 'simple';
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
                         break;
                     case 'simplelanguage':
-                        $attrs['data-ckeditor-toolbar-value'] = 'simplelanguage';
-                        $attrs['data-controller'] = 'ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'simplelanguage';
+                        $attrs['data-controller'] = 'base--ckeditor';
                         break;
                     case 'full':
-                        $attrs['data-controller'] = 'ckeditor';
-                        $attrs['data-ckeditor-upload-value'] = $entity . '_simpleupload';
-                        $attrs['data-ckeditor-toolbar-value'] = 'full';
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-upload-value'] = $entity . '_simpleupload';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'full';
                         break;
                     case 'normal':
-                        $attrs['data-controller'] = 'ckeditor';
-                        $attrs['data-ckeditor-toolbar-value'] = 'normal';
-                        $attrs['data-ckeditor-upload-value'] = $entity . '_simpleupload';
+                        $attrs['data-controller'] = 'base--ckeditor';
+                        $attrs['data-base--ckeditor-toolbar-value'] = 'normal';
+                        $attrs['data-base--ckeditor-upload-value'] = $entity . '_simpleupload';
                         break;
                     case 'password':
                         $tempadds = "->add('$name',RepeatedType::class,";
