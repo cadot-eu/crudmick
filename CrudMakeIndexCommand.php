@@ -69,8 +69,12 @@ class CrudMakeIndexCommand extends Command
             $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
         {{ knp_pagination_sortable(pagination, 'créé', 'a.createdAt') }}</th>";
         if (!isset($IDOptions['tpl']['no_updated']))
-            $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
+            if (isset($docs->getOptions()['id']['order'])) {
+                $th[] = "<th >Mis à jour</th>";
+            } else {
+                $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
         {{ knp_pagination_sortable(pagination, 'mis à jour', 'a.updatedAt') }}</th>";
+            }
         /* ---------------------------------- body ---------------------------------- */
         $tableauChoice = '';
         foreach ($docs->getOptions() as $name => $options) {
@@ -248,7 +252,7 @@ class CrudMakeIndexCommand extends Command
             'entete' => implode("\n", $th),
             'entity' => $entity,
             'Entity' => $Entity,
-            'order' => isset($IDOptions['order']) ?: 'false',
+            'order' => isset($IDOptions['order']),
             'no_action_edit' => implode("\n", $resaction),
             'extends' => '/admin/base.html.twig',
             'no_action_add' => !isset($IDOptions['tpl']['no_action_add']) ? "true" : "false",
