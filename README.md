@@ -45,6 +45,7 @@ Possibilités de surchargé les attr et opt .
 - no_deleted
 - no_updated
 - nocrud
+- order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int
 
 ### TWIG
 
