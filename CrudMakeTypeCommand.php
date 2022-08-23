@@ -158,8 +158,8 @@ class CrudMakeTypeCommand extends Command
                         $uses[] = "use App\Form\\" . $target . "Type;";
                         $tempadds = "->add('$name',CollectionType::class,";
                         $opts['entry_type!'] = $target . "Type::class";
-                        $attrs['data-controller'] = 'base--collection';
-                        $attrs['data-base--collection-valeurs-value!'] = 'json_encode($' . $name . ')';
+                        //$attrs['data-controller'] = 'base--collection';
+                        //$attrs['data-base--collection-valeurs-value!'] = 'json_encode($' . $name . ')';
                         //for entry use xtra for add option
                         if (isset($options['xtra'])) {
                             foreach ($options['xtra'] as $clef => $entry) {

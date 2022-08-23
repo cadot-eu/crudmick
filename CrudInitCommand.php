@@ -186,7 +186,7 @@ class CrudInitCommand extends Command
                         }
                         break;
                     case 'twig':
-                        $html .= "{# Here for add your Code #} {# End of your Code #}\n";
+                        $html .= "\n";
                         break;
                 }
                 $html .= $block;
