@@ -96,7 +96,7 @@
 	<div class="row">
 		{% if ¤no_action_add¤ %}
 			<div class="col">
-				<a class="btn btn-primary" data-toggle="tooltip" title="ajouter enregistrement" href="{{ path('¤entity¤_new') }}">Ajouter un enregistrement</a>
+				<a class="btn btn-primary" data-toggle="tooltip" title="ajouter enregistrement" data-turbo="false" href="{{ path('¤entity¤_new') }}">Ajouter un enregistrement</a>
 			</div>
 		{% endif %}
 		{% if ¤no_access_deleted¤ %}
