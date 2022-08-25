@@ -81,7 +81,8 @@ class CrudMakeControllerCommand extends Command
             $search = '$dql= $' . $entity . 'Repository->findby([\'deletedAt\'=>null],[\'ordre\'=>\'ASC\']);';
             $paginator = "1, 1000";
         } else {
-            $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'), $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
+            $fields = isset($IDOptions['search']) ? array_key_first($IDOptions['search']) : "['id']";
+            $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'),' . $fields . ', $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
             $paginator = " \$request->query->get('filterValue') ? 1 :\$request->query->getInt('page', 1)";
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [

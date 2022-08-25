@@ -69,10 +69,9 @@ class CrudInitCommand extends Command
         }
         // 
         $find = <<<'EOT'
-        public function index($search, $fields, $sort, $direction = 'ASC', $deleted = false, $etat = null)
+        public function index($search, $fields, $sort, $direction , $deleted = false, $etat = null)
         {
             $sort = is_null($sort) ? 'a.id' : $sort;
-            $fields = $fields == null ? ['id'] : []; //premier array à compléter
             $qb = $this->createQueryBuilder('a');
             if ($deleted) {
                 $qb->where($qb->expr()->isNotNull('a.deletedAt'));
@@ -93,22 +92,27 @@ class CrudInitCommand extends Command
                 $ORX->add(join(' AND ', $ors));
             }
             $qb->andWhere($ORX);
-            return $qb->orderBy($sort, $direction)
+            return $qb->orderBy($sort, strtoupper($direction))
                 ->getQuery()
                 ->getResult();
-        }//fin index
+        }
+        //fin index
+
       EOT;
 
 
 
         $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
         //suppression de l'ancien index
-        if ($deb = strpos($repo, 'public function index($search') !== false) {
-            $place = strpos($repo, '}//fin index', $deb);
+        if (($deb = strpos($repo, 'public function index($search')) !== false) {
+            $end = strpos($repo, '//fin index', $deb);
+            file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', str_replace(substr($repo, $deb, $end - $deb + strlen('//fin index')), $find, $repo));
         } else {
-            $place = strrpos($repo, '}');
+            $end = strrpos($repo, '}');
+            $deb = $end;
+            file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $deb) . "\n" . $find . substr($repo, $end));
         }
-        file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $place) . "\n" . $find . substr($repo, $place));
+        //file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $deb) . "\n" . $find . substr($repo, $end));
 
 
         return Command::SUCCESS;
