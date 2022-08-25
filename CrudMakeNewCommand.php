@@ -111,7 +111,7 @@ class CrudMakeNewCommand extends Command
             throw new Exception("Le fichier " . $fileNew . " est introuvable", 1);
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileNew), array(
-            'form_rows' => implode("\n{#BLOCK#}\n", $rows),
+            'form_rows' => implode("\n\n", $rows),
             'entity' => $entity,
             'Entity' => $Entity,
             'extends' => '/admin/base.html.twig',

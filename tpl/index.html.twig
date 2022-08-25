@@ -2,17 +2,17 @@
 {% set route =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))%}
 {% set action =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))| split('/')| last%}
 {% set current_path = app.request.get('_route') %}
-{#BLOCK#}
+
 {% block title %}
 	¤Entity¤
 {% endblock %}
 
 {% block body %}
 
-	{#BLOCK#}
+
 	¤tableauChoice¤
 	<h1>¤Entity¤</h1>
-	{#BLOCK#}
+
 	<div class="row">
 		{% if not ¤order¤ %}
 			<div class="col-8">
@@ -31,34 +31,32 @@
 		<table class="table table-striped table-hover align-middle">
 			<thead>
 				<tr>
-					{#BLOCK#}
+
 					¤entete¤
-					{#BLOCK#}
+
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody class="sortable">
 				{% for ¤Entity¤ in pagination %}
-					{#BLOCK#}
+
 					{% if ¤hide¤ %}
-						{#BLOCK#}
-						<tr
-							data-num="{{¤Entity¤.id }}">
-							{#BLOCK#}
+
+						<tr data-num="{{¤Entity¤.id }}">
+
 							¤rows¤
-							{#BLOCK#}
+
 							<td>
-								{#BLOCK#}
+
 								<form method="post" action="{{ path('¤entity¤_delete', {'id': ¤Entity¤.id }) }}" style="margin-block-end: 0;">
-									<div
-										class="btn-group" role="group" aria-label="actions">
-										{#BLOCK#}
+									<div class="btn-group" role="group" aria-label="actions">
+
 										<input type="hidden" name="_token" value="{{ csrf_token('delete'~¤Entity¤.id ) }}"/>
 										¤no_action_edit¤
-										{#BLOCK#}
+
 										{% if ¤no_access_deleted¤ %}
 											{% if action=='deleted' %}
-												{#BLOCK#}
+
 												<button class="btn btn-xs btn-warning" title="restaurer" name="delete_restore" value="1">
 													<i class="icone bi bi-life-preserver"></i>
 												</button>
@@ -66,24 +64,22 @@
 													<i class="icone bi bi-trash"></i>
 												</button>
 											{% else %}
-												{#BLOCK#}
+
 												<button class="btn btn-xs btn-warning" title="mettre dans la corbeille" name="delete_softdelete" value="1">
 													<i class="icone icone bi bi-trash"></i>
 												</button>
 											{% endif %}
 										{% endif %}
 
-										{#BLOCK#}
-
 
 									</div>
 								</form>
-								{#BLOCK#}
+
 							</td>
 						</tr>
-						{#BLOCK#}
+
 					{% endif %}
-					{#BLOCK#}
+
 				{% else %}
 					<tr>
 						<td colspan="11">Aucun enregistrement</td>
@@ -92,7 +88,7 @@
 			</tbody>
 		</table>
 	</div>
-	{#BLOCK#}
+
 	<div class="row">
 		{% if ¤no_action_add¤ %}
 			<div class="col">
@@ -111,7 +107,7 @@
 			{% endif %}
 		{% endif %}
 	</div>
-	{#BLOCK#}
+
 	{% if not ¤order¤ %}
 		<div class="row">
 			<div class="navigation col-auto mx-auto">
