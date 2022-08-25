@@ -41,9 +41,7 @@ class CrudGenerateAllCommand extends Command
         $Finput = new ArrayInput([
             'entity' => $this->entity
         ]);
-        //secure $this->entity in minus
         $this->entity = strTolower($this->entity);
-        //TODO: ajouter controle sur nocrud
         $init = $this->getApplication()->find('crud:init');
         $init->run($Finput, $output);
 

@@ -41,11 +41,13 @@ Possibilités de surchargé les attr et opt .
 ## ID
 
 - hide:{"roles[0]":"ROLE_SUPERADMIN"}
-- no_created
-- no_deleted
-- no_updated
+- tpl:no_created
+- tpl:no_deleted
+- tpl:no_updated
 - nocrud
+- onlytype
 - order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int
+- search: pour donner les champs de recherche pour knp
 
 ### TWIG
 
