@@ -23,7 +23,7 @@ class CrudMakeControllerCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('force', null, InputOption::VALUE_NONE, 'Pour passer les erreurs et continuer');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -81,7 +81,7 @@ class CrudMakeControllerCommand extends Command
             $search = '$dql= $' . $entity . 'Repository->findby([\'deletedAt\'=>null],[\'ordre\'=>\'ASC\']);';
             $paginator = "1, 1000";
         } else {
-            $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'),null, $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
+            $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'), $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
             $paginator = " \$request->query->get('filterValue') ? 1 :\$request->query->getInt('page', 1)";
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
@@ -100,15 +100,13 @@ class CrudMakeControllerCommand extends Command
             'formoptions' => isset($Lformoptions) ? $Lformoptions : ''
 
         ]);
-        /** @var string $html */
-        $blocks = (explode('//BLOCK', $html));
         //open model controller
         $fileController = __DIR__ . '/tpl/controller.incphp';
         if (!file_Exists($fileController)) {
             throw new Exception("Le fichier " . $fileController . ' est introuvable', 1);
         }
         //create file
-        CrudInitCommand::updateFile("src/Controller/" . $Entity . 'Controller.php', $blocks, $input->getOption('force'));
+        CrudInitCommand::updateFile("src/Controller/" . $Entity . 'Controller.php', $html, $input->getOption('comment'));
         return Command::SUCCESS;
     }
 }

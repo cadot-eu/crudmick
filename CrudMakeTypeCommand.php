@@ -29,7 +29,7 @@ class CrudMakeTypeCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('force', null, InputOption::VALUE_NONE, 'Pour passer les erreurs et continuer');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -252,7 +252,7 @@ class CrudMakeTypeCommand extends Command
 
                         break;
                     default: {
-                            dump('non géré dans maketype:' . $select . '[' . $name . ']');
+                            if ($input->getOption('comment') != false) $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
                         }
                 }
                 //surcharge opt
@@ -300,9 +300,7 @@ class CrudMakeTypeCommand extends Command
             ]
         );
         /* ------------------------------ RETURN BLOCKS ----------------------------- */
-        $html = str_replace(["'§", "§'", '"§', '§"'], '', $html);
-        $blocks = (explode('//BLOCK', $html));
-        CrudInitCommand::updateFile("src/Form/" . $Entity . 'Type.php', $blocks, $input->getOption('force'));
+        CrudInitCommand::updateFile("src/Form/" . $Entity . 'Type.php', $html, $input->getOption('comment'));
         return Command::SUCCESS;
     }
 }

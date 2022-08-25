@@ -24,7 +24,7 @@ class CrudMakeNewCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('force', null, InputOption::VALUE_NONE, 'Pour passer les erreurs et continuer');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -117,8 +117,7 @@ class CrudMakeNewCommand extends Command
             'extends' => '/admin/base.html.twig',
             'sdir' => ''
         ));
-        $blocks = (explode('{#BLOCK#}', $html));
-        CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $blocks, $input->getOption('force'));
+        CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'));
         return Command::SUCCESS;
     }
 }

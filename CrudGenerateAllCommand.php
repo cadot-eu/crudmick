@@ -23,8 +23,7 @@ class CrudGenerateAllCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('force', null, InputOption::VALUE_NONE, 'Pour passer les erreurs et continuer');
+            ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -39,29 +38,27 @@ class CrudGenerateAllCommand extends Command
             $this->entity = $helper->ask($input, $output, $question);
         }
         /* -------------------------------- constant -------------------------------- */
-        $force = new ArrayInput([
-            'entity' => $this->entity,
-            '--force' => $input->getOption('force'),
+        $Finput = new ArrayInput([
+            'entity' => $this->entity
         ]);
         //secure $this->entity in minus
         $this->entity = strTolower($this->entity);
         //TODO: ajouter controle sur nocrud
         $init = $this->getApplication()->find('crud:init');
-        $init->run($force, $output);
+        $init->run($Finput, $output);
 
         $type = $this->getApplication()->find('crud:generate:type');
-        $type->run($force, $output);
+        $type->run($Finput, $output);
 
         $new = $this->getApplication()->find('crud:generate:new');
-        $new->run($force, $output);
+        $new->run($Finput, $output);
 
         $index = $this->getApplication()->find('crud:generate:index');
-        $index->run($force, $output);
+        $index->run($Finput, $output);
 
         $controller = $this->getApplication()->find('crud:generate:controller');
-        $controller->run($force, $output);
+        $controller->run($Finput, $output);
 
-        $io->success('Tous les fichiers ont été générés');
         return Command::SUCCESS;
     }
 }

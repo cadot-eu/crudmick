@@ -23,7 +23,7 @@ class CrudMakeIndexCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('force', null, InputOption::VALUE_NONE, 'Pour passer les erreurs et continuer');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -200,7 +200,7 @@ class CrudMakeIndexCommand extends Command
                         break;
 
                     default:
-                        dump('non géré dans makeindex:' . $select);
+                        if ($input->getOption('comment') != false) $output->writeln('- non géré dans makeindex:' . $select);
                         break;
                 }
             }
@@ -260,8 +260,7 @@ class CrudMakeIndexCommand extends Command
             'tableauChoice' => $tableauChoice,
         ]);
         /** @var string $html */
-        $blocks = (explode('{#BLOCK#}', $html));
-        CrudInitCommand::updateFile("templates/" . $entity . '/index.html.twig', $blocks, $input->getOption('force'));
+        CrudInitCommand::updateFile("templates/" . $entity . '/index.html.twig', $html, $input->getOption('comment'));
         return Command::SUCCESS;
     }
 }

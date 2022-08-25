@@ -28,7 +28,7 @@ class CrudInitCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\'entity')
-            ->addOption('force', null, InputOption::VALUE_NONE, 'Pour passer les erreurs et continuer');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,7 +42,6 @@ class CrudInitCommand extends Command
             $question = new Question('Entrer le nom de l\'entité:');
             $entity = $helper->ask($input, $output, $question);
         }
-
         //secure $entity in minus
         $entity = strTolower($entity);
         $sdir = '';
@@ -97,15 +96,20 @@ class CrudInitCommand extends Command
             return $qb->orderBy($sort, $direction)
                 ->getQuery()
                 ->getResult();
-        }
+        }//fin index
       EOT;
-        $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
-        if (strpos($repo, ' public function index($search') === false) {
-            $place = strrpos($repo, '}');
-            file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $place) . "\n" . $find . substr($repo, $place));
-        }
 
-        $io->success('All necessary parameters are presents');
+
+
+        $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
+        //suppression de l'ancien index
+        if ($deb = strpos($repo, 'public function index($search') !== false) {
+            $place = strpos($repo, '}//fin index', $deb);
+        } else {
+            $place = strrpos($repo, '}');
+        }
+        file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $place) . "\n" . $find . substr($repo, $place));
+
 
         return Command::SUCCESS;
     }
@@ -120,89 +124,15 @@ class CrudInitCommand extends Command
      * @param string filename The name of the file to be updated.
      * @param array blocks an array of blocks of code
      */
-    public static function updateFile(string $filename, array $blocks, $force = false)
+    public static function updateFile(string $filename, $html, $comment = false)
     {
-        $input = new ArgvInput();
-        $output = new ConsoleOutput();
-        $io = new SymfonyStyle($input, $output);
-        $modification = false; //pour ne pas faire de modif et juste afficher qu'il y a eu une modification
-        //open old json file if exist and cut by block
-        if (file_exists("savecrud/" . $filename . ".json") && file_exists($filename) && $force == false) {
-            //get old blocks
-            $exblocks = json_decode(file_get_contents("savecrud/" . $filename . ".json"));
-            //loop on blocks in new file
-            $html = '';
-            //by extension cut blocks of code personal
-            switch (pathinfo($filename, PATHINFO_EXTENSION)) {
-                case 'php':
-                    preg_match_all('#//Here for add your Code(.*?)//end of your code#s', file_get_contents($filename), $match);
-                    break;
-                case 'twig':
-                    preg_match_all('/{# Here for add your Code #}(.*?) #}/s', file_get_contents($filename), $match);
-                    break;
-            }
-            //
-            if (pathinfo($filename, PATHINFO_EXTENSION) == 'php') {
-                $decalage = 1;
-            } else {
-                $decalage = 0;
-            }
-            /* -------------------- vérification du nombre de blocks -------------------- */
-            if (!((count($exblocks) == count($blocks)) && (count($blocks) == (count($match[0]) + $decalage)))) {
-                $io->error("Les blocks ne correspondent pas entre le fichier $filename et " . "savecrud/" . $filename . ".json");
-
-                $io->info("Arrêt du script, vous pouvez supprimer la sauvegarde ou vérifier que vous n'avez pas supprimer de blocks");
-                exit();
-            }
-            /* --------- vérification si un code est écris en dehors des blocks --------- */
-            foreach ($exblocks as $num => $block) {
-                $diff = CrudInitCommand::clean($block);
-                if ($diff != '') {
-                    $pos = strpos(CrudInitCommand::clean(file_get_contents($filename)), CrudInitCommand::clean($block));
-                    if ($pos === false) {
-                        $io->error("Dans le fichier:$filename.Ce block a été modifié:" . $block);
-                        $io->info("Arrêt du script.Merci de vérifier que vous n'avez pas écris en dehors des blocks");
-                        $modification = true;
-                    }
-                }
-                //maj du block
-                if (pathinfo($filename, PATHINFO_EXTENSION) == 'php') {
-                    if ($num != "0") {
-                        $html .= $match[0][$num - 1];
-                    }
-                } else {
-                    $html .= $match[0][$num];
-                }
-                $html .= $blocks[$num];
-            }
-            //$html = str_replace($exblocks, $blocks, file_get_contents($filename));
-        } else {
-            $html = "";
-            foreach ($blocks as $num => $block) {
-                switch (pathinfo($filename, PATHINFO_EXTENSION)) {
-                    case 'php':
-                        if ($num != 0) {
-                            $html .= "//Here for add your Code //end of your code\n";
-                        }
-                        break;
-                    case 'twig':
-                        $html .= "\n";
-                        break;
-                }
-                $html .= $block;
-            }
+        // save new file
+        $retour = file_put_contents($filename, $html);
+        if ($retour === false) {
+            throw new Exception("Erreur sur la création du fichier:" . $filename, 1);
         }
-        if ($modification == false) {
-            // save new file
-            @mkdir('savecrud/' . pathinfo($filename)['dirname'], 0777, true);
-            file_put_contents("savecrud/" . $filename . ".json", json_encode($blocks));
-            $retour = file_put_contents($filename, $html);
-            if ($retour === false) {
-                throw new Exception("Erreru sur la création du fichier:" . $filename, 1);
-            }
-            if (file_exists($filename)) {
-                $io->info('File ' . $filename . ' généré ');
-            }
+        if (file_exists($filename)) {
+            if ($comment) echo ('File ' . $filename . ' généré ' . "\n");
         }
     }
     /**
