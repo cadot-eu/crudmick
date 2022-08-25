@@ -77,11 +77,11 @@ class CrudMakeControllerCommand extends Command
         foreach ($formoptions as $key => $value) {
             $Lformoptions .= "'$key'" . '=>' . $value . ',';
         }
+        $fields = isset($IDOptions['search']) ? array_key_first($IDOptions['search']) : "['id']";
         if (isset($IDOptions['order'])) {
             $search = '$dql= $' . $entity . 'Repository->findby([\'deletedAt\'=>null],[\'ordre\'=>\'ASC\']);';
             $paginator = "1, 1000";
         } else {
-            $fields = isset($IDOptions['search']) ? array_key_first($IDOptions['search']) : "['id']";
             $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'),' . $fields . ', $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
             $paginator = " \$request->query->get('filterValue') ? 1 :\$request->query->getInt('page', 1)";
         }
@@ -95,6 +95,7 @@ class CrudMakeControllerCommand extends Command
             'sdir' =>  '',
             'ssdir' => '',
             'search' => $search,
+            'fields' => $fields,
             'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) :  $searchString,
             'delete' => isset($docs->getOptions()['id']['delete']) ?  array_key_first($docs->getOptions()['id']['delete']) : null,
             'gets' => isset($gets) ? implode("\n", $gets) : '',
