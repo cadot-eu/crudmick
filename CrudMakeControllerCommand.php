@@ -83,7 +83,7 @@ class CrudMakeControllerCommand extends Command
             $paginator = "1, 1000";
         } else {
             $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'),' . $fields . ', $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
-            $paginator = " \$request->query->get('filterValue') ? 1 :\$request->query->getInt('page', 1)";
+            $paginator = "\$request->query->getInt('page', 1)";
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
             'partie' => "/admin//",
