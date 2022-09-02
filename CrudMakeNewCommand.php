@@ -48,6 +48,20 @@ class CrudMakeNewCommand extends Command
         //variable
         $rows = [];
         $IDOptions = $docs->getOptions()['id'];
+        foreach ($IDOptions as $IDOption => $value) {
+            switch ($IDOption) {
+                    //ajoute selectandcopyelement_controlller
+                case 'select':
+                    $rows[] = '
+                    <div data-controller="base--SelectAndCopyElement" 
+                    data-base--SelectAndCopyElement-entitie-value="' . $value['entitie'] . '" 
+                    data-base--SelectAndCopyElement-affichage-value="' . $value['affichage'] . '"
+                    data-base--SelectAndCopyElement-copy-value="' . $value['copy'] . '"  
+                    ></div>';
+                    break;
+            }
+        }
+
         foreach ($docs->getOptions() as $name => $options) {
             //timetrait
             if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
