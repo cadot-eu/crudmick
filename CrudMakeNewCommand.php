@@ -56,7 +56,10 @@ class CrudMakeNewCommand extends Command
                     <div data-controller="base--SelectAndCopyElement" 
                     data-base--SelectAndCopyElement-entitie-value="' . $value['entitie'] . '" 
                     data-base--SelectAndCopyElement-affichage-value="' . $value['affichage'] . '"
+                    data-base--SelectAndCopyElement-champs-value="' . $value['champs'] . '"
+                    data-base--SelectAndCopyElement-limit-value="' . $value['limit'] . '"
                     data-base--SelectAndCopyElement-copy-value="' . $value['copy'] . '"  
+                    data-base--SelectAndCopyElement-copyurl-value="' . $value['copyurl'] . '"  
                     ></div>';
                     break;
             }
