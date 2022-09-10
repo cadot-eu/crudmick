@@ -85,9 +85,9 @@ class CrudMakeNewCommand extends Command
                         <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
                         {% endif %}
                         </div>
-                        <div class="col-sm-2 ">
+                        <div class="col-sm-2 d-flex align-items-center">
                     {% if ' . $entity . '.' . $name . ' %}
-                        <img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid" data-controller="base--bigpicture" ' . "
+                        <img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
                         data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"petit\")}}' />" . '
                     {% endif %}
                         </div>
@@ -131,6 +131,8 @@ class CrudMakeNewCommand extends Command
             'form_rows' => implode("\n\n", $rows),
             'entity' => $entity,
             'Entity' => $Entity,
+            'viewerUrl' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['url'] : false,
+            'viewerChamp' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['champ'] : false,
             'extends' => '/admin/base.html.twig',
             'sdir' => ''
         ));

@@ -9,6 +9,7 @@ last %}
 		{% elseif action=='edit' %}Edition
 	{% endif %}
 	¤Entity¤
+	{{¤entity¤.id}}
 {% endblock %}
 
 {% block body %}
@@ -16,11 +17,20 @@ last %}
 
 	<div class="col-12 text-center">
 		<h1>
-			{% if action=='new' %}Créer
-				{% elseif action=='copy' %}Dupliquer
-				{% elseif action=='edit' %}Editer
+			{% if action=='new' %}Création
+				{% elseif action=='copy' %}Duplication
+				{% elseif action=='edit' %}Edition
 			{% endif %}
-			¤Entity¤
+			{{TBgetClass(¤entity¤)|lower|slice(0,1) in ['a','e','i','o','u','y'] ? "de l'¤Entity¤" : "du ¤Entity¤"}}
+
+			{{¤entity¤.id}}
+			{% if "¤viewerUrl¤" != false %}
+				<span>
+					<a href="¤viewerUrl¤/{{¤entity¤.¤viewerChamp¤}}" title="Afficher dans un autre onglet la page" target="_blank">
+						<i class="bi bi-display"></i>
+					</a>
+				</span>
+			{% endif %}
 			<span
 				class="text-right">{# <h5>taille maxi d'envoie:<span id="TBuploadmax">{{TBuploadmax()}}</span>Mo</h5> #}
 			</span>
