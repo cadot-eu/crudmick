@@ -46,8 +46,10 @@ Possibilités de surchargé les attr et opt .
 - tpl:no_updated
 - nocrud
 - onlytype
-- order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int
-- search: pour donner les champs de recherche pour knp
+- order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}
+- search: pour donner les champs de recherche pour knp ex: *  SEARCH:['id','titre','article']
+- select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
+- viewer: url et champ pour créer le lien pour visionner l'objet dans un nouvel onglet ex:* VIEWER:{"url":"/les-articles","champ":"slug"}
 
 ### TWIG
 
