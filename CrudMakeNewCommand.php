@@ -131,8 +131,8 @@ class CrudMakeNewCommand extends Command
             'form_rows' => implode("\n\n", $rows),
             'entity' => $entity,
             'Entity' => $Entity,
-            'viewerUrl' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['url'] : false,
-            'viewerChamp' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['champ'] : false,
+            'viewerUrl' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['url'] : "false",
+            'viewerChamp' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['champ'] : "false",
             'extends' => '/admin/base.html.twig',
             'sdir' => ''
         ));

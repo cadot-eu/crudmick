@@ -103,6 +103,7 @@ class CrudMakeIndexCommand extends Command
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;
                     case 'string':
+                    case 'email':
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
@@ -118,7 +119,7 @@ class CrudMakeIndexCommand extends Command
                             $chaine = '';
                             foreach ($actions as $action => $icon) {
                                 $chaine .= "
-                                    <a href=\"{{path('change_ordre',{'entity':'$Entity','id':$Entity.id,'ordre':'$Entity.$name','action':'$action'})}}\" class=\"text-decoration-none\">
+                                    <a href=\"{{path('change_ordre',{'entity':'$Entity','id':$Entity.id,'ordre':'$Entity.$name','action':'$action'})}}\" class=\"text-decoration-none\" title=\"$action\">
                                     <i class=\"bi bi-$icon\"></i>
                                     </a>
                                 ";
@@ -226,10 +227,10 @@ class CrudMakeIndexCommand extends Command
         $timestamptable = ['createdAt', 'updatedAt', 'deletedAt'];
         foreach ($timestamptable as $time) {
             if (!isset($IDOptions['tpl']['no_' . substr($time, 0, -2)])) {
-                if ($name == 'deletedAt') {
+                if ($time == 'deletedAt') {
                     $td[] .= "{%if action==\"deleted\" %}<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>{% endif %}";
                 } else {
-                    $td[] .= "<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}</td>";
+                    $td[] .= "<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris'):'---'}}</td>";
                 }
             }
         }
