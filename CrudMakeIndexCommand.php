@@ -44,7 +44,7 @@ class CrudMakeIndexCommand extends Command
         $docs = new ParserDocblock($entity);
         foreach ($docs->getOptions() as $name => $options) {
             //creation des th
-            if (!isset($options['tpl']['no_index']) && $name != 'deletedAt' && $name != 'createdAt' && $name != 'updatedAt') {
+            if (!isset($options['tpl']['no_index']) && $name != 'deletedAt' && $name != 'createdAt' && $name != 'updatedAt' && in_array($docs->getType($name), ['manytomany', 'onetomany'])) {
                 if (isset($docs->getOptions()['id']['order'])) {
                     $th[] = "<th >$name</th>";
                 } else {
