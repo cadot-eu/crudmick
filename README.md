@@ -71,4 +71,10 @@ split('¤')[1]
 - time: updated, created, deleted
 - categories
 - vérified: on off
-- 
+  
+```php
+    use TimeTrait;
+    use EtatTrait;
+    use VuesTrait;
+    use CategoriesTrait;
+```
