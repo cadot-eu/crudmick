@@ -65,14 +65,15 @@ class CrudMakeIndexCommand extends Command
             </th>
         {% endif %}
         EOT;
+        /* ------------------------- datetime avec knpsorted ------------------------ */
         if (!isset($IDOptions['tpl']['no_created']))
-            $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
+            $th[] = "<th {% if pagination.isSorted('a.createdAt') %} class='sorted'{% endif %}>
         {{ knp_pagination_sortable(pagination, 'créé', 'a.createdAt') }}</th>";
         if (!isset($IDOptions['tpl']['no_updated']))
             if (isset($docs->getOptions()['id']['order'])) {
                 $th[] = "<th >Mis à jour</th>";
             } else {
-                $th[] = "<th {% if pagination.isSorted('a.$name') %} class='sorted'{% endif %}>
+                $th[] = "<th {% if pagination.isSorted('a.updatedAt') %} class='sorted'{% endif %}>
         {{ knp_pagination_sortable(pagination, 'mis à jour', 'a.updatedAt') }}</th>";
             }
         /* ---------------------------------- body ---------------------------------- */
@@ -107,6 +108,11 @@ class CrudMakeIndexCommand extends Command
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
+                        break;
+                    case 'manytoone':
+                        $champ = $options['options']['champ'];
+                        $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name?$Entity.$name.$champ" . '}}"> {{' . "$Entity.$name? $Entity.$name.$champ$twig" . '}}' . "\n</td>";
                         break;
                     case 'money':
                     case 'choice':
@@ -180,13 +186,13 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'entity':
                         //field for show
-                        $return = isset($options['label']) ? array_keys($options['label'])[0] : 'id';
+                        $return = isset($options['options']['label']) ? $options['options']['label'] : 'id';
                         if ($docs->getType($name) == 'manytomany'  || $docs->getType($name) == 'onetomany') {
                             //for separate field
                             $separation = isset($options['separation']) ? $options['separation'] : ';';
                             $td[] = '<td class="my-auto">' . "{% for " . $name . "_item in " . $Entity . ".$name %}\n{{" . $name . "_item.$return$twig}}{{loop.last?'':'$separation'}}\n{% endfor %}" . "\n</td>";
                         } else {
-                            $td[] = '<td class="my-auto">VERIF SI UTILE' . '{{ ' . $Entity . '.' . $name . '.' . $return . ' is defined ? ' . $Entity . '.' . $name . '.' . $return . '}}' . "\n</td>";
+                            $td[] = '<td class="my-auto">' . '{{ ' . $Entity . '.' . $name . '.' . $return . ' is defined ? ' . $Entity . '.' . $name . '.' . $return . '}}' . "\n</td>";
                         }
                         break;
                     case 'array':
@@ -201,7 +207,7 @@ class CrudMakeIndexCommand extends Command
                     case 'slug':
                         $td[] = '<td class="my-auto text-center' . implode(' ', $class) . '"  data-clipboard-text="{{' . "$Entity.$name$twig" . '}}" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-clipboard"></i>' . "\n</td>";
                     default:
-                        if ($input->getOption('comment') != false) $output->writeln('- non géré dans makeindex:' . $select);
+                        if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) $output->writeln('- non géré dans makeindex:' . $select);
                         break;
                 }
             }

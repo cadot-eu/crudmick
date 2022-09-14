@@ -22,6 +22,7 @@ Possibilités de surchargé les attr et opt .
 - image (possibilité d'ajouter tpl index_FileImage ou index_FileImageNom)
 - money
 - array (options=>separation et label)
+- onetomany: ajouter options:{"champ":"nom"} pour définir le champ à afficher dans l'index
   
 
 ## TPL
@@ -55,9 +56,17 @@ Possibilités de surchargé les attr et opt .
 
 ```php
 date('d/m à H:i', "Europe/Paris")
-TWIG=JsonPretty\|raw //use cadot.info/twigbundle
+TWIG=JsonPretty\|raw 
 TWIG=u.truncate(8, '...')
 split('¤')[1]
+```
+
+### Collection
+Pour avoir une liste de choix de sur une entité
+```php
+ * entity
+     * options:{"label":"nom"}
+
 ```
 
 ### Erreurs fréquentes

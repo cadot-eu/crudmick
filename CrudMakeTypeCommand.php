@@ -229,7 +229,7 @@ class CrudMakeTypeCommand extends Command
                         if (substr($docs->getAttributes($name)[0]->getName(), -4) == 'Many') {
                             $opts['multiple'] = true;
                         }
-                        $opts['choice_label'] = array_keys($options['label'])[0];
+                        $opts['choice_label'] = $options['options']['label'];
                         break;
                     case 'generatedvalue': //id
 
@@ -240,7 +240,6 @@ class CrudMakeTypeCommand extends Command
                             $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                             $tempadds = "\n->add('$name',HiddenType::class,";
                         }
-
                         if ($name == 'updatedAt' && !isset($IDOptions['tpl']['no_updated'])) {
                             $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                             $opts['help'] = "Vide pour la date et l'heure d'enregistrement";
@@ -248,11 +247,11 @@ class CrudMakeTypeCommand extends Command
                         }
                         break;
                     case 'integer':
-
-
+                    case 'string':
                         break;
+
                     default: {
-                            if ($input->getOption('comment') != false) $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
+                            if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt']))  $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
                         }
                 }
                 //surcharge opt
