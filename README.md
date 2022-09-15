@@ -15,6 +15,7 @@ Possibilités de surchargé les attr et opt .
 - choice (options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"] ou options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"} et possibilté d'imposé un choix seul sur un json ou array ATTR:{"data-controller":"base--onecheckbox"})
 - choiceenplace
 - entity
+  ` (pour choisir le champ affiché * options:{"label":"nom"} et pour avoir un choix vide possible * OPT:{"required":false} * OPT:{"empty_data":null}) `
 - collection
 - color
 - password
