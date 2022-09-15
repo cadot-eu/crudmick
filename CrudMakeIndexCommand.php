@@ -109,6 +109,10 @@ class CrudMakeIndexCommand extends Command
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n</td>";
                         break;
+                    case 'drapeau':
+                        ///node_modules/flag-icons/flags/1x1/fr.svg
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name" . '}}">' . "{% if $Entity.$name %} <img src=\"/build/flags/1x1/{{ $Entity.$name }}.svg\" style=\"max-height:2rem\"> {% endif %} \n</td>";
+                        break;
                     case 'manytoone':
                         $champ = $options['options']['champ'];
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
