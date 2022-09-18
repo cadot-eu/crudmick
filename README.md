@@ -11,7 +11,7 @@ Possibilités de surchargé les attr et opt .
 - vide
 - simple
 - simplelanguage
-- normal
+- normal possibilité d'ajouter un filtre * attr:{"data-base--ckeditor-upload-value":"article/hd"} ou un autre répertoire de destination pour les images envoyé dans ckeditor
 - choice (options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"] ou options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"} et possibilté d'imposé un choix seul sur un json ou array ATTR:{"data-controller":"base--onecheckbox"})
 - choiceenplace
 - entity
@@ -52,7 +52,7 @@ Possibilités de surchargé les attr et opt .
 - search: pour donner les champs de recherche pour knp ex: *  SEARCH:['id','titre','article']
 - select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
 - viewer: url et champ pour créer le lien pour visionner l'objet dans un nouvel onglet ex:* VIEWER:{"url":"/les-articles","champ":"slug"}
-
+- fliter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
 ### TWIG
 
 ```php

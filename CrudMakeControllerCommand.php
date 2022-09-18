@@ -85,6 +85,7 @@ class CrudMakeControllerCommand extends Command
             $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'),' . $fields . ', $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
             $paginator = "\$request->query->getInt('page', 1)";
         }
+
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
             'partie' => "/admin//",
             'fieldslug' => $fieldslug,
@@ -95,6 +96,7 @@ class CrudMakeControllerCommand extends Command
             'sdir' =>  '',
             'ssdir' => '',
             'search' => $search,
+            'filter' => isset($IDOptions['tpl']['filter']) ?  '"' . $IDOptions['tpl']['filter'] . '"' : null,
             'fields' => $fields,
             'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) :  $searchString,
             'delete' => isset($docs->getOptions()['id']['delete']) ?  array_key_first($docs->getOptions()['id']['delete']) : null,

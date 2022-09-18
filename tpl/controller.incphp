@@ -81,7 +81,7 @@ class ¤Entity¤Controller extends AbstractController
                             foreach ($fichier as $num => $fiche) {
                                 if ($data[$num][key($data[$num])] != null) {
                                     $class = explode('\\', get_class($fiche));
-                                    $fichierName = $fileUploader->upload($data[$num][key($data[$num])], "¤entity¤/$name/" . key($data[$num]) . '/');
+                                    $fichierName = $fileUploader->upload($data[$num][key($data[$num])], "¤entity¤/$name/" . key($data[$num]),¤filter¤);
                                     $functionE = 'set' . ucfirst(key($data[$num]));
                                     $fiche->$functionE($fichierName);
                                     $function = 'add' . end($class);
@@ -89,7 +89,7 @@ class ¤Entity¤Controller extends AbstractController
                                 }
                             }
                         } else {
-                                $fichierName = $fileUploader->upload($fichier, "¤entity¤/$name/");
+                                $fichierName = $fileUploader->upload($fichier, "¤entity¤/$name",¤filter¤);
                                 $function = 'set' . $name;
                                 $¤entity¤->$function($fichierName);
                         }

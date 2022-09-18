@@ -84,6 +84,7 @@ class CrudMakeTypeCommand extends Command
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
+                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) $attrs['data-base--ckeditor-upload-value'] = $entity;
                         break;
                     case 'vide':
                         $attrs['data-controller'] = 'base--ckeditor';
@@ -95,13 +96,13 @@ class CrudMakeTypeCommand extends Command
                         break;
                     case 'full':
                         $attrs['data-controller'] = 'base--ckeditor';
-                        $attrs['data-base--ckeditor-upload-value'] = $entity . '_simpleupload';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'full';
+                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) $attrs['data-base--ckeditor-upload-value'] = $entity;
                         break;
                     case 'normal':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'normal';
-                        $attrs['data-base--ckeditor-upload-value'] = $entity . '_simpleupload';
+                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) $attrs['data-base--ckeditor-upload-value'] = $entity;
                         break;
                     case 'password':
                         $tempadds = "->add('$name',RepeatedType::class,";
