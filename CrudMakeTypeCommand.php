@@ -230,7 +230,8 @@ class CrudMakeTypeCommand extends Command
                         if (substr($docs->getAttributes($name)[0]->getName(), -4) == 'Many') {
                             $opts['multiple'] = true;
                         }
-                        $opts['choice_label'] = $options['options']['label'];
+                        if (isset($options['options']))
+                            $opts['choice_label'] = $options['options']['label'];
                         break;
                     case 'generatedvalue': //id
 
