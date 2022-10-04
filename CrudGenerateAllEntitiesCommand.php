@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Service\base\ParserDocblock;
 
 #[AsCommand(
-    name: 'crud:generateAll',
+    name: 'crud',
     description: 'génère toutes les entités ',
 )]
 class CrudGenerateAllEntitiesCommand extends Command
