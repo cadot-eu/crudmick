@@ -230,8 +230,10 @@ class CrudMakeTypeCommand extends Command
                         if (substr($docs->getAttributes($name)[0]->getName(), -4) == 'Many') {
                             $opts['multiple'] = true;
                         }
-                        if (isset($options['options']))
-                            $opts['choice_label'] = $options['options']['label'];
+                        if (!$options['label'])
+                            die('Il manque l\'option label pour le champ ' . $name . ' de l\'entité ' . $entity . "\n");
+                        else
+                            $opts['choice_label'] = key($options['label']);
                         break;
                     case 'generatedvalue': //id
 
