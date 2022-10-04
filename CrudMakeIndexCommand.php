@@ -157,7 +157,7 @@ class CrudMakeIndexCommand extends Command
                     case 'fichier':
                         $tdtemp = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ';
                         //retoune que le nom du fichier
-                        $tdtemp .= "{% if $Entity.$name is not empty %}<a href=\"{{asset($Entity.$name)}}\" target=\"_blank\">{{TBgetFilename($Entity.$name)$twig}}</span> {% endif %}</a>";
+                        $tdtemp .= "{% if $Entity.$name is not empty %}<a href=\"{{asset($Entity.$name)}}\" title=\"{{TBgetFilename($Entity.$name)}}\" target=\"_blank\">{{TBgetFilename($Entity.$name)$twig|u.truncate(50, \"...\")}}</span> {% endif %}</a>";
                         $td[] = $tdtemp . '' . "\n</td>";
                         break;
                     case 'choiceenplace':
