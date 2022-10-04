@@ -227,7 +227,7 @@ class CrudMakeIndexCommand extends Command
         ];
         foreach ($actions as $action => $title) {
             if (!isset($IDOptions['tpl']['no_action_' . $action])) {
-                $resaction[$action] =  "<a class='btn btn-xs btn-primary'  title='$action' href=\"{{ path('$entity" . "_$action" . "', {'id': $Entity.id }) }}\"><i class='icone $title'></i></a>";
+                $resaction[$action] =  "<a class='btn btn-xs btn-primary'   data-turbo=\"false\" title='$action' href=\"{{ path('$entity" . "_$action" . "', {'id': $Entity.id }) }}\"><i class='icone $title'></i></a>";
             }
         }
         if (isset($IDOptions['tpl']['action_clone']))
