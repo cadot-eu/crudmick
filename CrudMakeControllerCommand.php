@@ -55,7 +55,8 @@ class CrudMakeControllerCommand extends Command
                         //else
                         //$gets[] = '$' . $entity . '->set' . ucfirst($name) . '($' . $entity . ');';
                         break;
-
+                    case '':
+                        break;
                     case 'entity':
                         // $nom = substr($name, -1) == 's' ? substr($name, 0, -1) : $name;
                         // $gets[] = '$' . $entity . '->add' . $nom . '($' . $entity . ');';
