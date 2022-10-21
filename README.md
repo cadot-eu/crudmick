@@ -14,6 +14,14 @@ Possibilités de surchargé les attr et opt .
 - normal possibilité d'ajouter un filtre * attr:{"data-base--ckeditor-upload-value":"article/hd"} ou un autre répertoire de destination pour les images envoyé dans ckeditor
 - choice (options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"] ou options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"} et possibilté d'imposé un choix seul sur un json ou array ATTR:{"data-controller":"base--onecheckbox"})
 - choiceenplace
+  
+  ```php
+     * choiceenplace
+     * xtra:{"champ":"Sur l'accueil"}
+     * options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"}
+     * TPL:no_form
+  ```
+
 - entity
   ` (pour choisir le champ affiché * options:{"label":"nom"} et pour avoir un choix vide possible * OPT:{"required":false} * OPT:{"empty_data":null}) `
 - collection
