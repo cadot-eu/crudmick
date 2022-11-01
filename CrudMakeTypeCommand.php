@@ -302,6 +302,9 @@ class CrudMakeTypeCommand extends Command
                 'transform' => isset($transform) ? implode("\n", $transform) : ''
             ]
         );
+        //pour supprimler les " dans le fichier
+        //pour les champs "§\$AtypeOption[\"username\"]§" => \$AtypeOption[\"username\"]
+        $html = str_replace(["'§", "§'"], "", $html);
         /* ------------------------------ RETURN BLOCKS ----------------------------- */
         CrudInitCommand::updateFile("src/Form/" . $Entity . 'Type.php', $html, $input->getOption('comment'));
         return Command::SUCCESS;

@@ -78,6 +78,27 @@ Pour avoir une liste de choix de sur une entité
 
 ```
 
+### hiddenroot et readonlyroot
+
+Ils permettent d'afficher ou de bloquer l'édition pour les utilisateurs différents de m@cadot.eu
+Ils apellent les jscontrollers hiddenroot_controller et readonlyroot_controller
+
+```php
+/**
+     * readonlyroot ou hiddenroot
+     * TPL:no_index
+*/
+```
+
+### un champ peut accéder à la valeur d'una autre champ
+
+par exemple pour que le champ ckeditor toolbar value prennent la valeur du champ getTypenom
+
+```php
+     * attr:{"data-controller" : "base--ckeditor"}
+     * attr:{"data-base--ckeditor-toolbar-value": "§$AtypeOption[\"data\"]->getTypenom()§"}
+```
+
 ### Erreurs fréquentes
 
 - An invalid form control with name='' is not focusable est du à un champ qui est required et ` hiddden ` ou  ` display:none `, ckeditor cache le champ et donc si il est required crè cette erreur. On peut utiliser ` * OPT=required=>false`
