@@ -29,6 +29,7 @@ Possibilités de surchargé les attr et opt .
 - password
 - hidden
 - image (possibilité d'ajouter tpl index_FileImage ou index_FileImageNom)
+- fichier 
 - money
 - array (options=>separation et label)
 - onetomany: ajouter options:{"champ":"nom"} pour définir le champ à afficher dans l'index

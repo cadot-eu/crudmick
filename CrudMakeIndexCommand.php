@@ -114,7 +114,7 @@ class CrudMakeIndexCommand extends Command
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name" . '}}">' . "{% if $Entity.$name %} <img src=\"/build/flags/1x1/{{ $Entity.$name }}.svg\" style=\"max-height:2rem\"> {% endif %} \n</td>";
                         break;
                     case 'manytoone':
-                        $champ = $options['options']['champ'];
+                        $champ = isset($options['options']['champ']) ? $options['options']['champ'] : 'id';
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name?$Entity.$name.$champ" . '}}"> {{' . "$Entity.$name? $Entity.$name.$champ$twig" . '}}' . "\n</td>";
                         break;
