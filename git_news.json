@@ -1,0 +1,364 @@
+{
+"39d279c":{  "subject": "suite objet",
+  "date": "Wed, 23 Nov 2022 10:26:52 +0100"
+ },
+"eededc7":{  "subject": "refactorisation en cours",
+  "date": "Tue, 22 Nov 2022 19:51:17 +0100"
+ },
+"47d426b":{  "subject": "debut de la chatbox",
+  "date": "Mon, 7 Nov 2022 11:21:35 +0100"
+ },
+"7d7a193":{  "subject": "maj parametres",
+  "date": "Tue, 1 Nov 2022 11:12:06 +0100"
+ },
+"afd0811":{  "subject": "add doc",
+  "date": "Fri, 21 Oct 2022 13:19:50 +0200"
+ },
+"29cb270":{  "subject": "new image upload",
+  "date": "Sat, 15 Oct 2022 18:12:45 +0200"
+ },
+"26c9a31":{  "subject": "repair tests",
+  "date": "Tue, 4 Oct 2022 19:48:39 +0200"
+ },
+"c3da9e0":{  "subject": "fix error",
+  "date": "Tue, 4 Oct 2022 11:27:13 +0200"
+ },
+"6132bbc":{  "subject": "collection fix",
+  "date": "Tue, 4 Oct 2022 10:41:53 +0200"
+ },
+"4fe2346":{  "subject": "rename command crud",
+  "date": "Tue, 4 Oct 2022 10:10:16 +0200"
+ },
+"ad44253":{  "subject": "add couleur dans graphique",
+  "date": "Tue, 4 Oct 2022 10:08:46 +0200"
+ },
+"22f4a80":{  "subject": "ok",
+  "date": "Sun, 18 Sep 2022 15:06:24 +0200"
+ },
+"08c31bf":{  "subject": "add ckeditor.css",
+  "date": "Thu, 15 Sep 2022 13:48:29 +0200"
+ },
+"759e776":{  "subject": "add drapeau",
+  "date": "Thu, 15 Sep 2022 09:59:01 +0200"
+ },
+"c493313":{  "subject": "maj",
+  "date": "Wed, 14 Sep 2022 23:07:27 +0200"
+ },
+"2d31186":{  "subject": "cache les relation dans les filtres",
+  "date": "Tue, 13 Sep 2022 11:57:32 +0200"
+ },
+"e9c8861":{  "subject": "add google",
+  "date": "Tue, 13 Sep 2022 11:53:01 +0200"
+ },
+"1aab6b4":{  "subject": "maj doc",
+  "date": "Tue, 13 Sep 2022 11:06:07 +0200"
+ },
+"1af98e0":{  "subject": "rectification affichage action",
+  "date": "Sun, 11 Sep 2022 17:13:26 +0200"
+ },
+"8a2a5dd":{  "subject": "page reset sur nouvelle recherche",
+  "date": "Sun, 11 Sep 2022 13:36:15 +0200"
+ },
+"f8cd279":{  "subject": "add viewer page in editor and id",
+  "date": "Sat, 10 Sep 2022 19:35:46 +0200"
+ },
+"53c88c8":{  "subject": "start find link",
+  "date": "Wed, 7 Sep 2022 14:08:30 +0200"
+ },
+"ec6ffd2":{  "subject": "add api search",
+  "date": "Fri, 2 Sep 2022 09:48:47 +0200"
+ },
+"a7b686d":{  "subject": "slug pour makeindex",
+  "date": "Sat, 27 Aug 2022 10:42:38 +0200"
+ },
+"8c27a06":{  "subject": "ajout id aux titres",
+  "date": "Sat, 27 Aug 2022 09:01:30 +0200"
+ },
+"7af6e32":{  "subject": "corrige repository pour deleted",
+  "date": "Thu, 25 Aug 2022 15:31:47 +0200"
+ },
+"212ba46":{  "subject": "remove block",
+  "date": "Thu, 25 Aug 2022 15:17:38 +0200"
+ },
+"5b25f87":{  "subject": "remove allcommand",
+  "date": "Thu, 25 Aug 2022 15:13:54 +0200"
+ },
+"724250e":{  "subject": "nocrud et onytype",
+  "date": "Thu, 25 Aug 2022 15:12:35 +0200"
+ },
+"815d585":{  "subject": "error",
+  "date": "Thu, 25 Aug 2022 14:22:19 +0200"
+ },
+"5afb707":{  "subject": "start",
+  "date": "Thu, 25 Aug 2022 11:56:54 +0200"
+ },
+"cc5da6c":{  "subject": "add turbo false pour new",
+  "date": "Tue, 23 Aug 2022 17:27:28 +0200"
+ },
+"dd526e6":{  "subject": "debut creer comparatif",
+  "date": "Tue, 23 Aug 2022 14:50:12 +0200"
+ },
+"f8cdccb":{  "subject": "graphisme par xls",
+  "date": "Sat, 6 Aug 2022 14:23:57 +0200"
+ },
+"4d74d98":{  "subject": "gestion des fichiers et des noms",
+  "date": "Mon, 1 Aug 2022 12:31:30 +0200"
+ },
+"3e7f19a":{  "subject": "fix page",
+  "date": "Sat, 30 Jul 2022 10:47:23 +0200"
+ },
+"da5dd34":{  "subject": "fix",
+  "date": "Sat, 30 Jul 2022 10:36:02 +0200"
+ },
+"41d2352":{  "subject": "dossiers et entreprises sélectionnées",
+  "date": "Thu, 28 Jul 2022 13:38:43 +0200"
+ },
+"1cbd1ea":{  "subject": "mv ckeditor",
+  "date": "Mon, 25 Jul 2022 17:43:09 +0200"
+ },
+"0ec8852":{  "subject": "correction apostrophe",
+  "date": "Sun, 24 Jul 2022 19:09:16 +0200"
+ },
+"401eeba":{  "subject": "create comment",
+  "date": "Tue, 19 Jul 2022 16:47:26 +0200"
+ },
+"d0c3bfc":{  "subject": "links tools by fink",
+  "date": "Fri, 15 Jul 2022 11:02:28 +0200"
+ },
+"111a937":{  "subject": "make link tester",
+  "date": "Thu, 14 Jul 2022 19:53:48 +0200"
+ },
+"6b7985f":{  "subject": "make link tester",
+  "date": "Thu, 14 Jul 2022 19:51:11 +0200"
+ },
+"b0f50f8":{  "subject": "order",
+  "date": "Tue, 12 Jul 2022 10:31:48 +0200"
+ },
+"e0853b3":{  "subject": "style",
+  "date": "Sat, 9 Jul 2022 15:37:09 +0200"
+ },
+"0c453f1":{  "subject": "améliore repository index",
+  "date": "Fri, 8 Jul 2022 10:15:49 +0200"
+ },
+"938f15b":{  "subject": "new search",
+  "date": "Fri, 1 Jul 2022 18:43:11 +0200"
+ },
+"d2c3893":{  "subject": "tests form",
+  "date": "Sun, 26 Jun 2022 18:49:39 +0200"
+ },
+"9df886b":{  "subject": "produits",
+  "date": "Sat, 25 Jun 2022 20:15:02 +0200"
+ },
+"124c524":{  "subject": "params",
+  "date": "Sat, 25 Jun 2022 18:46:26 +0200"
+ },
+"b192207":{  "subject": "toolbar",
+  "date": "Sat, 25 Jun 2022 15:09:42 +0200"
+ },
+"91da94e":{  "subject": "parametres",
+  "date": "Thu, 23 Jun 2022 01:53:18 +0200"
+ },
+"b5cfaa3":{  "subject": "maj front et search",
+  "date": "Tue, 21 Jun 2022 21:07:15 +0200"
+ },
+"04d3057":{  "subject": "dossier en place",
+  "date": "Mon, 20 Jun 2022 18:48:55 +0200"
+ },
+"e56cdad":{  "subject": "new repository",
+  "date": "Sat, 18 Jun 2022 10:28:35 +0200"
+ },
+"9d34599":{  "subject": "new dql",
+  "date": "Fri, 17 Jun 2022 19:52:34 +0200"
+ },
+"7dbd432":{  "subject": "new search",
+  "date": "Fri, 17 Jun 2022 18:09:18 +0200"
+ },
+"b9fa534":{  "subject": "maj search",
+  "date": "Fri, 17 Jun 2022 11:13:49 +0200"
+ },
+"529b387":{  "subject": "maintenance",
+  "date": "Thu, 16 Jun 2022 23:39:18 +0200"
+ },
+"76449cc":{  "subject": "fix attr",
+  "date": "Thu, 16 Jun 2022 12:31:54 +0200"
+ },
+"6cd1127":{  "subject": "maj params",
+  "date": "Wed, 15 Jun 2022 03:55:04 +0200"
+ },
+"36d9789":{  "subject": "hiddenroot",
+  "date": "Wed, 15 Jun 2022 02:06:38 +0200"
+ },
+"a159d88":{  "subject": "fix search and remove index and delete",
+  "date": "Tue, 14 Jun 2022 16:15:23 +0200"
+ },
+"b39a737":{  "subject": "fix",
+  "date": "Tue, 14 Jun 2022 15:36:02 +0200"
+ },
+"deabd8a":{  "subject": "add recherche",
+  "date": "Tue, 14 Jun 2022 13:18:51 +0200"
+ },
+"e127aeb":{  "subject": "fix timetrait",
+  "date": "Tue, 14 Jun 2022 10:32:14 +0200"
+ },
+"53ca865":{  "subject": "add runtests",
+  "date": "Mon, 13 Jun 2022 13:37:55 +0200"
+ },
+"8b29ebc":{  "subject": "inject code par index et delete",
+  "date": "Mon, 13 Jun 2022 12:39:17 +0200"
+ },
+"933efa2":{  "subject": "simpleupload ckeditor",
+  "date": "Mon, 13 Jun 2022 10:03:37 +0200"
+ },
+"a4f6600":{  "subject": "shema",
+  "date": "Sun, 12 Jun 2022 19:39:44 +0200"
+ },
+"0335aa0":{  "subject": "keywords en place",
+  "date": "Sun, 12 Jun 2022 09:55:54 +0200"
+ },
+"03911d3":{  "subject": "manytomany relation en place",
+  "date": "Thu, 9 Jun 2022 11:05:30 +0200"
+ },
+"c5b7d07":{  "subject": "collection et entity générer par crud",
+  "date": "Thu, 9 Jun 2022 09:37:32 +0200"
+ },
+"9246d02":{  "subject": "collection et entity",
+  "date": "Tue, 7 Jun 2022 23:28:54 +0200"
+ },
+"f9f5b43":{  "subject": "produits ok",
+  "date": "Tue, 7 Jun 2022 13:28:48 +0200"
+ },
+"a7484a9":{  "subject": "add conditions generales et creation compte",
+  "date": "Fri, 3 Jun 2022 13:56:49 +0200"
+ },
+"a60bed6":{  "subject": "groupe et produit en place",
+  "date": "Thu, 2 Jun 2022 18:06:37 +0200"
+ },
+"8c4622a":{  "subject": "new db",
+  "date": "Thu, 2 Jun 2022 12:49:53 +0200"
+ },
+"61706bc":{  "subject": "adapt etat",
+  "date": "Thu, 2 Jun 2022 10:37:47 +0200"
+ },
+"435d954":{  "subject": "fix",
+  "date": "Wed, 25 May 2022 12:17:01 +0200"
+ },
+"bdea5d0":{  "subject": "fix",
+  "date": "Mon, 23 May 2022 21:10:58 +0200"
+ },
+"e3a34ae":{  "subject": "add paginator",
+  "date": "Sun, 22 May 2022 11:01:27 +0200"
+ },
+"c8fb435":{  "subject": "avant knp",
+  "date": "Sun, 22 May 2022 09:05:14 +0200"
+ },
+"e0bde07":{  "subject": "les articles",
+  "date": "Sat, 21 May 2022 12:53:28 +0200"
+ },
+"ec1d1b1":{  "subject": "add filereset",
+  "date": "Thu, 19 May 2022 16:52:02 +0200"
+ },
+"4fdfb1c":{  "subject": "big maj",
+  "date": "Thu, 19 May 2022 13:20:19 +0200"
+ },
+"d875d97":{  "subject": "slug article",
+  "date": "Wed, 18 May 2022 01:24:57 +0200"
+ },
+"343fd7d":{  "subject": "traits",
+  "date": "Wed, 18 May 2022 00:22:52 +0200"
+ },
+"d3698cb":{  "subject": "fix",
+  "date": "Tue, 17 May 2022 23:52:03 +0200"
+ },
+"9a074a5":{  "subject": "start entreprise",
+  "date": "Tue, 17 May 2022 20:19:47 +0200"
+ },
+"a522b12":{  "subject": "Merge branch 'main' of github.com:cadot-eu/basecommand into main",
+  "date": "Tue, 17 May 2022 10:52:34 +0200"
+ },
+"83d6fd9":{  "subject": "maj from CE7",
+  "date": "Tue, 17 May 2022 09:45:08 +0200"
+ },
+"5dbe543":{  "subject": "fin add type pour parametres et correction BLOCK",
+  "date": "Sun, 15 May 2022 16:59:10 +0200"
+ },
+"3ad70bc":{  "subject": "nocrud, add type pour parametres",
+  "date": "Sun, 15 May 2022 16:23:49 +0200"
+ },
+"49aa82c":{  "subject": "money type, arrayhelper avec is-associative, choice upgrade",
+  "date": "Sun, 15 May 2022 11:27:06 +0200"
+ },
+"7c5a06f":{  "subject": "new bigpicture avec options",
+  "date": "Sat, 14 May 2022 23:36:23 +0200"
+ },
+"52f48ee":{  "subject": "ajout des drapeaux",
+  "date": "Fri, 13 May 2022 19:30:21 +0200"
+ },
+"b5373dd":{  "subject": "fic: choiceenplace value",
+  "date": "Thu, 12 May 2022 21:13:58 +0200"
+ },
+"ca325da":{  "subject": "add simplelanguage in doc",
+  "date": "Thu, 12 May 2022 20:22:43 +0200"
+ },
+"f1f4e1d":{  "subject": "add miniature pour image",
+  "date": "Thu, 12 May 2022 20:08:25 +0200"
+ },
+"4e0e606":{  "subject": "fix: page suivante",
+  "date": "Thu, 12 May 2022 18:29:13 +0200"
+ },
+"4fc25e5":{  "subject": "fix:",
+  "date": "Thu, 12 May 2022 18:28:32 +0200"
+ },
+"c975795":{  "subject": "update",
+  "date": "Thu, 12 May 2022 18:14:07 +0200"
+ },
+"5925c00":{  "subject": "update",
+  "date": "Thu, 12 May 2022 18:12:14 +0200"
+ },
+"5ea8b3b":{  "subject": "update",
+  "date": "Thu, 12 May 2022 18:10:48 +0200"
+ },
+"d7adefa":{  "subject": "update",
+  "date": "Thu, 12 May 2022 18:02:26 +0200"
+ },
+"8851410":{  "subject": "add no-created et no_updated",
+  "date": "Thu, 12 May 2022 16:29:47 +0200"
+ },
+"3ea9764":{  "subject": "fix add base à  bigpicture",
+  "date": "Thu, 12 May 2022 15:55:42 +0200"
+ },
+"da78c83":{  "subject": "fix: page==0",
+  "date": "Thu, 12 May 2022 14:41:19 +0200"
+ },
+"ca524b5":{  "subject": "add no_created ...",
+  "date": "Tue, 10 May 2022 20:06:19 +0200"
+ },
+"fabc761":{  "subject": "add no_created ...",
+  "date": "Tue, 10 May 2022 20:05:16 +0200"
+ },
+"a42d42b":{  "subject": "fix: hide aray",
+  "date": "Tue, 10 May 2022 19:43:38 +0200"
+ },
+"d3b43b0":{  "subject": "add simplelanguage",
+  "date": "Tue, 10 May 2022 18:42:20 +0200"
+ },
+"85dd257":{  "subject": "new controller",
+  "date": "Tue, 10 May 2022 16:09:02 +0200"
+ },
+"2910f8d":{  "subject": "fix: path service",
+  "date": "Tue, 10 May 2022 15:08:22 +0200"
+ },
+"a58cb4f":{  "subject": "update",
+  "date": "Tue, 10 May 2022 15:03:48 +0200"
+ },
+"44ff9e6":{  "subject": "new doc",
+  "date": "Tue, 10 May 2022 12:55:52 +0200"
+ },
+"41b429a":{  "subject": "current path",
+  "date": "Mon, 9 May 2022 20:25:28 +0200"
+ },
+"8c93f41":{  "subject": "start",
+  "date": "Wed, 4 May 2022 20:37:59 +0200"
+ },
+"db25e5e":{  "subject": "first commit",
+  "date": "Wed, 4 May 2022 20:37:50 +0200"
+ }}

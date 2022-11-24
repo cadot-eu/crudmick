@@ -117,7 +117,7 @@ class CrudMakeTypeCommand extends Command
                     case 'fichier':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\FileType;";
                         $tempadds = "\n->add('$name',FileType::class,";
-                        $attrs['accept'] = ['image/*', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed'];
+                        $attrs['accept'] = 'image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/zip,application/x-rar-compressed,application/x-7z-compressed';
                         $opts['mapped'] = false;
                         $opts['required'] = false;
                         break;
