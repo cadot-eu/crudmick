@@ -102,7 +102,8 @@ class CrudMakeControllerCommand extends Command
             'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) :  $searchString,
             'delete' => isset($docs->getOptions()['id']['delete']) ?  array_key_first($docs->getOptions()['id']['delete']) : null,
             'gets' => isset($gets) ? implode("\n", $gets) : '',
-            'formoptions' => isset($Lformoptions) ? $Lformoptions : ''
+            'formoptions' => isset($Lformoptions) ? $Lformoptions : '',
+            'slug' => isset($IDOptions['slug']) ? ucfirst(array_key_first($IDOptions['slug'])) : 'Id',
 
         ]);
         //open model controller
