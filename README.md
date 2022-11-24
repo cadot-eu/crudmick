@@ -74,11 +74,24 @@ split('¤')[1]
 ### Collection
 Pour avoir une liste de choix de sur une entité
 ```php
- * entity
-     * options:{"label":"nom"}
-
+/**
+     * entity
+     * label:nom
+     * OPT:{"help":"multiple sélection avec CTRL"}
+     * OPT:{"required":false}
+     * twig:json_encode
+     */
 ```
 
+```php
+ /**
+     * collection
+     * options:{"field":"label"}
+     * xtra:{"allow_add":true,"prototype":true,"allow_delete":true,"entry_options!":"[\"label\"=>false]"}
+     * tpl:no_index
+     * opt:{"required":false}
+     */
+```
 ### hiddenroot et readonlyroot
 
 Ils permettent d'afficher ou de bloquer l'édition pour les utilisateurs différents de m@cadot.eu
