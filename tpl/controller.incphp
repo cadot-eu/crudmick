@@ -51,7 +51,7 @@ class ¤Entity¤Controller extends AbstractController
     #[Route('/deleted', name: '¤entity¤_deleted', methods: ['GET'])]
     public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
-         $dql = $¤entity¤Repository->index($request->query->get('filterValue', ''),¤fields¤, $request->query->get('sort', 'a.id'), $request->query->get('direction'),true);
+         $dql = $¤entity¤Repository->index($request->query->get('filterValue', ''),¤fields¤, $request->query->get('sort', 'a.id'), $request->query->get('direction'),null,true);
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
         ]);

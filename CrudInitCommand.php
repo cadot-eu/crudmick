@@ -69,7 +69,7 @@ class CrudInitCommand extends Command
         }
         // 
         $find = <<<'EOT'
-        public function index($search, $fields, $sort, $direction , $deleted = false, $etat = null)
+        public function index($search, $fields, $sort, $direction ,$categorie=null, $deleted = false, $etat = null)
         {
             $sort = is_null($sort) ? 'a.id' : $sort;
             $qb = $this->createQueryBuilder('a');
@@ -92,17 +92,29 @@ class CrudInitCommand extends Command
                 $ORX->add(join(' AND ', $ors));
             }
             $qb->andWhere($ORX);
+            if($categorie !=null)
+                $qb->andwhere($qb->expr()->isMemberOf(':categorie', 'a.categories'))->setParameter('categorie', $categorie);
+
             return $qb->orderBy($sort, strtoupper($direction))
                 ->getQuery()
                 ->getResult();
         }
-        //fin index
-
       EOT;
 
 
-
         $repo = file_get_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php');
+        //pon ajoute bycategorie si on a categorietrait
+        $objetEntity = 'App\Entity\\' . ucfirst($entity);
+        if (property_exists($objetEntity, 'categories')) {
+            //on ajoute le use si pas présent
+            if (strpos($repo, 'use App\Entity\Categorie;') === false) {
+                $repo = str_replace('namespace App\Repository;', 'namespace App\Repository;' . "\nuse App\Entity\Categorie;", $repo);
+            }
+        }
+
+
+        $find .= "\n" . '//fin index';
+
         //suppression de l'ancien index
         if (($deb = strpos($repo, 'public function index($search')) !== false) {
             $end = strpos($repo, '//fin index', $deb);
