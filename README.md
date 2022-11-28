@@ -129,7 +129,7 @@ par exemple pour que le champ ckeditor toolbar value prennent la valeur du champ
     use TimeTrait;
     use EtatTrait;
     use VuesTrait;
-    use CategoriesTrait;
+
 ```
 
 ### Slug
