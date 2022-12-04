@@ -129,7 +129,7 @@ class CrudInitCommand extends Command
 
         return Command::SUCCESS;
     }
-    static function ArrayToKeyValue(array $array)
+    static public function ArrayToKeyValue(array $array)
     {
         $vars = var_export($array, true);
         return str_replace(['¤\'', '\'¤'], '', $vars);
@@ -140,7 +140,7 @@ class CrudInitCommand extends Command
      * @param string filename The name of the file to be updated.
      * @param array blocks an array of blocks of code
      */
-    public static function updateFile(string $filename, $html, $comment = false)
+    static public function updateFile(string $filename, $html, $comment = false)
     {
         // save new file
         $retour = file_put_contents($filename, $html);
@@ -157,7 +157,7 @@ class CrudInitCommand extends Command
      * @param $html string twig with ¤...¤ for replacement
      * @param $tab array tableau des clefs à rechercher entre {{}} et à remplacer par value
      */
-    public static function twigParser($html, $tab): string
+    static public function twigParser($html, $tab): string
     {
         foreach ($tab as $key => $value) {
             $html = str_replace('//¤' . $key . '¤', $value, $html); // that in first
@@ -178,7 +178,7 @@ class CrudInitCommand extends Command
      *
      * @return The array with the element moved.
      */
-    public static function moveKeyBefore($arr, $find, $move)
+    static public function moveKeyBefore($arr, $find, $move)
     {
         if (!isset($arr[$find], $arr[$move])) {
             return $arr;
@@ -199,7 +199,7 @@ class CrudInitCommand extends Command
      *
      * @param  mixed $string
      */
-    public static function clean($string): string
+    static public function clean($string): string
     {
         return str_replace(["\t", "\n", "\r", "\0", "\x0B", "\n", "\r", " "], '', $string);
     }
