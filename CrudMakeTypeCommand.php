@@ -61,11 +61,13 @@ class CrudMakeTypeCommand extends Command
             $attrs = [];
             $tab = [];
             //timetrait
-            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
+            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created'])) {
                 continue;
-            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated']))
+            }
+            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
                 continue;
-            if ((!isset($options['tpl']['no_form']) && $name != 'id')) {
+            }
+            if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
                     case 'json':
                         $transform[] = "\$builder->get('keywords')\n->addModelTransformer(new CallbackTransformer(\n" .
@@ -84,7 +86,9 @@ class CrudMakeTypeCommand extends Command
                     case 'simple':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'simple';
-                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) $attrs['data-base--ckeditor-upload-value'] = $entity;
+                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) {
+                            $attrs['data-base--ckeditor-upload-value'] = $entity;
+                        }
                         break;
                     case 'vide':
                         $attrs['data-controller'] = 'base--ckeditor';
@@ -97,12 +101,16 @@ class CrudMakeTypeCommand extends Command
                     case 'full':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'full';
-                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) $attrs['data-base--ckeditor-upload-value'] = $entity;
+                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) {
+                            $attrs['data-base--ckeditor-upload-value'] = $entity;
+                        }
                         break;
                     case 'normal':
                         $attrs['data-controller'] = 'base--ckeditor';
                         $attrs['data-base--ckeditor-toolbar-value'] = 'normal';
-                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) $attrs['data-base--ckeditor-upload-value'] = $entity;
+                        if (!isset($options['attr']['data-base--ckeditor-upload-value'])) {
+                            $attrs['data-base--ckeditor-upload-value'] = $entity;
+                        }
                         break;
                     case 'password':
                         $tempadds = "->add('$name',RepeatedType::class,";
@@ -142,13 +150,15 @@ class CrudMakeTypeCommand extends Command
                         $attrs['data-controller'] = 'base--hiddenroot';
                         $attrs['data-base--hiddenroot-code-value'] = "§\$AtypeOption[\"username\"]§";
                         $vars['username'] = "''";
-                        $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')'; //mis le nom pour ne pas avoir de doublon
+                        $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')';
+                        //mis le nom pour ne pas avoir de doublon
                         break;
                     case 'readonlyroot':
                         $attrs['data-controller'] = 'base--readonlyroot';
                         $attrs['data-base--readonlyroot-code-value'] = "§\$AtypeOption[\"username\"]§";
                         $vars['username'] = "''";
-                        $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')'; //mis le nom pour ne pas avoir de doublon
+                        $resolver['hiddenroot'] = '$resolver->setAllowedTypes(\'username\', \'string\')';
+                        //mis le nom pour ne pas avoir de doublon
                         break;
                     case 'money':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\MoneyType;";
@@ -182,7 +192,7 @@ class CrudMakeTypeCommand extends Command
                                 $finalOpts[$key] = $value;
                             }
                         } else {
-                            foreach ($options['options'] as  $value) {
+                            foreach ($options['options'] as $value) {
                                 $finalOpts[$value] = $value;
                             }
                         }
@@ -213,8 +223,9 @@ class CrudMakeTypeCommand extends Command
                         $opts['class'] = "¤$EntityTarget::class¤";
                         $opts['query_builder'] = "¤
                         function (EntityRepository \$er)";
-                        if ($options)
+                        if ($options) {
                             $opts['query_builder'] .= 'use ($AtypeOption) ';
+                        }
 
                         $opts['query_builder'] .= "{
                             return \$er->createQueryBuilder(\"u\")
@@ -231,9 +242,9 @@ class CrudMakeTypeCommand extends Command
                         if (substr($docs->getAttributes($name)[0]->getName(), -4) == 'Many') {
                             $opts['multiple'] = true;
                         }
-                        if (!$options['label'])
+                        if (!$options['label']) {
                             die('Il manque l\'option label pour le champ ' . $name . ' de l\'entité ' . $entity . "\n");
-                        else
+                        } else
                             $opts['choice_label'] = key($options['label']);
                         break;
                     case 'generatedvalue': //id
@@ -256,7 +267,9 @@ class CrudMakeTypeCommand extends Command
                         break;
 
                     default: {
-                            if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt']))  $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
+                            if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+                                $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
+                            }
                         }
                 }
                 //surcharge opt
