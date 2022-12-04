@@ -136,10 +136,6 @@ class CrudMakeTypeCommand extends Command
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                         $tempadds = "\n->add('$name',HiddenType::class,";
                         break;
-                    case 'email':
-                        $uses[] = "use Symfony\Component\Form\Extension\Core\Type\EmailType;";
-                        $tempadds = "\n->add('$name',EmailType::class,";
-                        break;
                     case 'hiddenroot':
                         $uses[] = "use Symfony\Component\Form\Extension\Core\Type\HiddenType;";
                         $tempadds = "\n->add('$name',HiddenType::class,";
