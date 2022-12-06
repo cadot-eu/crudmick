@@ -57,7 +57,7 @@ class CrudInitCommand extends Command
 			'use App\Entity\base\TimeTrait;' => 'use',
 			'use Gedmo\Mapping\Annotation as Gedmo;' => 'use',
 			'use Symfony\Component\Validator\Constraints as Assert;' => 'use',
-			'#[ORM\HasLifecycleCallbacks()]' => '#[ORM',
+			'#[ORM\HasLifecycleCallbacks]' => '#[ORM',
 			'use TimeTrait;' => '{',
 		];
 		$fentity = 'src/Entity/' . ucfirst($entity) . '.php';
