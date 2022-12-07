@@ -11,7 +11,7 @@ Possibilités de surchargé les attr et opt .
 - vide
 - simple
 - simplelanguage
-- normal possibilité d'ajouter un filtre * attr:{"data-base--ckeditor-upload-value":"article/hd"} ou un autre répertoire de destination pour les images envoyé dans ckeditor
+- normal possibilité d'ajouter un filtre * attr:{"data-base--suneditor--upload-value":"article/hd"} ou un autre répertoire de destination pour les images envoyé dans ckeditor
 - choice (options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"] ou options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"} et possibilté d'imposé un choix seul sur un json ou array ATTR:{"data-controller":"base--onecheckbox"})
 - choiceenplace
   
@@ -111,7 +111,7 @@ par exemple pour que le champ ckeditor toolbar value prennent la valeur du champ
 
 ```php
      * attr:{"data-controller" : "base--ckeditor"}
-     * attr:{"data-base--ckeditor-toolbar-value": "§$AtypeOption[\"data\"]->getTypenom()§"}
+     * attr:{"data-base--suneditor--toolbar-value": "§$AtypeOption[\"data\"]->getTypenom()§"}
 ```
 
 ### Erreurs fréquentes
