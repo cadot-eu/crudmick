@@ -21,6 +21,7 @@ Possibilités de surchargé les attr et opt .
      * options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"}
      * TPL:no_form
   ```
+_ onechoiceenplace permet de mettre tous les champs à false et un seul à true
 
 - entity
   ` (pour choisir le champ affiché * options:{"label":"nom"} et pour avoir un choix vide possible * OPT:{"required":false} * OPT:{"empty_data":null}) `
@@ -61,7 +62,7 @@ Possibilités de surchargé les attr et opt .
 - search: pour donner les champs de recherche pour knp ex: *  SEARCH:['id','titre','article']
 - select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
 - viewer: url et champ pour créer le lien pour visionner l'objet dans un nouvel onglet ex:* VIEWER:{"url":"/les-articles","champ":"slug"}
-- fliter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
+- filter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
 ### TWIG
 
 ```php

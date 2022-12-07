@@ -178,6 +178,24 @@ class CrudMakeIndexCommand extends Command
                                 {% endif %}
                                 <a href=\"{{path('" . $entity . "_champ',{'id':$Entity.id,'type':'" . $name . "','valeur':choice_" . $name . "|keys[numr]})}}\" style='font-size:2rem;'  title='{{ choice_" . $name . "|keys[retour]}}'> {{ choice_" . $name . "[ choice_" . $name . "|keys[retour]]$twig|raw}}</a>\n";
                         break;
+                    case 'onechoiceenplace':
+                        $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '';
+                        $tableauChoice .= '{% set choice_' . $name . '=' . json_encode($options['options']) . ' %}' . "\n";
+                        //création de la ligne
+                        $td[] = "<td class=\"my-auto\">
+                                    {% set retour=0 %}
+                                    {% for test,value in choice_$name %}
+                                        {% if test==$Entity.$name %}
+                                            {% set retour=loop.index0 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if retour+1==choice_$name|length %}
+                                        {% set numr=0 %}
+                                    {% else %}
+                                        {% set numr=retour+1 %}
+                                    {% endif %}
+                                    <a href=\"{{path('" . $entity . "_champ',{'one':true,'id':$Entity.id,'type':'" . $name . "','valeur':choice_" . $name . "|keys[numr]})}}\" style='font-size:2rem;'  title='{{ choice_" . $name . "|keys[retour]}}'> {{ choice_" . $name . "[ choice_" . $name . "|keys[retour]]$twig|raw}}</a>\n";
+                        break;
                     case 'color':
                         $td[] = '<td class="my-auto"><div class="boxcolor" style="background-color:{{' . $Entity . '.' . $name . '}}"></div>' . "\n";
                         break;
