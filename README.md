@@ -52,6 +52,12 @@ _ onechoiceenplace permet de mettre tous les champs à false et un seul à true
 
 ## ID
 
+Fortement conseillé:
+
+- search: pour donner les champs de recherche pour knp ex: *  SEARCH:['id','titre','article']
+
+Optionnels:
+
 - hide:{"roles[0]":"ROLE_SUPERADMIN"}
 - tpl:no_created
 - tpl:no_deleted
@@ -59,7 +65,6 @@ _ onechoiceenplace permet de mettre tous les champs à false et un seul à true
 - nocrud
 - onlytype
 - order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}
-- search: pour donner les champs de recherche pour knp ex: *  SEARCH:['id','titre','article']
 - select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
 - viewer: url et champ pour créer le lien pour visionner l'objet dans un nouvel onglet ex:* VIEWER:{"url":"/les-articles","champ":"slug"}
 - filter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
@@ -116,7 +121,10 @@ par exemple pour que le champ ckeditor toolbar value prennent la valeur du champ
 
 ### Erreurs fréquentes
 
-- An invalid form control with name='' is not focusable est du à un champ qui est required et ` hiddden ` ou  ` display:none `, ckeditor cache le champ et donc si il est required crè cette erreur. On peut utiliser ` * OPT=required=>false`
+- An invalid form control with name='' is not focusable est du à un champ qui est required et ` hiddden ` ou  ` display:none `, suneditor cache le champ et donc si il est required crè cette erreur. On peut utiliser ` * OPT=required=>false`
+
+- `Warning: include(/app/vendor/composer/ ... ): Failed to open stream: No such file or directory`
+faire un `composer dump-autoload`cela réactualise les fichiers mémorisé par composer
 
 ### Trait
 

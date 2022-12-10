@@ -55,10 +55,13 @@ class CrudInitCommand extends Command
 		//control des paramètres et ajout si nécessaires
 		$trait = [
 			'use App\Entity\base\TimeTrait;' => 'use',
+			'use App\Entity\base\SlugTrait;' => 'use',
 			'use Gedmo\Mapping\Annotation as Gedmo;' => 'use',
 			'use Symfony\Component\Validator\Constraints as Assert;' => 'use',
 			'#[ORM\HasLifecycleCallbacks]' => '#[ORM',
 			'use TimeTrait;' => '{',
+			'use SlugTrait;' => '{'
+
 		];
 		$fentity = 'src/Entity/' . ucfirst($entity) . '.php';
 		foreach ($trait as $test => $comment) {
@@ -76,7 +79,7 @@ class CrudInitCommand extends Command
 				$io->info("Paramètre `$test` ajouter dans la partie $comment ");
 			}
 		}
-		//
+
 		$find = <<<'EOT'
   public function index($search, $fields, $sort, $direction ,$categorie=null, $deleted = false, $etat = null)
   {
@@ -117,16 +120,16 @@ EOT;
 		$objetEntity = 'App\Entity\\' . ucfirst($entity);
 		if (property_exists($objetEntity, 'categories')) {
 			//on ajoute le use si pas présent
-			if (strpos($repo, 'use App\Entity\Categorie;') === false) {
+			if (strpos($repo, 'use App\Entity\base\Categorie;') === false) {
 				$repo = str_replace(
 					'namespace App\Repository;',
-					'namespace App\Repository;' . "\nuse App\Entity\Categorie;",
+					'namespace App\Repository;' . "\nuse App\Entity\base\Categorie;",
 					$repo
 				);
 			}
 		}
 
-		$find .= "\n" . '//fin index';
+		$find .= "\n" . '//fin index' . "\n";
 
 		//suppression de l'ancien index
 		if (($deb = strpos($repo, 'public function index($search')) !== false) {

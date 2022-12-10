@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\base\FileUploader;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Service\base\ToolsHelper;
 
 #[Route('¤partie¤/¤entity¤')]
 class ¤Entity¤Controller extends AbstractController
@@ -41,6 +42,7 @@ class ¤Entity¤Controller extends AbstractController
         }
         $this->em->flush();
         //fin de la génération des slugs
+        $request->query->set('knpChampsRecherche', ToolsHelper::knpChampsRecherche('¤entity¤'));
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             'pagination' =>$paginator->paginate($dql,¤paginator¤)
         ]);
