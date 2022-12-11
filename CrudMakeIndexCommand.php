@@ -103,6 +103,7 @@ class CrudMakeIndexCommand extends Command
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
+                    case '':
                     case 'string':
                     case 'email':
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
@@ -229,7 +230,9 @@ class CrudMakeIndexCommand extends Command
                     case 'slug':
                         $td[] = '<td class="my-auto text-center clipboard' . implode(' ', $class) . '"  data-clipboard-text="{{' . "$Entity.$name$twig" . '}}" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-clipboard"></i>' . "\n";
                     default:
-                        if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) $output->writeln('- non géré dans makeindex:' . $select);
+                        if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+                            $output->writeln('- non géré dans makeindex:' . $select);
+                        }
                         break;
                 }
             }

@@ -60,7 +60,7 @@ class CrudInitCommand extends Command
 			'use Symfony\Component\Validator\Constraints as Assert;' => 'use',
 			'#[ORM\HasLifecycleCallbacks]' => '#[ORM',
 			'use TimeTrait;' => '{',
-			'use SlugTrait;' => '{'
+			'use SlugTrait;' => '{',
 
 		];
 		$fentity = 'src/Entity/' . ucfirst($entity) . '.php';
@@ -120,10 +120,10 @@ EOT;
 		$objetEntity = 'App\Entity\\' . ucfirst($entity);
 		if (property_exists($objetEntity, 'categories')) {
 			//on ajoute le use si pas présent
-			if (strpos($repo, 'use App\Entity\base\Categorie;') === false) {
+			if (strpos($repo, '') === false) {
 				$repo = str_replace(
 					'namespace App\Repository;',
-					'namespace App\Repository;' . "\nuse App\Entity\base\Categorie;",
+					'namespace App\Repository;' . "\n",
 					$repo
 				);
 			}

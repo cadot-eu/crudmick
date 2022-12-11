@@ -92,9 +92,6 @@ class CrudMakeTypeCommand extends Command
 							"));\n";
 						$uses[] = 'use Symfony\Component\Form\CallbackTransformer;';
 						break;
-					case 'text':
-						$attrs['data-controller'] = 'base--suneditor';
-						break;
 					case 'simple':
 						$attrs['data-controller'] = 'base--suneditor';
 						$attrs['data-base--suneditor-toolbar-value'] = 'simple';

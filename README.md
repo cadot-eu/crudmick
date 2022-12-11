@@ -63,6 +63,7 @@ Optionnels:
 - tpl:no_deleted
 - tpl:no_updated
 - nocrud
+- slug:champ 
 - onlytype
 - order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}
 - select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
@@ -143,12 +144,7 @@ faire un `composer dump-autoload`cela réactualise les fichiers mémorisé par c
 
 ### Slug
 
-```php
-    use SlugTrait;
-    private function getPourSlug(): string
-    {
-        return $this->getNom();// à remplacer par la méthode qui appelle le field pour le slug
-    }
-    ```
-on code dans le controller.tpl qui permet de ne créer les slugs vides quand on lance la méthode admin/index
+le Slug est généré par SlugTrait et doctrinesubscriber.
+il est possible de choisir un champ en mettant dans l'id
+slug:champ
 

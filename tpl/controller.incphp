@@ -31,17 +31,6 @@ class ¤Entity¤Controller extends AbstractController
     public function index(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         ¤search¤
-        //génération des slugs en cas de slug vide
-        if (isset($dql[0]) && property_exists(new ¤Entity¤, 'slug')) {
-            foreach ($dql as $objet) {
-                if ($objet->getSlug() == '') {
-                    $objet->setSlug($objet->get¤slug¤());
-                    $this->em->persist($objet);
-                }
-            }
-        }
-        $this->em->flush();
-        //fin de la génération des slugs
         $request->query->set('knpChampsRecherche', ToolsHelper::knpChampsRecherche('¤entity¤'));
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             'pagination' =>$paginator->paginate($dql,¤paginator¤)
