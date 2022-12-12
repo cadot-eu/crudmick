@@ -62,7 +62,7 @@ class ¤Entity¤Controller extends AbstractController
                 $objet->$method(false);
                 $this->em->persist($objet);
             }
-            
+            }
         if ($type) {
             $method = 'set' . $type;
             $¤entity¤->$method($valeur);
@@ -70,7 +70,7 @@ class ¤Entity¤Controller extends AbstractController
             $this->em->flush();
             }
            
-        }
+        
         return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
     }
     /* -------------------------------------------------------------------------- */

@@ -63,7 +63,7 @@ Optionnels:
 - tpl:no_deleted
 - tpl:no_updated
 - nocrud
-- slug:champ 
+- slug:champ (sinon généré automatiquement)
 - onlytype
 - order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}
 - select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
@@ -144,7 +144,7 @@ faire un `composer dump-autoload`cela réactualise les fichiers mémorisé par c
 
 ### Slug
 
-le Slug est généré par SlugTrait et doctrinesubscriber.
+le Slug est généré par SlugTrait et toolshelper appelé dans le controller.
 il est possible de choisir un champ en mettant dans l'id
-slug:champ
+'*slug:champ'
 
