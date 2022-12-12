@@ -1,61 +1,70 @@
-{% extends '¤extends¤' %} {% set route =
+{% extends '¤extends¤' %}
+{% set route =
 path(app.request.attributes.get('_route'),
-app.request.attributes.get('_route_params')) %} {% set action =
+app.request.attributes.get('_route_params')) %}
+{% set action =
 path(app.request.attributes.get('_route'),
-app.request.attributes.get('_route_params')) | split('/') | last %} {% block
-title %} {% if action=='new' %}Création {% elseif action=='copy' %}Duplication
-{% elseif action=='edit' %}Edition {% endif %} ¤Entity¤
-{{¤entity¤.id}}
-{% endblock %} {% block body %}
-<input type="hidden" id="TBuploadmax" value="{{ TBuploadmax() }}" />
+app.request.attributes.get('_route_params')) | split('/') | last %}
+{% block
+title %}
+	{% if action=='new' %}Création
+		{% elseif action=='copy' %}Duplication
+		{% elseif action=='edit' %}Edition
+	{% endif %}
+	¤Entity¤
+	{{¤entity¤.id}}
+{% endblock %}
+{% block body %}
+	<input type="hidden" id="TBuploadmax" value="{{ TBuploadmax() }}"/>
 
-<div class="col-12 text-center">
-	<h1>
-		{% if action=='new' %}Création {% elseif action=='copy' %}Duplication {%
-		elseif action=='edit' %}Edition {% endif %}
-		{{TBgetClass(¤entity¤)|lower|slice(0,1) in ['a','e','i','o','u','y'] ? "de l'¤Entity¤" : "du ¤Entity¤"}}
+	<div class="col-12 text-center">
+		<h1>
+			{% if action=='new' %}Création
+				{% elseif action=='copy' %}Duplication
+				{%
+		elseif action=='edit' %}Edition
+			{% endif %}
+			{{TBgetClass(¤entity¤)|lower|slice(0,1) in ['a','e','i','o','u','y'] ? "de l'¤Entity¤" : "du ¤Entity¤"}}
 
-		{{¤entity¤.id}}
-		{% if "¤viewerUrl¤" !="false" %}
-		<span>
-			<a
-				href="¤viewerUrl¤/{{¤entity¤.¤viewerChamp¤}}"
-				title="Afficher dans un autre onglet la page"
-				target="_blank"
-			>
-				<em class="bi bi-display"></em>
-			</a>
-		</span>
-		{% endif %}
-		<span class="text-right"
-			>{#
-			<h5>
-				taille maxi d'envoie:<span id="TBuploadmax">{{
-					TBuploadmax()
-				}}</span
-				>Mo
-			</h5>
-			#}
-		</span>
-	</h1>
-</div>
+			{{¤entity¤.id}}
+			{% if "¤viewerUrl¤" !="false" %}
+				<span>
+					<a href="¤viewerUrl¤/{{¤entity¤.¤viewerChamp¤}}" title="Afficher dans un autre onglet la page" target="_blank">
+						<em class="bi bi-display"></em>
+					</a>
+				</span>
+			{% endif %}
+			<span
+				class="text-right">{#
+								<h5>
+									taille maxi d'envoie:<span id="TBuploadmax">{{
+										TBuploadmax()
+									}}</span
+									>Mo
+								</h5>
+								#}
+			</span>
+		</h1>
+	</div>
 
-<div class="col-12" data-turbo="false">
-	{{ form_start(form) }}
+	<div class="col-12" data-turbo="false">
+		{{ form_start(form) }}
 
-	¤form_rows¤
+		¤form_rows¤
 
-	<button class="btn btn-primary" id="bouton_submit" type="submit">
-		{% if action=='new' %}Créer {% else %}Mettre à jour {% endif %}
-	</button>
-	<a href="{{ path('¤entity¤_index') }}">
-		<button class="btn btn-secondary" type="button">
-			Revenir à la liste
+		<button class="btn btn-primary" id="bouton_submit" type="submit">
+			{% if action=='new' %}Créer
+				{% else %}Mettre à jour
+			{% endif %}
 		</button>
-	</a>
-	<input type="hidden" id="token" value="{{ csrf_token('upload') }}" />
+		<a href="{{ path('¤entity¤_index') }}">
+			<button class="btn btn-secondary" type="button">
+				Revenir à la liste
+			</button>
+		</a>
+		<input type="hidden" id="token" value="{{ csrf_token('upload') }}"/>
 
-	{{ form_end(form) }}
-</div>
+		{{ form_end(form) }}
+	</div>
 
 {% endblock %}
