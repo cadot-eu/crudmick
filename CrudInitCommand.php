@@ -134,22 +134,22 @@ EOT;
 		//suppression de l'ancien index
 		if (($deb = strpos($repo, 'public function index($search')) !== false) {
 			$end = strpos($repo, '//fin index', $deb);
-			file_put_contents(
-				'/app/src/Repository/' . ucfirst($entity) . 'Repository.php',
+			$str =
 				str_replace(
 					substr($repo, $deb, $end - $deb + strlen('//fin index')),
 					$find,
 					$repo
-				)
-			);
+				);
 		} else {
 			$end = strrpos($repo, '}');
 			$deb = $end;
-			file_put_contents(
-				'/app/src/Repository/' . ucfirst($entity) . 'Repository.php',
-				substr($repo, 0, $deb) . "\n" . $find . substr($repo, $end)
-			);
+			$str = substr($repo, 0, $deb)  . $find . substr($repo, $end);
 		}
+		$str = preg_replace('/^[ \t]*[\r\n]+/m', '', $str);
+		file_put_contents(
+			'/app/src/Repository/' . ucfirst($entity) . 'Repository.php',
+			$str
+		);
 		//file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $deb) . "\n" . $find . substr($repo, $end));
 
 		return Command::SUCCESS;

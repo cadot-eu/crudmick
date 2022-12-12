@@ -118,6 +118,7 @@ class ¤Entity¤Controller extends AbstractController
                 }
             //TODO: par listener
             ¤gets¤
+            $¤entity¤=ToolsHelper::SetSlug($em, $¤entity¤);
             $em->persist($¤entity¤);
             $em->flush();
             return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
@@ -145,6 +146,7 @@ class ¤Entity¤Controller extends AbstractController
             $¤entity¤->setslug($¤entity¤c->getslug().uniqid());
         }
         $¤entity¤->setCreatedAt(new DateTime('now'));
+         $¤entity¤=ToolsHelper::SetSlug($em, $¤entity¤);
         $em->persist($¤entity¤);
         $em->flush();
         return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);

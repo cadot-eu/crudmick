@@ -1,122 +1,102 @@
-{% extends '¤extends¤' %} {% set route
+{% extends '¤extends¤' %}
+{% set route
 =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))%}
 {% set action
 =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))|
-split('/')| last%} {% set current_path = app.request.get('_route') %} {% block
-title %} ¤Entity¤ {% endblock %} {% block body %} ¤tableauChoice¤
-<h1>¤Entity¤</h1>
-<div class="row">
-	{% if not ¤order¤ %}
-	<div class="col-8">
-		{{ knp_pagination_filter(pagination, {
+split('/')| last%}
+{% set current_path = app.request.get('_route') %}
+{% block
+title %}
+	¤Entity¤
+{% endblock %}
+{% block body %}
+	¤tableauChoice¤
+	<h1>¤Entity¤</h1>
+	<div class="row">
+		{% if not ¤order¤ %}
+			<div class="col-8">
+				{{ knp_pagination_filter(pagination, {
                     'r.recherche': 'Recherche',
                 }) }}
+			</div>
+			<div class="col-4 my-auto">
+				{% if pagination.getTotalItemCount>0 %}
+					<strong class="ms-auto text-bold">
+						{{ pagination.getTotalItemCount }}
+						trouvés</strong>
+				{% endif %}
+			</div>
+		{% endif %}
+		<table class="table table-striped table-hover align-middle">
+			<thead>
+				<tr class="text-center">
+					¤entete¤
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody class="sortable">
+				{% for ¤Entity¤ in pagination %}
+					{% if ¤hide¤ %}
+						<tr data-num="{{¤Entity¤.id }}" class="text-center">
+							¤rows¤
+							<td>
+								<form method="post" action="{{ path('¤entity¤_delete', {'id': ¤Entity¤.id }) }}" style="margin-block-end: 0">
+									<div class="btn-group" role="group" aria-label="actions">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete'~¤Entity¤.id ) }}"/>
+										¤no_action_edit¤
+										{% if ¤no_access_deleted¤ %}
+											{% if
+							action=='deleted' %}
+												<button class="btn btn-xs btn-warning" title="restaurer" name="delete_restore" value="1">
+													<i class="icone bi bi-life-preserver"></i>
+												</button>
+												<button class="btn btn-xs btn-danger" title="supprimer définitivement" onclick="return confirm('Etes-vous sûr de vouloir effacer cet item?');" name="delete_delete" value="1">
+													<i class="icone bi bi-trash"></i>
+												</button>
+											{% else %}
+												<button class="btn btn-xs btn-warning" title="mettre dans la corbeille" name="delete_softdelete" value="1">
+													<i class="icone icone bi bi-trash"></i>
+												</button>
+											{% endif %}
+										{% endif %}
+									</div>
+								</form>
+							</td>
+						</tr>
+
+					{% else %}
+						<tr>
+							<td colspan="11">Aucun enregistrement</td>
+						</tr>
+
+					{% endif %}
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
-	<div class="col-4 my-auto">
-		{% if pagination.getTotalItemCount>0 %}
-		<strong class="ms-auto text-bold">
-			{{ pagination.getTotalItemCount }}
-			trouvés</strong
-		>
+	<div class="row">
+		{% if ¤no_action_add¤ %}
+			<div class="col">
+				<a class="btn btn-primary" data-toggle="tooltip" title="ajouter enregistrement" data-turbo="false" href="{{ path('¤entity¤_new') }}">Ajouter un enregistrement</a>
+			</div>
+		{% endif %}
+		{% if ¤no_access_deleted¤ %}
+			{% if action=='deleted' %}
+				<div class="col-auto">
+					<a class="text-muted" href="{{ path('¤entity¤_index') }}">voir les enregistrements</a>
+				</div>
+			{% else %}
+				<div class="col-auto">
+					<a class="text-muted" href="{{ path('¤entity¤_deleted') }}">voir les enregistrements supprimés</a>
+				</div>
+			{% endif %}
 		{% endif %}
 	</div>
+	{% if not ¤order¤ %}
+		<div class="row">
+			<div class="navigation col-auto mx-auto">
+				{{ knp_pagination_render(pagination) }}
+			</div>
+		</div>
 	{% endif %}
-	<table class="table table-striped table-hover align-middle">
-		<thead>
-			<tr>
-				¤entete¤
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody class="sortable">
-			{% for ¤Entity¤ in pagination %} {% if ¤hide¤ %}
-			<tr data-num="{{¤Entity¤.id }}">
-				¤rows¤
-				<td>
-					<form
-						method="post"
-						action="{{ path('¤entity¤_delete', {'id': ¤Entity¤.id }) }}"
-						style="margin-block-end: 0"
-					>
-						<div class="btn-group" role="group" aria-label="actions">
-							<input
-								type="hidden"
-								name="_token"
-								value="{{ csrf_token('delete'~¤Entity¤.id ) }}"
-							/>
-							¤no_action_edit¤ {% if ¤no_access_deleted¤ %} {% if
-							action=='deleted' %}
-							<button
-								class="btn btn-xs btn-warning"
-								title="restaurer"
-								name="delete_restore"
-								value="1"
-							>
-								<i class="icone bi bi-life-preserver"></i>
-							</button>
-							<button
-								class="btn btn-xs btn-danger"
-								title="supprimer définitivement"
-								onclick="return confirm('Etes-vous sûr de vouloir effacer cet item?');"
-								name="delete_delete"
-								value="1"
-							>
-								<i class="icone bi bi-trash"></i>
-							</button>
-							{% else %}
-							<button
-								class="btn btn-xs btn-warning"
-								title="mettre dans la corbeille"
-								name="delete_softdelete"
-								value="1"
-							>
-								<i class="icone icone bi bi-trash"></i>
-							</button>
-							{% endif %} {% endif %}
-						</div>
-					</form>
-				</td>
-			</tr>
-
-			{% else %}
-			<tr>
-				<td colspan="11">Aucun enregistrement</td>
-			</tr>
-
-			{% endif %} {% endfor %}
-		</tbody>
-	</table>
-</div>
-<div class="row">
-	{% if ¤no_action_add¤ %}
-	<div class="col">
-		<a
-			class="btn btn-primary"
-			data-toggle="tooltip"
-			title="ajouter enregistrement"
-			data-turbo="false"
-			href="{{ path('¤entity¤_new') }}"
-			>Ajouter un enregistrement</a
-		>
-	</div>
-	{% endif %} {% if ¤no_access_deleted¤ %} {% if action=='deleted' %}
-	<div class="col-auto">
-		<a class="text-muted" href="{{ path('¤entity¤_index') }}"
-			>voir les enregistrements</a
-		>
-	</div>
-	{% else %}
-	<div class="col-auto">
-		<a class="text-muted" href="{{ path('¤entity¤_deleted') }}"
-			>voir les enregistrements supprimés</a
-		>
-	</div>
-	{% endif %} {% endif %}
-</div>
-{% if not ¤order¤ %}
-<div class="row">
-	<div class="navigation col-auto mx-auto">
-		{{ knp_pagination_render(pagination) }}
-	</div>
-</div>
-{% endif %} {% endblock %}
+{% endblock %}

@@ -71,9 +71,9 @@ class CrudMakeIndexCommand extends Command
         {{ knp_pagination_sortable(pagination, 'créé', 'a.createdAt') }}";
         if (!isset($IDOptions['tpl']['no_updated']))
             if (isset($docs->getOptions()['id']['order'])) {
-                $th[] = "<th >Mis à jour";
+                $th[] = "<th>Mis à jour";
             } else {
-                $th[] = "{{pagination.isSorted('a.updatedAt')?\"class='sorted'\"}}>
+                $th[] = "<th {{pagination.isSorted('a.updatedAt')?\"class='sorted'\"}}>
         {{ knp_pagination_sortable(pagination, 'mis à jour', 'a.updatedAt') }}";
             }
         /* ---------------------------------- body ---------------------------------- */
@@ -103,7 +103,6 @@ class CrudMakeIndexCommand extends Command
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
-                    case '':
                     case 'string':
                     case 'email':
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
@@ -227,11 +226,28 @@ class CrudMakeIndexCommand extends Command
                         $twig = isset($options['twig']) ? $options['twig'] : '|join(",")';
                         $td[] = '<td class="my-auto text-center' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-zoom-in"></i>' . "\n";
                         break;
+
+                    default:
+                        if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+                            $output->writeln('- non géré dans makeindex:' . $select);
+                        }
+
+                        break;
+                }
+            }
+            //gestion de certain par les noms de champs
+            if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+                switch ($name) {
                     case 'slug':
                         $td[] = '<td class="my-auto text-center clipboard' . implode(' ', $class) . '"  data-clipboard-text="{{' . "$Entity.$name$twig" . '}}" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-clipboard"></i>' . "\n";
+
+                        break;
                     default:
-                        if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
-                            $output->writeln('- non géré dans makeindex:' . $select);
+                        //dans le cas ou on a pas de type donné ni de nom connu
+                        if ($docs->getSelect($name) == '') {
+                            $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
+                            $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         }
                         break;
                 }

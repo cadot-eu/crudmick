@@ -350,18 +350,26 @@ class CrudMakeTypeCommand extends Command
 						break;
 
 					default:
-						if (
-							$input->getOption('comment') != false &&
-							!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])
-						) {
-							$output->writeln(
-								'- non géré dans maketype:' .
-									$select .
-									'[' .
-									$name .
-									']'
-							);
+						if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+							$output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
 						}
+				}
+				//gestion de certain par les noms de champs
+				if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+					switch ($name) {
+						case 'slug':
+							$opts['required'] = false;
+							$uses[] =
+								'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+							$tempadds = "\n->add('$name',HiddenType::class,";
+
+							break;
+						default:
+							//dans le cas ou on a pas de type donné ni de nom connu
+							if ($docs->getSelect($name) == '') {
+							}
+							break;
+					}
 				}
 				//surcharge opt
 				$finalOpts = isset($options['opt'])
