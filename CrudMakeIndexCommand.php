@@ -229,7 +229,7 @@ class CrudMakeIndexCommand extends Command
 
                     default:
                         if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
-                            $output->writeln('- non géré dans makeindex:' . $select);
+                            $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
                         }
 
                         break;
@@ -244,7 +244,7 @@ class CrudMakeIndexCommand extends Command
                         break;
                     default:
                         //dans le cas ou on a pas de type donné ni de nom connu
-                        if ($docs->getSelect($name) == '') {
+                        if (!isset($options['tpl']['no_index']) && $docs->getSelect($name) == '') {
                             $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
                             $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
