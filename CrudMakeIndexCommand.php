@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command\base;
+namespace App\Command\crudmick;
 
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Attribute\AsCommand;

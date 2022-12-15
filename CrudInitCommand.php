@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command\base;
+namespace App\Command\crudmick;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

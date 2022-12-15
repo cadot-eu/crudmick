@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command\base;
+namespace App\Command\crudmick;
 
 use Faker\Factory;
 use Symfony\Component\Console\Attribute\AsCommand;

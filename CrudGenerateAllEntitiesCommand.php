@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command\base;
+namespace App\Command\crudmick;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -36,15 +36,13 @@ class CrudGenerateAllEntitiesCommand extends Command
 		/* -------------------------------- constant -------------------------------- */
 		$tabentities = [];
 		//secure $this->entity in minus
-		foreach (
-			array_diff(scandir('src/Entity'), [
+		foreach (array_diff(scandir('src/Entity'), [
 				'..',
 				'.',
 				'ResetPasswordRequest.php',
 				'base',
 			])
-			as $entity
-		) {
+			as $entity) {
 			$tentitie = false;
 			$entity = strTolower(substr($entity, 0, -strlen('.php')));
 			$Finput = new ArrayInput([
