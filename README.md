@@ -1,31 +1,161 @@
-# generate
+
+
+# Traits
+
+Les traits s'ajoutent dans les entités par exemple:
+
+```php
+use App\Entity\base\CategoriesTrait;
+class Article
+{
+use CategoriesTrait;
+...
+```
+
+- CategoriesTrait: permet de sélectionner dess catégories pour une entité
+- DevantTrait: cré dans l'index un switch qui permet de mettre un boolan devant à true et tous les autres en false
+- EtatTrait: cré un bouton dans l'index avec l'état: brouillon, en ligne, à vérifier
+- OrdreTrait: affiche des boutons pour modifier l'ordre dans index (ajouter dans ID order:ordre (champ ordre, doit exister))
+- SituationTrait: Affiche un sawit avec actif/inactif dans index
+- SlugTrait: permet d'avoir un slug (il est généré à chaque enregistrement ou modif d'une entité. Pour une ancienne base on peut se servir de sc setslug)
+- VerifedTrait: permet d'avoir un switch on/off dans index
+- VuesTrait: ne se voit nul part, sert à enregistrer le nombres de vues par exmple
+
+Timetrait est d'office partout, il garde les dates de création, mise à jour et suppression
+
+Les traits sont interessants, c'est des bonnes base pour voir comment utiliser crudmick dedans.
+
+# pour tous les champs
+
+quelques exemples:
 
 TWIG:join(',')
 OPT:{"multiple":true,"expanded":true}
 ATTR:{"data-controller":"onecheckbox"}
 
-Possibilités de surchargé les attr et opt .
+Pour chaque type on a dans la doc de Symfony la possibilité d'ajouter des attributs (ATTR) ou des oprions (OPT)
+Exemple pour [entité](https://symfony.com/doc/current/reference/forms/types/entity.html) on à les [attributs](https://symfony.com/doc/current/reference/forms/types/entity.html#attr) et les tous le reste sont des options ;-)
 
-## ALIAS
+IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par exemple dans password il met l'option first_option="Mot de passe" si tu veux le changer il te suffit de mettre OPT:{"first_option":"Un super password"}
+
+# Textarea => TEXTE
 
 - vide
 - simple
 - simplelanguage
-- normal possibilité d'ajouter un filtre * attr:{"data-base--suneditor--upload-value":"article/hd"} ou un autre répertoire de destination pour les images envoyé dans ckeditor
-- choice (options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"] ou options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"} et possibilté d'imposé un choix seul sur un json ou array ATTR:{"data-controller":"base--onecheckbox"})
-- choiceenplace
-  
-  ```php
-     * choiceenplace
-     * xtra:{"champ":"Sur l'accueil"}
-     * options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"}
-     * TPL:no_form
-  ```
-_ onechoiceenplace permet de mettre tous les champs à false et un seul à true
+- normal possibilité d'ajouter un filtre 
+`* attr:{"data-base--suneditor--upload-value":"article/hd"}` pour choisir un répertoire de destination pour les images  (pas obligatoire)
+- full
 
-- entity
-  ` (pour choisir le champ affiché * options:{"label":"nom"} et pour avoir un choix vide possible * OPT:{"required":false} * OPT:{"empty_data":null}) `
-- collection
+Suneditor est en cours de finition
+
+# JSON =>ARRAY/JSON
+
+quand tu chois array avec sc m:e, en fait il te cré un array. Donc pour gérer ça en json
+
+` *json `
+
+# liste de choix
+
+## une liste de string définis
+
+le plus simple => STRING
+
+```php
+* choice
+* options:["question","réponse"]
+```
+
+ou choix simple avec retour différents =>STRING
+
+```php
+* choice
+* options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"}
+```
+
+ou une choix multiple =>STRING
+
+```php
+* choice
+* options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN","partenaire":"ROLE_PARTENAIRE"}
+* TWIG:join(',')
+* OPT:{"multiple":true,"expanded":true}
+```
+
+Pour imposer un seul choix
+`ATTR:{"data-controller":"base--onecheckbox"}`
+
+## liste de choix en cliquant sur un bouton dans index =>BOOLEAN
+
+```php
+* choiceenplace
+* xtra:{"champ":"Sur l'accueil"}
+* options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"}
+* TPL:no_form
+```
+
+## liste de choix en cliquant sur un bouton dans index mais avec un possible et désactive les autres => BOOLEAN
+
+```php
+* onechoiceenplace
+* xtra:{"champ":"mis devant"}
+* options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"}
+* TPL:no_form
+```
+
+## liste pour choisir un enfant d'une entité=>STRING pour MANYTOONE ou json P
+
+[doc](https://symfony.com/doc/current/reference/forms/types/entity.html)
+
+Utiliser MANYTOMANY ou MANYTOONE comme relation
+
+```php
+* entity
+* options:{"label":"nom"} //pour choisir le champ affiché dans la sélection de l'enfant
+* twig:json_encode
+* OPT:{"required":false} //pour permttre un choix vide
+* OPT:{"empty_data":null} //idem, peut-être pas obligatoire (merci de me dire)
+* OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"} //pour many to many
+```
+
+# mot de passe => STRING
+
+[doc](https://symfony.com/doc/current/reference/forms/types/repeated.html)
+
+Crudmick, affiche deux inputs et oblige à ce que les mots de passe soit identique
+`* password`
+
+# ajout d'un fichier unique=>STRING
+
+[doc](https://symfony.com/doc/current/reference/forms/types/file.html)
+
+`* fichier `
+
+Crudmick met d'office les extensions de fichiers les plus classiques comme possible.
+Il ajoute également un lien quand on clique sur le nom du fichier dans index (limité à 50 caractères)
+
+# ajout d'une image unique=>STRING
+
+[doc](https://symfony.com/doc/current/reference/forms/types/file.html)
+
+```php
+* image 
+* tpl:index_FileImage (miniature) ou index_FileImageNom (minature et nom) sinon retourne que le nom de fichier
+```
+Crudmick met d'office les extensions de images les plus classiques comme possible.(image/*)
+
+# permettre d'ajouter ou supprimer une entité dans une autre (collection)
+
+Utiliser MANYTOMANY
+
+```php
+* collection
+* options:{"field":"label"}
+* xtra:{"allow_add":true,"prototype":true,"allow_delete":true,"entry_options!":"[\"label\"=>false]"}
+* tpl:no_index
+* opt:{"required":false}
+```
+
 - color
 - password
 - hidden
@@ -78,26 +208,7 @@ TWIG=u.truncate(8, '...')
 split('¤')[1]
 ```
 
-### Collection
-Pour avoir une liste de choix de sur une entité
-```php
-/**
-     * entity
-     * label:nom
-     * OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"}
-     * OPT:{"required":false}
-     * twig:json_encode
-     */
-```
 
-```php
- /**
-     * collection
-     * options:{"field":"label"}
-     * xtra:{"allow_add":true,"prototype":true,"allow_delete":true,"entry_options!":"[\"label\"=>false]"}
-     * tpl:no_index
-     * opt:{"required":false}
-     */
 ```
 ### hiddenroot et readonlyroot
 

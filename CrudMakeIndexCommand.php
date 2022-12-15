@@ -100,13 +100,13 @@ class CrudMakeIndexCommand extends Command
                     case 'normal':
                     case 'text':
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(20, \'...\')';
-                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                        $twigtitle = isset($options['twig']) ? '|' .$twig;
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
                     case 'string':
                     case 'email':
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
-                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                        $twigtitle = isset($options['twig']) ? '|' .$twig;
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
                     case 'drapeau':
@@ -120,7 +120,7 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'money':
                     case 'choice':
-                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                        $twigtitle = isset($options['twig']) ? '|' .$twig;
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
                     case 'integer':
@@ -246,7 +246,7 @@ class CrudMakeIndexCommand extends Command
                         //dans le cas ou on a pas de type donné ni de nom connu
                         if (!isset($options['tpl']['no_index']) && $docs->getSelect($name) == '') {
                             $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
-                            $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                            $twigtitle = isset($options['twig']) ? '|' .$twig;
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         }
                         break;
