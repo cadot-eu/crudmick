@@ -115,6 +115,8 @@ class CrudMakeNewCommand extends Command
                         //         $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . $resattrs . ',{"disabled":disabled}) }}' . "\n";
                         //     }
                         //     break;
+                    case 'pass':
+                        break;
                     default: {
                             $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
                             $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";

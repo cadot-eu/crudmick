@@ -269,3 +269,10 @@ faire un `composer dump-autoload`cela réactualise les fichiers mémorisé par c
 le Slug est généré par SlugTrait et toolshelper appelé dans le controller.
 il est possible de choisir un champ en mettant dans l'id
 '*slug:champ'
+
+### PASS
+
+Quand tu lances la génération par sc crud, tu peux avoir un message du genre "non géré ..." cela signifie que crudmick n'a rien fait pour ces valeurs. Cela permet de ne pas en oublier.
+Si tu veux lui dire de ne pas s'en occuper tu peux mettre 
+
+`* pass`

@@ -94,18 +94,19 @@ class CrudMakeIndexCommand extends Command
                     case 'hiddenroot':
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";;
                         break;
+                    case 'vide':
                     case 'simple':
                     case 'simplelanguage':
                     case 'full':
                     case 'normal':
                     case 'text':
-                        $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(20, \'...\')';
+                        $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(20, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . $options['twig'] : '|' . $twig;
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
                     case 'string':
                     case 'email':
-                        $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
+                        $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . $options['twig'] : '|' . $twig;
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
@@ -120,7 +121,7 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'money':
                     case 'choice':
-                        $twigtitle = isset($options['twig']) ? '|' . $options['twig'] : '|' . $twig;
+                        $twigtitle = isset($options['twig']) ? '|' . implode('|', $options['twig']) : '|' . $twig;
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
                     case 'integer':
@@ -226,9 +227,10 @@ class CrudMakeIndexCommand extends Command
                         $twig = isset($options['twig']) ? $options['twig'] : '|join(",")';
                         $td[] = '<td class="my-auto text-center' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-zoom-in"></i>' . "\n";
                         break;
-
+                    case 'pass':
+                        break;
                     default:
-                        if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+                        if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {
                             $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
                         }
 

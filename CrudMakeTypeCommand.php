@@ -348,7 +348,8 @@ class CrudMakeTypeCommand extends Command
 					case 'integer':
 					case 'string':
 						break;
-
+					case 'pass':
+						break;
 					default:
 						if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
 							$output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
