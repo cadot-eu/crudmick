@@ -1,5 +1,3 @@
-
-
 # Traits
 
 Les traits s'ajoutent dans les entités par exemple:
@@ -17,7 +15,7 @@ use CategoriesTrait;
 - EtatTrait: cré un bouton dans l'index avec l'état: brouillon, en ligne, à vérifier
 - OrdreTrait: affiche des boutons pour modifier l'ordre dans index (ajouter dans ID order:ordre (champ ordre, doit exister))
 - SituationTrait: Affiche un sawit avec actif/inactif dans index
-- SlugTrait: permet d'avoir un slug (il est généré à chaque enregistrement ou modif d'une entité. Pour une ancienne base on peut se servir de sc setslug)
+- SlugTrait: permet d'avoir un slug (il est généré à chaque enregistrement ou modif d'une entité. Pour une ancienne base on peut se servir de sc setslug), de plus le slug est peut être généré automatiquement (name,nom,titre,title,label ou id) si on indique pas de slugs
 - VerifedTrait: permet d'avoir un switch on/off dans index
 - VuesTrait: ne se voit nul part, sert à enregistrer le nombres de vues par exmple
 
@@ -37,6 +35,12 @@ Pour chaque type on a dans la doc de Symfony la possibilité d'ajouter des attri
 Exemple pour [entité](https://symfony.com/doc/current/reference/forms/types/entity.html) on à les [attributs](https://symfony.com/doc/current/reference/forms/types/entity.html#attr) et les tous le reste sont des options ;-)
 
 IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par exemple dans password il met l'option first_option="Mot de passe" si tu veux le changer il te suffit de mettre OPT:{"first_option":"Un super password"}
+
+## TPL (template)
+- no_created
+- no_updated
+- no_index (n'affiche pas dans index)
+- no_form (n'affiche pas dans new et edit)
 
 # Textarea => TEXTE
 
@@ -134,6 +138,45 @@ Crudmick, affiche deux inputs et oblige à ce que les mots de passe soit identiq
 Crudmick met d'office les extensions de fichiers les plus classiques comme possible.
 Il ajoute également un lien quand on clique sur le nom du fichier dans index (limité à 50 caractères)
 
+# ajout d'un champ email => STRING
+
+[doc](https://symfony.com/doc/current/reference/forms/types/email.html)
+
+`email`
+
+# cache un champ
+
+[doc](https://symfony.com/doc/current/reference/forms/types/hidden.html)
+
+```php
+*hidden
+*TPL:no_index
+```
+
+# cache un champ pour tout le monde sauf pour le superadmin
+
+Utilise le stimulus hiddenroot et se sert de l'email m@cadot.eu
+
+```php
+*hiddenroot
+*TPL:no_index
+```
+
+# affiche en lecture seule sauf pour root
+
+Utilise le stimulus readonlyroot et se sert de l'email m@cadot.eu*
+
+```php
+*readonlyroot
+*TPL:no_index
+```
+
+# un champ type money => STRING
+
+[doc](https://symfony.com/doc/current/reference/forms/types/money.html)
+
+`money`
+
 # ajout d'une image unique=>STRING
 
 [doc](https://symfony.com/doc/current/reference/forms/types/file.html)
@@ -146,6 +189,8 @@ Crudmick met d'office les extensions de images les plus classiques comme possibl
 
 # permettre d'ajouter ou supprimer une entité dans une autre (collection)
 
+[doc](https://symfony.com/doc/current/reference/forms/types/collection.html)
+
 Utiliser MANYTOMANY
 
 ```php
@@ -156,50 +201,44 @@ Utiliser MANYTOMANY
 * opt:{"required":false}
 ```
 
-- color
-- password
-- hidden
-- image (possibilité d'ajouter tpl index_FileImage ou index_FileImageNom)
-- fichier 
-- money
-- array (options=>separation et label)
-- onetomany: ajouter options:{"champ":"nom"} pour définir le champ à afficher dans l'index
-  
+# choix d'une couleur
 
-## TPL
-- no_created
-- no_updated
-- no_index
-- no_form
-- index_FileImage
-- index_FileImageNom
+[doc](https://symfony.com/doc/current/reference/forms/types/color.html)
 
+`color`
 
-## OPT et ATTR
+# ID
 
-  - `OPT:{"multiple":true,"expanded":true}`
-  - `ATTR:{"data-controller":"onecheckbox"}`
-
-## ID
-
-Fortement conseillé:
+## Fortement conseillé:
 
 - search: pour donner les champs de recherche pour knp ex: *  SEARCH:['id','titre','article']
 
-Optionnels:
+## Optionnels:
 
-- hide:{"roles[0]":"ROLE_SUPERADMIN"}
+- hide:{"roles[0]":"ROLE_SUPERADMIN"} //cache sauf pour
 - tpl:no_created
 - tpl:no_deleted
 - tpl:no_updated
-- nocrud
+- nocrud //pour proétger une entité des modificatio nde crudmick
 - slug:champ (sinon généré automatiquement)
-- onlytype
+- onlytype (crud mick génère que le fichier form, sert pour les entités que l'on veut juste mettre dans une connection par exmple)
 - order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}
-- select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
-- viewer: url et champ pour créer le lien pour visionner l'objet dans un nouvel onglet ex:* VIEWER:{"url":"/les-articles","champ":"slug"}
 - filter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
-### TWIG
+
+## Particulier
+
+Créé un sélecteur sur une entité et copy la sélection dans le presse papier
+
+- select: pour la boite de recherche ex: * SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30} //utilise le stimulus 'SelectAndCopyElement'
+- viewer: url et champ pour créer le lien pour visionner l'objet dans un nouvel onglet ex:* VIEWER:{"url":"/les-articles","champ":"slug"}
+
+```php
+* SELECT:{"entitie":"article","affichage":"titre","champs":"titre","copy":"slug","copyurl":"/les-articles/","limit":30}
+* VIEWER:{"url":"/les-articles","champ":"slug"}
+```
+
+
+### Quelques exemples TWIG
 
 ```php
 date('d/m à H:i', "Europe/Paris")
@@ -208,54 +247,25 @@ TWIG=u.truncate(8, '...')
 split('¤')[1]
 ```
 
+### un champ peut accéder à la valeur d'un autre champ 
 
-```
-### hiddenroot et readonlyroot
-
-Ils permettent d'afficher ou de bloquer l'édition pour les utilisateurs différents de m@cadot.eu
-Ils apellent les jscontrollers hiddenroot_controller et readonlyroot_controller
+par exemple pour que le champ suneditor toolbar value prennent la valeur du champ getTypenom
 
 ```php
-/**
-     * readonlyroot ou hiddenroot
-     * TPL:no_index
-*/
-```
-
-### un champ peut accéder à la valeur d'una autre champ
-
-par exemple pour que le champ ckeditor toolbar value prennent la valeur du champ getTypenom
-
-```php
-     * attr:{"data-controller" : "base--ckeditor"}
+     * attr:{"data-controller" : "base--suneditor"}
      * attr:{"data-base--suneditor--toolbar-value": "§$AtypeOption[\"data\"]->getTypenom()§"}
 ```
 
 ### Erreurs fréquentes
 
-- An invalid form control with name='' is not focusable est du à un champ qui est required et ` hiddden ` ou  ` display:none `, suneditor cache le champ et donc si il est required crè cette erreur. On peut utiliser ` * OPT=required=>false`
+- An invalid form control with name='' is not focusable est du à un champ qui est required et `hiddden ` ou  `display:none `, suneditor cache le champ et donc si il est required crè cette erreur. On peut utiliser `* OPT=required=>false`
 
 - `Warning: include(/app/vendor/composer/ ... ): Failed to open stream: No such file or directory`
 faire un `composer dump-autoload`cela réactualise les fichiers mémorisé par composer
 
-### Trait
-
-- etat: brouillon, en ligne à vérifier par ajax
-- situation: actif / inactif
-- time: updated, created, deleted
-- categories
-- vérified: on off
-  
-```php
-    use TimeTrait;
-    use EtatTrait;
-    use VuesTrait;
-
-```
 
 ### Slug
 
 le Slug est généré par SlugTrait et toolshelper appelé dans le controller.
 il est possible de choisir un champ en mettant dans l'id
 '*slug:champ'
-
