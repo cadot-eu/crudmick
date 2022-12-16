@@ -253,7 +253,7 @@ par exemple pour que le champ suneditor toolbar value prennent la valeur du cham
 
 ```php
      * attr:{"data-controller" : "base--suneditor"}
-     * attr:{"data-base--suneditor--toolbar-value": "§$AtypeOption[\"data\"]->getTypenom()§"}
+     * attr:{"data-base--suneditor-toolbar-value": "§$AtypeOption[\"data\"]->getTypenom()§"}
 ```
 
 ### Erreurs fréquentes
