@@ -14,7 +14,7 @@ use CategoriesTrait;
 - DevantTrait: cré dans l'index un switch qui permet de mettre un boolan devant à true et tous les autres en false
 - EtatTrait: cré un bouton dans l'index avec l'état: brouillon, en ligne, à vérifier
 - OrdreTrait: affiche des boutons pour modifier l'ordre dans index (ajouter dans ID order:ordre (champ ordre, doit exister))
-- SituationTrait: Affiche un sawit avec actif/inactif dans index
+- SituationTrait: Affiche un switch avec actif/inactif dans index
 - SlugTrait: permet d'avoir un slug (il est généré à chaque enregistrement ou modif d'une entité. Pour une ancienne base on peut se servir de sc setslug), de plus le slug est peut être généré automatiquement (name,nom,titre,title,label ou id) si on indique pas de slugs
 - VerifedTrait: permet d'avoir un switch on/off dans index
 - VuesTrait: ne se voit nul part, sert à enregistrer le nombres de vues par exmple
