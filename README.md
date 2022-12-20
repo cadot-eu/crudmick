@@ -27,9 +27,9 @@ Les traits sont interessants, c'est des bonnes base pour voir comment utiliser c
 
 quelques exemples:
 
-TWIG:join(',')
-OPT:{"multiple":true,"expanded":true}
-ATTR:{"data-controller":"onecheckbox"}
+- TWIG:join(',')
+- OPT:{"multiple":true,"expanded":true}
+- ATTR:{"data-controller":"onecheckbox"}
 
 Pour chaque type on a dans la doc de Symfony la possibilité d'ajouter des attributs (ATTR) ou des oprions (OPT)
 Exemple pour [entité](https://symfony.com/doc/current/reference/forms/types/entity.html) on à les [attributs](https://symfony.com/doc/current/reference/forms/types/entity.html#attr) et les tous le reste sont des options ;-)
@@ -258,7 +258,7 @@ par exemple pour que le champ suneditor toolbar value prennent la valeur du cham
 
 ### Erreurs fréquentes
 
-- An invalid form control with name='' is not focusable est du à un champ qui est required et `hiddden ` ou  `display:none `, suneditor cache le champ et donc si il est required crè cette erreur. On peut utiliser `* OPT=required=>false`
+- An invalid form control with name='' is not focusable est du à un champ qui est required et `hiddden ` ou  `display:none `, suneditor cache le champ et donc si il est required crè cette erreur. On peut utiliser `* OPT:{"required":false}`
 
 - `Warning: include(/app/vendor/composer/ ... ): Failed to open stream: No such file or directory`
 faire un `composer dump-autoload`cela réactualise les fichiers mémorisé par composer
