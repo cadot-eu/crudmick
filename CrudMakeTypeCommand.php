@@ -200,6 +200,11 @@ class CrudMakeTypeCommand extends Command
 							'use Symfony\Component\Form\Extension\Core\Type\MoneyType;';
 						$tempadds = "\n->add('$name',MoneyType::class,";
 						break;
+					case 'telephone':
+						$uses[] =
+							'use Symfony\Component\Form\Extension\Core\Type\TelType;';
+						$tempadds = "\n->add('$name',TelType::class,";
+						break;
 					case 'collection':
 						$uses[] =
 							'use Symfony\Component\Form\Extension\Core\Type\CollectionType;';
@@ -327,7 +332,7 @@ class CrudMakeTypeCommand extends Command
 					case 'generatedvalue': //id
 						break;
 					case 'datetime':
-						$opts['widget'] = 'single_text';
+						//$opts['widget'] = 'single_text';
 						if ($name == 'createdAt') {
 							$uses[] =
 								'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
@@ -360,9 +365,12 @@ class CrudMakeTypeCommand extends Command
 					switch ($name) {
 						case 'slug':
 							$opts['required'] = false;
-							$uses[] =
-								'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-							$tempadds = "\n->add('$name',HiddenType::class,";
+							// $uses[] =
+							// 	'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+							// $tempadds = "\n->add('$name',HiddenType::class,";
+							$attrs['data-controller'] = 'base--resetinput';
+							//ajoute l'id de l'entité
+							$opts['help'] = "Vide pour auto-génération du slug";
 
 							break;
 						default:

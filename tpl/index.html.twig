@@ -11,7 +11,9 @@ title %}
 {% endblock %}
 {% block body %}
 	¤tableauChoice¤
-	<h1>¤Entity¤</h1>
+	<h1>
+		¤Entity¤
+	</h1>
 	<div class="row">
 		{% if not ¤order¤ %}
 			<div class="col-8">
@@ -23,23 +25,38 @@ title %}
 				{% if pagination.getTotalItemCount>0 %}
 					<strong class="ms-auto text-bold">
 						{{ pagination.getTotalItemCount }}
-						trouvés</strong>
+						trouvés
+					</strong>
 				{% endif %}
 			</div>
 		{% endif %}
 		<table class="table table-striped table-hover align-middle">
 			<thead>
 				<tr class="text-center">
+					{% if "¤viewerUrl¤" !="false" %}
+						<th></th>
+					{% endif %}
 					¤entete¤
-					<th>Actions</th>
+					<th>
+						Actions
+					</th>
 				</tr>
 			</thead>
 			<tbody class="sortable">
 				{% for ¤Entity¤ in pagination %}
 					{% if ¤hide¤ %}
 						<tr data-num="{{¤Entity¤.id }}" class="text-center">
+							{% if "¤viewerUrl¤" !="false" %}
+								<td>
+									<a href="¤viewerUrl¤/{{¤Entity¤.¤viewerChamp¤}}" title="Afficher dans un autre onglet la page" target="_blank">
+										<em class="bi bi-display"></em>
+									</a>
+								</td>
+							{% endif %}
+
 							¤rows¤
 							<td>
+
 								<form method="post" action="{{ path('¤entity¤_delete', {'id': ¤Entity¤.id }) }}" style="margin-block-end: 0">
 									<div class="btn-group" role="group" aria-label="actions">
 										<input type="hidden" name="_token" value="{{ csrf_token('delete'~¤Entity¤.id ) }}"/>
@@ -66,7 +83,9 @@ title %}
 
 					{% else %}
 						<tr>
-							<td colspan="11">Aucun enregistrement</td>
+							<td colspan="11">
+								Aucun enregistrement
+							</td>
 						</tr>
 
 					{% endif %}
@@ -77,17 +96,23 @@ title %}
 	<div class="row">
 		{% if ¤no_action_add¤ %}
 			<div class="col">
-				<a class="btn btn-primary" data-toggle="tooltip" title="ajouter enregistrement" data-turbo="false" href="{{ path('¤entity¤_new') }}">Ajouter un enregistrement</a>
+				<a class="btn btn-primary" data-toggle="tooltip" title="ajouter enregistrement" data-turbo="false" href="{{ path('¤entity¤_new') }}">
+					Ajouter un enregistrement
+				</a>
 			</div>
 		{% endif %}
 		{% if ¤no_access_deleted¤ %}
 			{% if action=='deleted' %}
 				<div class="col-auto">
-					<a class="text-muted" href="{{ path('¤entity¤_index') }}">voir les enregistrements</a>
+					<a class="text-muted" href="{{ path('¤entity¤_index') }}">
+						voir les enregistrements
+					</a>
 				</div>
 			{% else %}
 				<div class="col-auto">
-					<a class="text-muted" href="{{ path('¤entity¤_deleted') }}">voir les enregistrements supprimés</a>
+					<a class="text-muted" href="{{ path('¤entity¤_deleted') }}">
+						voir les enregistrements supprimés
+					</a>
 				</div>
 			{% endif %}
 		{% endif %}

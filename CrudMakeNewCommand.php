@@ -82,7 +82,7 @@ class CrudMakeNewCommand extends Command
                         <p class="form-text mb-0 help-text"><i>pensez à nommer le fichier pour le SEO (accents , majuscule et minuscule, espace, -_. conservés)</i></p>
                         {{form_widget(form.' . $name . ')}}
                         {% if ' . $entity . '.' . $name . ' %}
-                        <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form.vars.value.' . $name . '}}</p>
+                        <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text"><a href="' . '/{{form.vars.value.' . $name . '}}">{{form.vars.value.' . $name . '}}</a></p>
                         {% endif %}
                         </div>
                         <div class="col-sm-2 d-flex align-items-center">
@@ -102,13 +102,10 @@ class CrudMakeNewCommand extends Command
                         <p class="form-text mb-0 help-text"><i>pensez à nommer le fichier pour le SEO (accents , majuscule et minuscule, espace, -_. conservés)</i></p>
                         {{form_widget(form.' . $name . ')}}
                         {% if ' . $entity . '.' . $name . ' %}
-                        <p id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text" data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '">{{form.vars.value.' . $name . '}}</p>
+                        <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text"><a href="' . '/{{form.vars.value.' . $name . '}}">{{form.vars.value.' . $name . '}}</a>    </p>
                         {% endif %}
                         </div>
-                       
-                    </div>
-
-                    </div>';
+                </div>';
                         break;
                         // case 'readonlyroot': {
                         //         $resattrs = '';

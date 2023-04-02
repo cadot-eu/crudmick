@@ -145,7 +145,6 @@ class ¤Entity¤Controller extends AbstractController
         if (property_exists($¤entity¤, 'slug')) {
             $¤entity¤->setslug($¤entity¤c->getslug().uniqid());
         }
-        $¤entity¤->setCreatedAt(new DateTime('now'));
          $¤entity¤=ToolsHelper::SetSlug($em, $¤entity¤);
         $em->persist($¤entity¤);
         $em->flush();

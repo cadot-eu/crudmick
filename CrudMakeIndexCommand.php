@@ -44,13 +44,15 @@ class CrudMakeIndexCommand extends Command
         $docs = new ParserDocblock($entity);
         foreach ($docs->getOptions() as $name => $options) {
             //creation des th
-            if (!isset($options['tpl']['no_index']) && $name != 'deletedAt' && $name != 'createdAt' && $name != 'updatedAt') {
+            if (!isset($options['tpl']['no_index']) && $name != 'deletedAt' && $name != 'createdAt' && $name != 'updatedAt' && $name != 'slug') {
                 if (isset($docs->getOptions()['id']['order']) || in_array($docs->getType($name), ['manytomany', 'onetomany'])) {
                     $th[] = "<th >$name";
                 } else {
                     $th[] = "<th {{pagination.isSorted('a.$name')?\"class='sorted'\"}}>
                 {{ knp_pagination_sortable(pagination, '$name', 'a.$name') }}";
                 }
+            } elseif ($name == 'slug' && isset($IDOptions['tpl']['no_slug'])) {
+                $th[] = "<th >$name";
             }
         }
         /* ------------------------- creation des idoptions ------------------------- */
@@ -113,6 +115,9 @@ class CrudMakeIndexCommand extends Command
                     case 'drapeau':
                         ///node_modules/flag-icons/flags/1x1/fr.svg
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name" . '}}">' . "{% if $Entity.$name %} <img src=\"/build/flags/1x1/{{ $Entity.$name }}.svg\" style=\"max-height:2rem\"> {% endif %} \n";
+                        break;
+                    case 'telephone':
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name" . '}}">' . "{{ $Entity.$name }}\n";
                         break;
                     case 'manytoone':
                         $champ = isset($options['options']['champ']) ? $options['options']['champ'] : 'id';
@@ -241,7 +246,8 @@ class CrudMakeIndexCommand extends Command
             if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
                 switch ($name) {
                     case 'slug':
-                        $td[] = '<td class="my-auto text-center clipboard' . implode(' ', $class) . '"  data-clipboard-text="{{' . "$Entity.$name$twig" . '}}" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-clipboard"></i>' . "\n";
+                        if (isset($IDOptions['tpl']['no_slug']))
+                            $td[] = '<td class="my-auto text-center clipboard' . implode(' ', $class) . '"  data-clipboard-text="{{' . "$Entity.$name$twig" . '}}" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-clipboard"></i>' . "\n";
 
                         break;
                     default:
@@ -302,12 +308,14 @@ class CrudMakeIndexCommand extends Command
             'entete' => implode("\n", $th),
             'entity' => $entity,
             'Entity' => $Entity,
+            'no_action_edit' => isset($resaction) ? implode("\n", $resaction) : '',
             'order' => isset($IDOptions['order']) ?: 'false',
-            'no_action_edit' => implode("\n", $resaction),
             'extends' => '/admin/base.html.twig',
             'no_action_add' => !isset($IDOptions['tpl']['no_action_add']) ? "true" : "false",
             'no_access_deleted' => !isset($IDOptions['tpl']['no_action_deleted']) ? "true" : "false",
             'tableauChoice' => $tableauChoice,
+            'viewerUrl' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['url'] : "false",
+            'viewerChamp' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['champ'] : "false"
         ]);
         /** @var string $html */
         CrudInitCommand::updateFile("templates/" . $entity . '/index.html.twig', $html, $input->getOption('comment'));
