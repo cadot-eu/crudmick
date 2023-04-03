@@ -13,6 +13,11 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Exception;
+use phpDocumentor\Reflection\DocBlock\Tags\Formatter;
+use Psy\Formatter\CodeFormatter;
+use jetstreamlabs\PHPIndent\PHPIndent;
+use Tidy;
+use HTMLModule;
 
 #[AsCommand(name: 'crud:init', description: 'Initialise une entity')]
 class CrudInitCommand extends Command
@@ -150,6 +155,10 @@ EOT;
 			'/app/src/Repository/' . ucfirst($entity) . 'Repository.php',
 			$str
 		);
+		// onformat le fichier
+		$cmd = "vendor/bin/phpcbf /app/src/Repository/" . ucfirst($entity) . 'Repository.php';
+		shell_exec($cmd);
+
 		//file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', substr($repo, 0, $deb) . "\n" . $find . substr($repo, $end));
 
 		return Command::SUCCESS;

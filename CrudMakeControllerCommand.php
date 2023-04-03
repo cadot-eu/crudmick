@@ -99,7 +99,6 @@ class CrudMakeControllerCommand extends Command
             'search' => $search,
             'filter' => isset($IDOptions['tpl']['filter']) ?  '"' . $IDOptions['tpl']['filter'] . '"' : null,
             'fields' => $fields,
-            'index' => isset($docs->getOptions()['id']['index']) ? '.' . array_key_first($docs->getOptions()['id']['index']) :  $searchString,
             'delete' => isset($docs->getOptions()['id']['delete']) ?  array_key_first($docs->getOptions()['id']['delete']) : null,
             'gets' => isset($gets) ? implode("\n", $gets) : '',
             'formoptions' => isset($Lformoptions) ? $Lformoptions : '',

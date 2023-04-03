@@ -19,7 +19,6 @@ use CategoriesTrait;
 - VerifedTrait: permet d'avoir un switch on/off dans index
 - VuesTrait: ne se voit nul part, sert à enregistrer le nombres de vues par exmple
 
-Timetrait est d'office partout, il garde les dates de création, mise à jour et suppression
 
 Les traits sont interessants, c'est des bonnes base pour voir comment utiliser crudmick dedans.
 
@@ -177,6 +176,15 @@ Utilise le stimulus readonlyroot et se sert de l'email m@cadot.eu*
 
 `money`
 
+# un champ type téléphone => STRING
+
+[doc](https://symfony.com/doc/current/reference/forms/types/tel.html)
+
+ajouter
+#[Assert\Regex(pattern: '/^(\+33|0)[1-9](\d{2}){4}$/', message: 'Le numéro de téléphone doit être au format +33 ou 0 suivi de 9 chiffres')]
+
+`telephone`
+
 # ajout d'une image unique=>STRING
 
 [doc](https://symfony.com/doc/current/reference/forms/types/file.html)
@@ -219,7 +227,10 @@ Utiliser MANYTOMANY
 - tpl:no_created
 - tpl:no_deleted
 - tpl:no_updated
-- nocrud //pour proétger une entité des modificatio nde crudmick
+- nocrud //pour protéger une entité des modificatio nde crudmick
+- no_action_edit //pour ne pas afficher le bouton éditer
+- no_access_deleted //pour ne pas voir les accès pour supprimer
+- no_action_add // pour ne pas voir le bouton ajouter
 - slug:champ (sinon généré automatiquement)
 - onlytype (crud mick génère que le fichier form, sert pour les entités que l'on veut juste mettre dans une connection par exmple)
 - order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}
