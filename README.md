@@ -110,15 +110,14 @@ Pour imposer un seul choix
 
 [doc](https://symfony.com/doc/current/reference/forms/types/entity.html)
 
-Utiliser MANYTOMANY ou MANYTOONE comme relation
+Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
 
 ```php
-* entity
-* options:{"label":"nom"} //pour choisir le champ affiché dans la sélection de l'enfant
-* twig:json_encode
-* OPT:{"required":false} //pour permttre un choix vide
-* OPT:{"empty_data":null} //idem, peut-être pas obligatoire (merci de me dire)
-* OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"} //pour many to many
+   * entity
+     * label:nom
+     * OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"}
+     * OPT:{"required":false}
+     * tpl:no_index
 ```
 
 # mot de passe => STRING
@@ -199,7 +198,7 @@ Crudmick met d'office les extensions de images les plus classiques comme possibl
 
 [doc](https://symfony.com/doc/current/reference/forms/types/collection.html)
 
-Utiliser MANYTOMANY
+Utiliser MANYTOMANY ou ONETOMANY
 
 ```php
 * collection

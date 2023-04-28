@@ -114,7 +114,20 @@ class CrudMakeNewCommand extends Command
                         //     break;
                     case 'pass':
                         break;
+                    case 'invisible':
+                        $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
+                        break;
+                    case 'entity':
+                        $rows[] = '<div class="mb-3 row">
+                        <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
+                        {{form_label(form.' . $name . ')}}
+                        </label>
+                        <div class="col-sm-10" >
+                        {{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
+                        </div>';
+                        break;
                     default: {
+
                             $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
                             $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
                         }
@@ -136,6 +149,7 @@ class CrudMakeNewCommand extends Command
             'sdir' => ''
         ));
         CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'));
+
         return Command::SUCCESS;
     }
 }
