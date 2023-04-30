@@ -50,8 +50,9 @@ class CrudMakeControllerCommand extends Command
             if ($name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
                     case 'manytoone':
-                        if ($name == 'user')
+                        if ($name == 'user') {
                             $gets[] = '$' . $entity . '->setUser($this->getUser());';
+                        }
                         //else
                         //$gets[] = '$' . $entity . '->set' . ucfirst($name) . '($' . $entity . ');';
                         break;
@@ -60,7 +61,9 @@ class CrudMakeControllerCommand extends Command
                     case 'entity':
                         // $nom = substr($name, -1) == 's' ? substr($name, 0, -1) : $name;
                         // $gets[] = '$' . $entity . '->add' . $nom . '($' . $entity . ');';
-                        if (isset($options['form']))  $formoptions['user_id'] = '$this->getUser()->getId()';
+                        if (isset($options['form'])) {
+                            $formoptions['user_id'] = '$this->getUser()->getId()';
+                        }
                         break;
                     case 'hiddenroot':
                         $formoptions['username'] = '$this->getUser()->getEmail()';

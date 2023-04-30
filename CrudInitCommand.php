@@ -69,92 +69,19 @@ class CrudInitCommand extends Command
 
         ];
         $fentity = 'src/Entity/' . ucfirst($entity) . '.php';
-        foreach ($trait as $test => $comment) {
-            $Sentity = file_get_contents($fentity);
-            if (strpos($Sentity, $test) === false) {
-                $insd = strpos($Sentity, $comment);
-                $insf = strpos($Sentity, "\n", $insd);
-                // on format le fichier
-                file_put_contents($fentity, substr($Sentity, 0, $insf) . "\n" . $test . substr($Sentity, $insf));
-                $cmd = "vendor/bin/phpcbf /app/" . $fentity;
-                shell_exec($cmd);
-                $io->info("Paramètre `$test` ajouter dans la partie $comment ");
-            }
-        }
+        $this->add_in_file($trait, $fentity);
 
-        $find = <<<'EOT'
-        /**
-         * This is a PHP function that searches and filters data based on various parameters and returns the
-         * results in a specific order.
-         *
-         * @param search A string used to search for specific values in the fields specified by the "fields"
-         * parameter.
-         * @param fields A string containing the fields to search in, separated by spaces.
-         * @param string sort The field to sort the results by. Default value is 'a.id'.
-         * @param direction The direction parameter is a string that specifies the direction of the sorting.
-         * It can be either "ASC" for ascending order or "DESC" for descending order.
-         * @param categorie Category of the items to be searched for.
-         * @param deleted A boolean parameter that determines whether to include deleted records in the query
-         * or not. If set to true, the query will only return deleted records. If set to false or null, the
-         * query will only return non-deleted records.
-         * @param etats The "etats" parameter is a string that contains one or more space-separated values
-         * representing the states of the items to be searched. The function will search for items whose
-         * "etat" field matches any of these values. If a value starts with "!", it means that the function
-         * should search for items
-         *
-         * @return ?array an array of results from a database query. The type of the returned array is
-         * nullable, meaning it can either be an array or null.
-         */
-          public function index(?string $search = null, ?string $fields = null, string $sort = 'a.id', ?string $direction = 'ASC', ?string $categorie = null, ?bool $deleted = false, ?string $etats = null): ?array
-          {
-              $sort = is_null($sort) ? 'a.id' : $sort;
-              $qb = $this->createQueryBuilder('a');
-              if ($deleted) {
-                      $qb->where($qb->expr()->isNotNull('a.deletedAt'));
-              } else {
-                  $qb->where($qb->expr()->isNull('a.deletedAt'));
-              }
-              $ORX = $qb->expr()->orx();
-              if ($etats != null) {
-                  $ors = [];
-                  foreach (explode(' ', $etats) as $etat) {
-                          $s = str_replace("'", "''", $etat);
-                      if ($s[0] == '!') {
-                          $ors[] = $qb->expr()->orx("a.etat NOT LIKE '%" . substr($s, 1) . "%' ");
-                      } else {
-                          $ors[] = $qb->expr()->orx("a.etat LIKE '%$s%' ");
-                      }
-                      $ORX->add(join(' AND ', $ors));
-                  }
-              }
-              $qb->andWhere($ORX);
-      
-              if ($fields != null && $search != null) {
-                  foreach (explode(' ', $fields) as $field) {
-                      $ors = [];
-                      foreach (explode(' ', $search) as $s) {
-                          $s = str_replace("'", "''", $s);
-                          if ($s[0] == '!') {
-                              $ors[] = $qb->expr()->orx("a.$field NOT LIKE '%" . substr($s, 1) . "%' ");
-                          } else {
-                              $ors[] = $qb->expr()->orx("a.$field LIKE '%$s%' ");
-                          }
-                      }
-                      $ORX->add(join(' AND ', $ors));
-                  }
-              }
-                      $qb->andWhere($ORX);
-              if ($categorie != null) {
-                  $qb->andwhere($qb->expr()->isMemberOf(':categorie', 'a.categories'))->setParameter('categorie', $categorie);
-              }
-                      return $qb->orderBy($sort, strtoupper($direction))->getQuery()->getResult();
-          }
-EOT;
+//iem pour le repository
+        $trait = [
+        'use App\Repository\base\SearchRepositoryTrait;' => 'use',
+        'use SearchRepositoryTrait;' => '{',
 
-        $repo = file_get_contents(
-            '/app/src/Repository/' . ucfirst($entity) . 'Repository.php'
-        );
-        //pon ajoute bycategorie si on a categorietrait
+        ];
+        $frepository = 'src/Repository/' . ucfirst($entity) . 'Repository.php';
+        $this->add_in_file($trait, $frepository);
+
+        $repo = file_get_contents($frepository);
+        //on ajoute bycategorie si on a categorietrait dans l'entity
         $objetEntity = 'App\Entity\\' . ucfirst($entity);
         if (property_exists($objetEntity, 'categories')) {
             //on ajoute le use si pas présent
@@ -167,29 +94,38 @@ EOT;
             }
         }
 
-        $find .= "\n" . '//fin index' . "\n";
-
-        //suppression de l'ancien index
-        if (($deb = strpos($repo, 'public function index($search')) !== false) {
-            $end = strpos($repo, '//fin index', $deb);
-            $str =
-                str_replace(
-                    substr($repo, $deb, $end - $deb + strlen('//fin index')),
-                    $find,
-                    $repo
-                );
-        } else {
-            $end = strrpos($repo, '}');
-            $deb = $end;
-            $str = substr($repo, 0, $deb)  . $find . substr($repo, $end);
+        //supression de l'ancien index
+        $deb = strpos($repo, '* This is a PHP function that searches and filters results based on various');
+        $end = strpos($repo, '//fin index', $deb);
+        if ($deb !== false) {
+            $deb = $deb - 22;
+            $end = $end + 12;
+            $repo = str_replace(substr($repo, $deb, $end - $deb), '', $repo);
         }
-        $str = preg_replace('/^[ \t]*[\r\n]+/m', '', $str);
+        $str = preg_replace('/^[ \t]*[\r\n]+/m', '', $repo);
         file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', $str);
         // on format le fichier
         $cmd = "vendor/bin/phpcbf /app/src/Repository/" . ucfirst($entity) . 'Repository.php';
         shell_exec($cmd);
         return Command::SUCCESS;
     }
+    private function add_in_file($trait, $fentity)
+    {
+        foreach ($trait as $test => $comment) {
+            $Sentity = file_get_contents($fentity);
+            if (strpos($Sentity, $test) === false) {
+                $insd = strpos($Sentity, $comment);
+                $insf = strpos($Sentity, "\n", $insd);
+                // on format le fichier
+                file_put_contents($fentity, substr($Sentity, 0, $insf) . "\n" . $test . substr($Sentity, $insf));
+                $cmd = "vendor/bin/phpcbf /app/" . $fentity;
+                shell_exec($cmd);
+            }
+        }
+    }
+
+
+
     public static function ArrayToKeyValue(array $array): string
     {
         $vars = var_export($array, true);
