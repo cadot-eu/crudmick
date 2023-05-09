@@ -83,6 +83,7 @@ ou une choix multiple =>STRING
 * options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN","partenaire":"ROLE_PARTENAIRE"}
 * TWIG:join(',')
 * OPT:{"multiple":true,"expanded":true}
+* ATTR:{"class":"d-flex flex-wrap gap-2"}
 ```
 
 Pour imposer un seul choix
