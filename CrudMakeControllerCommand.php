@@ -87,7 +87,8 @@ class CrudMakeControllerCommand extends Command
         foreach ($formoptions as $key => $value) {
             $Lformoptions .= "'$key'" . '=>' . $value . ',';
         }
-        $fields = isset($IDOptions['search']) ? array_key_first($IDOptions['search']) : "['id']";
+
+        $fields = isset($IDOptions['search']) ? array_key_first($IDOptions['search']) : "[" . "'" . implode("', '", \array_keys($docs->getAllAlias())) . "'" . "]";
         if (isset($IDOptions['order'])) {
             $search = '$dql= $' . $entity . 'Repository->findby([\'deletedAt\'=>null],[\'ordre\'=>\'ASC\']);';
             $paginator = "1, 1000";
