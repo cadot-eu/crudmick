@@ -23,7 +23,13 @@ class CrudMakeControllerCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires')
+            ->addOption(
+                'speed',
+                's',
+                InputOption::VALUE_NONE,
+                'Pour passer le formatage des fichiers'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -114,7 +120,7 @@ class CrudMakeControllerCommand extends Command
             throw new Exception("Le fichier " . $fileController . ' est introuvable', 1);
         }
         //create file
-        CrudInitCommand::updateFile("src/Controller/" . $Entity . 'Controller.php', $html, $input->getOption('comment'));
+        CrudInitCommand::updateFile("src/Controller/" . $Entity . 'Controller.php', $html, $input->getOption('comment'), $input->getOption('speed'));
         return Command::SUCCESS;
     }
 }

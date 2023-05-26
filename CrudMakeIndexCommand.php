@@ -23,7 +23,14 @@ class CrudMakeIndexCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires')
+            ->addOption(
+                'speed',
+                's',
+                InputOption::VALUE_NONE,
+                'Pour passer le formatage des fichiers'
+            )
+            ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -59,7 +66,7 @@ class CrudMakeIndexCommand extends Command
         $IDOptions = $docs->getOptions()['id'];
         //gestion du timetrait
         $thtime = '';
-        if (!isset($IDOptions['tpl']['no_deleted']))
+        if (!isset($IDOptions['tpl']['no_deleted'])) {
             $thtime .= <<<'EOT'
         {%if action=="deleted" %}
             <th>
@@ -67,17 +74,20 @@ class CrudMakeIndexCommand extends Command
             
         {% endif %}
         EOT;
+        }
         /* ------------------------- datetime avec knpsorted ------------------------ */
-        if (!isset($IDOptions['tpl']['no_created']))
+        if (!isset($IDOptions['tpl']['no_created'])) {
             $th[] = "<th {{pagination.isSorted('a.createdAt')?\"class='sorted'\"}}>
         {{ knp_pagination_sortable(pagination, 'créé', 'a.createdAt') }}";
-        if (!isset($IDOptions['tpl']['no_updated']))
+        }
+        if (!isset($IDOptions['tpl']['no_updated'])) {
             if (isset($docs->getOptions()['id']['order'])) {
                 $th[] = "<th>Mis à jour";
             } else {
                 $th[] = "<th {{pagination.isSorted('a.updatedAt')?\"class='sorted'\"}}>
         {{ knp_pagination_sortable(pagination, 'mis à jour', 'a.updatedAt') }}";
             }
+        }
         /* ---------------------------------- body ---------------------------------- */
         $tableauChoice = '';
         foreach ($docs->getOptions() as $name => $options) {
@@ -94,13 +104,15 @@ class CrudMakeIndexCommand extends Command
                 switch ($select = $docs->getSelect($name)) {
                     case 'generatedvalue': //id
                     case 'hiddenroot':
-                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";;
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
+                        ;
                         break;
                     case 'vide':
                     case 'simple':
                     case 'simplelanguage':
                     case 'full':
                     case 'normal':
+                    case 'annonce':
                     case 'text':
                         $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(20, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
@@ -108,6 +120,11 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'string':
                     case 'email':
+                        $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
+                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
+                        break;
+                    case 'adresse':
                         $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
@@ -234,6 +251,7 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'pass':
                         break;
+
                     default:
                         if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {
                             $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
@@ -246,8 +264,9 @@ class CrudMakeIndexCommand extends Command
             if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
                 switch ($name) {
                     case 'slug':
-                        if (isset($IDOptions['tpl']['no_slug']))
+                        if (isset($IDOptions['tpl']['no_slug'])) {
                             $td[] = '<td class="my-auto text-center clipboard' . implode(' ', $class) . '"  data-clipboard-text="{{' . "$Entity.$name$twig" . '}}" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-clipboard"></i>' . "\n";
+                        }
 
                         break;
                     default:
@@ -275,8 +294,9 @@ class CrudMakeIndexCommand extends Command
                 $resaction[$action] =  "<a class='btn btn-xs btn-primary'   data-turbo=\"false\" title='$action' href=\"{{ path('$entity" . "_$action" . "', {'id': $Entity.id }) }}\"><i class='icone $title'></i></a>";
             }
         }
-        if (isset($IDOptions['tpl']['action_clone']))
+        if (isset($IDOptions['tpl']['action_clone'])) {
             $resaction['clone'] =  "<a class='btn btn-xs btn-primary'  title='clone' href=\"{{ path('$entity" . "_clone" . "', {'id': $Entity.id }) }}\"><i class='icone  bi bi-file-earmark-plus'></i></a>";
+        }
         /* ----------------------------- timestamptable ----------------------------- */
         //timestamptable
         $timestamptable = ['createdAt', 'updatedAt', 'deletedAt'];
@@ -318,7 +338,7 @@ class CrudMakeIndexCommand extends Command
             'viewerChamp' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['champ'] : "false"
         ]);
         /** @var string $html */
-        CrudInitCommand::updateFile("templates/" . $entity . '/index.html.twig', $html, $input->getOption('comment'));
+        CrudInitCommand::updateFile("templates/" . $entity . '/index.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
         return Command::SUCCESS;
     }
 }

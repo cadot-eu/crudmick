@@ -34,7 +34,14 @@ class CrudInitCommand extends Command
             null,
             InputOption::VALUE_NONE,
             'Pour afficher les commentaires'
-        );
+        )
+        ->addOption(
+            'speed',
+            's',
+            InputOption::VALUE_NONE,
+            'Pour passer le formatage des fichiers'
+        )
+        ;
     }
 
     protected function execute(
@@ -104,9 +111,12 @@ class CrudInitCommand extends Command
         }
         $str = preg_replace('/^[ \t]*[\r\n]+/m', '', $repo);
         file_put_contents('/app/src/Repository/' . ucfirst($entity) . 'Repository.php', $str);
-        // on format le fichier
-        $cmd = "vendor/bin/phpcbf /app/src/Repository/" . ucfirst($entity) . 'Repository.php';
-        shell_exec($cmd);
+
+        // on format le fichier au besoin
+        if (!$input->getOption('speed')) {
+            $cmd = "vendor/bin/phpcbf /app/src/Repository/" . ucfirst($entity) . 'Repository.php';
+            shell_exec($cmd);
+        }
         return Command::SUCCESS;
     }
     private function add_in_file($trait, $fentity)
@@ -137,7 +147,7 @@ class CrudInitCommand extends Command
      * @param string filename The name of the file to be updated.
      * @param array blocks an array of blocks of code
      */
-    public static function updateFile(string $filename, $html, $comment = false)
+    public static function updateFile(string $filename, $html, $comment = false, $speed = false)
     {
         // save new file
         $retour = file_put_contents($filename, $html);
@@ -152,8 +162,11 @@ class CrudInitCommand extends Command
                 echo 'File ' . $filename . ' généré ' . "\n";
             }
         }
-        $cmd = "vendor/bin/phpcbf /app/$filename";
-        shell_exec($cmd);
+        // on format le fichier au besoin
+        if (!$speed) {
+            $cmd = "vendor/bin/phpcbf /app/$filename";
+            shell_exec($cmd);
+        }
     }
     /**
      * Method twigParser

@@ -47,8 +47,9 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 - simple
 - simplelanguage
 - normal possibilité d'ajouter un filtre 
-`* attr:{"data-base--suneditor--upload-value":"article/hd"}` pour choisir un répertoire de destination pour les images  (pas obligatoire)
+`* attr:{"data-base--suneditor-upload-value":"article/hd"}` pour choisir un répertoire de destination pour les images  (pas obligatoire)
 - full
+- annonce
 
 Suneditor est en cours de finition
 
@@ -88,6 +89,9 @@ ou une choix multiple =>STRING
 
 Pour imposer un seul choix
 `ATTR:{"data-controller":"base--onecheckbox"}`
+
+Pour mettre uyne valeur par défaut passer par
+`private string $mitoyen = "non mitoyen";`
 
 ## liste de choix en cliquant sur un bouton dans index =>BOOLEAN
 

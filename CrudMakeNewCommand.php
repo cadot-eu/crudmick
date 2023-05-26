@@ -24,7 +24,14 @@ class CrudMakeNewCommand extends Command
     {
         $this
             ->addArgument('entity', InputArgument::OPTIONAL, 'nom de l\entité')
-            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires');
+            ->addOption('comment', null, InputOption::VALUE_NONE, 'Pour afficher les commentaires')
+            ->addOption(
+                'speed',
+                's',
+                InputOption::VALUE_NONE,
+                'Pour passer le formatage des fichiers'
+            )
+            ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -67,10 +74,12 @@ class CrudMakeNewCommand extends Command
 
         foreach ($docs->getOptions() as $name => $options) {
             //timetrait
-            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created']))
+            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created'])) {
                 continue;
-            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated']))
+            }
+            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
                 continue;
+            }
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
                     case 'image':
@@ -118,19 +127,22 @@ class CrudMakeNewCommand extends Command
                         $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
                         break;
                     case 'entity':
-                        $rows[] = '<div class="mb-3 row">
-                        <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
-                        {{form_label(form.' . $name . ')}}
-                        </label>
-                        <div class="col-sm-10" >
-                        {{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
+                        $rows[] = '
+                        <div class="mb-3 row">
+                            <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
+                            {{form_label(form.' . $name . ')}}
+                            </label>
+                            <div class="col-sm-10" >
+                            {{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
+                            </div>
                         </div>';
                         break;
+
                     default: {
 
                             $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
                             $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
-                        }
+                    }
                 }
             }
         }
@@ -148,7 +160,7 @@ class CrudMakeNewCommand extends Command
             'extends' => '/admin/base.html.twig',
             'sdir' => ''
         ));
-        CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'));
+        CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
 
         return Command::SUCCESS;
     }
