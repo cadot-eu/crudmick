@@ -119,6 +119,9 @@ class ¤Entity¤Controller extends AbstractController
             //TODO: par listener
             ¤gets¤
             
+            if (property_exists($¤entity¤, 'slug')) {
+            $¤entity¤=ToolsHelper::SetSlug($em, $¤entity¤);
+        }
             $em->persist($¤entity¤);
             $em->flush();
             return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);

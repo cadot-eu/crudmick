@@ -299,6 +299,11 @@ class CrudMakeTypeCommand extends Command
                             return \$er->createQueryBuilder(\"u\")
                                 ->orderBy(\"u.nom\", \"ASC\")
                                 ->andwhere(\"u.deletedAt IS  NULL\")";
+                        if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
+                            $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
+                            $opts['query_builder'] .= "->andWhere(\"u." .
+                                $mappedby . " IS NULL\")";
+                        }
                         //si on a un formoptions
                         if (isset($options['form'])) {
                             $opts['query_builder'] .=

@@ -125,6 +125,18 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
      * tpl:no_index
 ```
 
+Dans l'autre entity pour afficher autre chose que l'id
+
+nb: toujours un problème sur le OneToMany qui n'enregistre pas.
+
+```php
+  #[ORM\ManyToOne(inversedBy: 'categories')]
+    /**
+     * options:{"champ":"nom"}
+     */
+```
+
+
 # mot de passe => STRING
 
 [doc](https://symfony.com/doc/current/reference/forms/types/repeated.html)

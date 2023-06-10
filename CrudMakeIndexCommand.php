@@ -219,19 +219,29 @@ class CrudMakeIndexCommand extends Command
                                     {% endif %}
                                     <a href=\"{{path('" . $entity . "_champ',{'one':true,'id':$Entity.id,'type':'" . $name . "','valeur':choice_" . $name . "|keys[numr]})}}\" style='font-size:2rem;'  title='{{ choice_" . $name . "|keys[retour]}}'> {{ choice_" . $name . "[ choice_" . $name . "|keys[retour]]$twig|raw}}</a>\n";
                         break;
+                    case 'importance':
+                        $select = "<select class='form-control'   data-controller='base--importance' data-base--importance-url-value='{{path('" . $entity . "_champ',{'id':$Entity.id,'type':'importance'})}}'>";
+                        for ($i = 0; $i <= 10; $i++) {
+                            $select .= '<option value="' . $i . '" {% if ' . $Entity . '.' . $name . '==' . $i . ' %}selected{% endif %}>' . $i . '</option>';
+                        }
+                        $select .= '</select>';
+
+                        $td[] = '<td class="my-auto">' . $select . "\n";
+                        break;
                     case 'color':
                         $td[] = '<td class="my-auto"><div class="boxcolor" style="background-color:{{' . $Entity . '.' . $name . '}}"></div>' . "\n";
                         break;
+                    case 'onetomany':
                     case 'collection':
                         //field for show
-                        $return = isset($options['label']) ? $options['label'] : 'id';
+                        $return = isset($options['options']['champ']) ? $options['options']['champ'] : 'id';
                         //for separate field
                         $separation = isset($options['separation']) ? $options['separation'] : ';';
                         $td[] = '<td class="my-auto">' . "{% for " . $name . "_item in " . $Entity . ".$name %}\n{{" . $name . "_item.$return$twig}}{{loop.last?'':'$separation'}}\n{% endfor %}" . "\n";
                         break;
                     case 'entity':
                         //field for show
-                        $return = isset($options['options']['label']) ? $options['options']['label'] : 'id';
+                        $return = isset($options['label']) ? key($options['label']) : 'id';
                         if ($docs->getType($name) == 'manytomany'  || $docs->getType($name) == 'onetomany') {
                             //for separate field
                             $separation = isset($options['separation']) ? $options['separation'] : ';';
