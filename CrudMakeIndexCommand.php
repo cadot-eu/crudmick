@@ -103,6 +103,16 @@ class CrudMakeIndexCommand extends Command
             if (!isset($options['tpl']['no_index'])) {
                 switch ($select = $docs->getSelect($name)) {
                     case 'generatedvalue': //id
+                           //si on a un slug on ajoute un tooltip pour voir le slug
+                        if ($docs->propertyExist('slug')) {
+                            $td[] = '<td  data-toggle="tooltip" 
+                            title="{{' . "$Entity.slug" . '}}"' .
+                            ' {{ ' . "$Entity.slug" . '!=""? "data-clipboard-text="~' . "$Entity.slug" . '~' . "\" class=clipboard \""   .
+                            ':"class=my-auto"}} > {{' . "$Entity.$name$twig" . '}}' . "\n";
+                        } else {
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
+                        }
+                        break;
                     case 'hiddenroot':
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
                         ;
