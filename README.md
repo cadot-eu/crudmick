@@ -137,6 +137,7 @@ nb: toujours un problème sur le OneToMany qui n'enregistre pas.
 ```
 
 
+
 # mot de passe => STRING
 
 [doc](https://symfony.com/doc/current/reference/forms/types/repeated.html)
@@ -303,3 +304,27 @@ Quand tu lances la génération par sc crud, tu peux avoir un message du genre "
 Si tu veux lui dire de ne pas s'en occuper tu peux mettre 
 
 `* pass`
+
+### Relation et recherche
+
+On peut avoir une erreur du type
+
+```php
+... Must be a StateFieldPathExpression
+```
+
+C'est du au fait qu'il y a une relation, il faut indiquer une recherche par exemple:
+
+#### pour les ManyToOne
+
+```php
+* SEARCH:['id','nom','description','supercat.nom']
+```
+
+#### pour les OneToMany
+
+il n'est pas possible de les intégrer dans la recherche, donc il faut mettre une recherche snas les cités.
+
+```php
+ * SEARCH:['id','nom']
+```
