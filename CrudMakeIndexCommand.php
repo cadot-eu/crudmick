@@ -50,16 +50,21 @@ class CrudMakeIndexCommand extends Command
         $th = []; //contient les th pour l'entete du tableau
         $docs = new ParserDocblock($entity);
         foreach ($docs->getOptions() as $name => $options) {
+            if (isset($options['opt']['label'])) {
+                $textname = $options['opt']['label'];
+            } else {
+                $textname = $name;
+            }
             //creation des th
             if (!isset($options['tpl']['no_index']) && $name != 'deletedAt' && $name != 'createdAt' && $name != 'updatedAt' && $name != 'slug') {
                 if (isset($docs->getOptions()['id']['order']) || in_array($docs->getType($name), ['manytomany', 'onetomany'])) {
-                    $th[] = "<th >$name";
+                    $th[] = "<th >$textname";
                 } else {
                     $th[] = "<th {{pagination.isSorted('a.$name')?\"class='sorted'\"}}>
-                {{ knp_pagination_sortable(pagination, '$name', 'a.$name') }}";
+                {{ knp_pagination_sortable(pagination, '$textname', 'a.$name') }}";
                 }
             } elseif ($name == 'slug' && isset($IDOptions['tpl']['no_slug'])) {
-                $th[] = "<th >$name";
+                $th[] = "<th >$textname";
             }
         }
         /* ------------------------- creation des idoptions ------------------------- */
@@ -240,6 +245,25 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'color':
                         $td[] = '<td class="my-auto"><div class="boxcolor" style="background-color:{{' . $Entity . '.' . $name . '}}"></div>' . "\n";
+                        break;
+                    case 'stars':
+                        $stars = isset($options['options']) ? key($options['options']) : 5;
+                        $td[] = '<td class="my-auto">
+                        {% set rating = ' . $Entity . '.' . $name . ' %}
+                        <div class="star-rating">
+                        {% for i in 1..' . $stars . ' %}
+                            {% if i <= rating %}
+                            <span class="bi bi-star-fill starsTwigFilled"></span>
+                            {% else %}
+                            {% if rating > i - 1 and rating < i %}
+                                <span class="bi bi-star-half starsTwigHalf"></span>
+                            {% else %}
+                                <span class="bi bi-star starsTwigEmpty"></span>
+                            {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                        ' . "\n";
                         break;
                     case 'onetomany':
                     case 'collection':

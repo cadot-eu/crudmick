@@ -111,6 +111,17 @@ class CrudMakeTypeCommand extends Command
                             $attrs['data-base--suneditor-upload-value'] = $entity;
                         }
                         break;
+                    case 'stars':
+                        //$uses[] =
+                        //'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                        //$tempadds = "\n->add('$name',HiddenType::class,";
+                        //$rowattrs['class'] = 'd-none mb-3 text-warning';
+                        $attrs['class'] = 'd-none';
+                        $stars = isset($options['options']) ? key($options['options']) : 5;
+                        $attrs['data-controller'] = 'base--stars';
+                        $attrs['data-base--stars-max-value'] = $stars;
+
+                        break;
                     case 'vide':
                         $attrs['data-controller'] = 'base--suneditor';
                         $attrs['data-base--suneditor-toolbar-value'] = 'vide';

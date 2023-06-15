@@ -59,6 +59,18 @@ quand tu chois array avec sc m:e, en fait il te cré un array. Donc pour gérer 
 
 ` *json `
 
+# notation par étoiles
+
+Le type peut-être int ou float (l'affichage ne prend que 0,0.5,1:étoile vide, à moitié ou complète)
+
+```php
+     * stars
+     * options:10
+```
+
+- par défaut le système est basé sur 5 étoiles
+- 3 class pour la présentation starsTwigFilled, starsTwigEmpty, starsTwigHalf
+
 # liste de choix
 
 ## une liste de string définis
