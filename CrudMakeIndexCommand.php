@@ -129,10 +129,7 @@ class CrudMakeIndexCommand extends Command
                     case 'normal':
                     case 'annonce':
                     case 'text':
-                        $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(20, \'...\')';
-                        $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
-                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
-                        break;
+                     case 'siret':
                     case 'string':
                     case 'email':
                         $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
@@ -295,6 +292,8 @@ class CrudMakeIndexCommand extends Command
                         break;
                     case 'pass':
                         break;
+                       
+
 
                     default:
                         if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {

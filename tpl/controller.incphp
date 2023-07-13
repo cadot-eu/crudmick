@@ -131,6 +131,28 @@ class ¤Entity¤Controller extends AbstractController
             'form' => $form->createView()
         ]);
     }
+       /* -------------------------------------------------------------------------- */
+    /*                                   ALL DELETE                                 */
+    /* -------------------------------------------------------------------------- */
+    #[Route('/toutsupprimer', name: '¤entity¤_alldelete', methods: ['POST'])]
+    public function alldelete(Request $request, EntityManagerInterface $em): Response
+    {
+        foreach ($em->getRepository(¤Entity¤::class)->findAll() as $item) {
+            if ($this->isCsrfTokenValid('delete_¤Entity¤', $request->request->get('_alltoken')) and $item->getDeletedAt() != null) {
+                if ('¤entity¤' == 'user') {
+                    $id = $item->getId();
+                    // on supprime la FOREIGN KEY pour le bundle reset-password-bundle et on vérifie que user_id existe bien dans la table reset_password_request 
+                    $res=$em->createQuery("SELECT r FROM App\Entity\ResetPasswordRequest r WHERE r.user = $id")->getResult();
+                    if($res){
+                            $em->remove($res[0]);
+                    }
+                }
+                $em->remove($item);
+            }
+        }
+        $em->flush();
+        return $this->redirectToRoute('¤entity¤_deleted', [], Response::HTTP_SEE_OTHER);
+    }
     /* -------------------------------------------------------------------------- */
     /*                                    SHOW                                    */
     /* -------------------------------------------------------------------------- */
@@ -161,6 +183,12 @@ class ¤Entity¤Controller extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete' . $¤entity¤->getId(), $request->request->get('_token')) ¤delete¤) {
             if ($request->request->has('delete_delete')) {
+                if('¤entity¤'=='user')
+                {
+                $id=$user->getId();
+                // on supprime la FOREIGN KEY pour le bundle reset-password-bundle
+                $em->createQuery('UPDATE App\Entity\ResetPasswordRequest r SET r.user = NULL WHERE r.user = :id')->setParameter('id', $id)->execute();
+                }
                 $em->remove($¤entity¤);
             }
             if ($request->request->has('delete_restore'))
@@ -174,4 +202,5 @@ class ¤Entity¤Controller extends AbstractController
         else
             return $this->redirectToRoute('¤entity¤_deleted', [], Response::HTTP_SEE_OTHER);
     }
+    
 }

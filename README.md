@@ -51,6 +51,10 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 - full
 - annonce
 
+il est possible de modifier l'initialisation par
+
+```* options:{"init":{"height":200}}``|
+
 Suneditor est en cours de finition
 
 # JSON =>ARRAY/JSON

@@ -130,6 +130,7 @@ class CrudMakeTypeCommand extends Command
                         $attrs['data-base--suneditor-toolbar-value'] =
                             'simplelanguage';
                         $attrs['data-controller'] = 'base--suneditor';
+                        if(isset($options['options']['init']))$attrs['data-base--suneditor-init-value'] = json_encode($options['options']['init']);
                         break;
                     case 'annonce':
                     case 'full':
@@ -143,6 +144,7 @@ class CrudMakeTypeCommand extends Command
                         ) {
                             $attrs['data-base--suneditor-upload-value'] = $entity;
                         }
+                        if(isset($options['options']['init']))$attrs['data-base--suneditor-init-value'] = json_encode($options['options']['init']);
                         break;
                     case 'password':
                         $tempadds = "->add('$name',RepeatedType::class,";
@@ -179,6 +181,10 @@ class CrudMakeTypeCommand extends Command
                             'use Symfony\Component\Form\Extension\Core\Type\EmailType;';
                         $tempadds = "\n->add('$name',EmailType::class,";
                         break;
+                        case 'siret':
+                            $attrs['data-controller'] = 'mask';
+                            $attrs['data-mask-alias-value'] = 'siret';
+                            break;
                     case 'hidden':
                         $uses[] =
                             'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
