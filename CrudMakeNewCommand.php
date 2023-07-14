@@ -82,6 +82,7 @@ class CrudMakeNewCommand extends Command
             }
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 switch ($select = $docs->getSelect($name)) {
+                    case 'fichier':
                     case 'image':
                         $texterow =  '<div class="mb-3 row"> 
                         <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
@@ -89,45 +90,27 @@ class CrudMakeNewCommand extends Command
                         </label>
                         <div class="col-sm-8">
                         ';
-if(isset($options['opt']['help'])){
-    $texterow.='{{form_help(form.'.$name.')}}';
-}
-else{
-    $texterow.='<p class="form-text mb-0 help-text"><i>pensez à nommer le fichier pour le SEO (accents , majuscule et minuscule, espace, -_. conservés)</i></p>';
-}
-$texterow.='{{form_widget(form.' . $name . ')}}
+                        if(isset($options['opt']['help'])){
+                            $texterow.='{{form_help(form.'.$name.')}}';
+                        }
+                        else{
+                            $texterow.='<p class="form-text mb-0 help-text"><i>pensez à nommer le fichier pour le SEO (accents , majuscule et minuscule, espace, -_. conservés)</i></p>';
+                        }
+                        $texterow.='{{form_widget(form.' . $name . ')}}
                         {% if ' . $entity . '.' . $name . ' %}
-                        <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text"><a href="' . '/{{form.vars.value.' . $name . '}}">{{form.vars.value.' . $name . '}}</a></p>
+                        <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text"><a target="_blank" href="' . '/{{form.vars.value.' . $name . '}}">{{form.vars.value.' . $name . '}}</a></p>
                         {% endif %}
                         </div>
-                        <div class="col-sm-2 d-flex align-items-center">
-                    {% if ' . $entity . '.' . $name . ' %}
-                        <img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
-                        data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"petit\")}}' />" . '
-                    {% endif %}
-                        </div>
+                        <div class="col-sm-2 d-flex align-items-center">';
+                        if($select=='image'){
+                            $texterow.=' {% if form.vars.value.'.$name.' %}<img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
+                            data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"petit\")}}' />{% endif %}";
+                        }
+                        $texterow.='</div>
                 </div>';
                 $rows[] = $texterow;
                         break;
-                    case 'fichier':
-                        $texterow = '<div class="mb-3 row">
-                        <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
-                        {{form_label(form.' . $name . ')}}
-                        </label><div class="col-sm-10" >';
-if(isset($options['opt']['help'])){
-    $texterow.='{{form_help(form.'.$name.')}}';
-}
-else{
-    $texterow.='<p class="form-text mb-0 help-text"><i>pensez à nommer le fichier pour le SEO (accents , majuscule et minuscule, espace, -_. conservés)</i></p>';
-}
-$texterow.='{{form_widget(form.' . $name . ')}}
-                        {% if ' . $entity . '.' . $name . ' %}
-                        <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text"><a href="' . '/{{form.vars.value.' . $name . '}}">{{form.vars.value.' . $name . '}}</a>    </p>
-                        {% endif %}
-                        </div>
-                </div>';
-                        $rows[] = $texterow;
-                        break;
+                   
                         // case 'readonlyroot': {
                         //         $resattrs = '';
                         //         $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . $resattrs . ',{"disabled":disabled}) }}' . "\n";

@@ -225,6 +225,8 @@ class CrudMakeTypeCommand extends Command
                             $tempadds = "\n->add('$name',NumberType::class,";
                             break;
                     case 'telephone':
+                        $attrs['data-controller'] = 'mask';
+                        $attrs['data-mask-alias-value'] = 'telephone';
                         $uses[] =
                             'use Symfony\Component\Form\Extension\Core\Type\TelType;';
                         $tempadds = "\n->add('$name',TelType::class,";
