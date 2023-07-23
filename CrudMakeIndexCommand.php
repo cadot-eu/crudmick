@@ -60,8 +60,8 @@ class CrudMakeIndexCommand extends Command
                 if (isset($docs->getOptions()['id']['order']) || in_array($docs->getType($name), ['manytomany', 'onetomany'])) {
                     $th[] = "<th >" . $textname;
                 } else {
-                    $th[] = '<th {{pagination.isSorted("a.$name")?"class=\'sorted\'"}}>
-                {{ knp_pagination_sortable(pagination, "' . $textname . '", "a.$name") }}';
+                    $th[] = '<th {{pagination.isSorted("a.'.$name.'")?"class=\'sorted\'"}}>
+                {{ knp_pagination_sortable(pagination, "' . $textname . '", "a.'.$name.'") }}';
                 }
             } elseif ($name == 'slug' && isset($IDOptions['tpl']['no_slug'])) {
                 $th[] = "<th >" . $textname;

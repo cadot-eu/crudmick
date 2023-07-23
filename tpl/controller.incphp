@@ -151,6 +151,7 @@ class ¤Entity¤Controller extends AbstractController
             }
         }
         $em->flush();
+        $this->addFlash('success', 'La corbeille est vidée');
         return $this->redirectToRoute('¤entity¤_deleted', [], Response::HTTP_SEE_OTHER);
     }
     /* -------------------------------------------------------------------------- */
@@ -190,11 +191,18 @@ class ¤Entity¤Controller extends AbstractController
                 $em->createQuery('UPDATE App\Entity\ResetPasswordRequest r SET r.user = NULL WHERE r.user = :id')->setParameter('id', $id)->execute();
                 }
                 $em->remove($¤entity¤);
+                $this->addFlash('success', '¤entity¤ supprimé');
             }
             if ($request->request->has('delete_restore'))
+            {
+             $this->addFlash('success', '¤entity¤ restauré');
                 $¤entity¤->setDeletedAt(null);
+            }
             if ($request->request->has('delete_softdelete'))
+            {
+            $this->addFlash('success', '¤entity¤ mis à la corbeille');
                 $¤entity¤->setDeletedAt(new DateTime('now'));
+            }
             $em->flush();
         }
         if ($request->request->has('delete_softdelete'))
