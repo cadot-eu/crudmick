@@ -182,8 +182,8 @@ class CrudMakeTypeCommand extends Command
                         $tempadds = "\n->add('$name',EmailType::class,";
                         break;
                         case 'siret':
-                            $attrs['data-controller'] = 'mask';
-                            $attrs['data-mask-alias-value'] = 'siret';
+                            $attrs['data-controller'] = 'base--mask';
+                            $attrs['data-base--mask-alias-value'] = 'siret';
                             break;
                     case 'hidden':
                         $uses[] =
@@ -225,8 +225,8 @@ class CrudMakeTypeCommand extends Command
                             $tempadds = "\n->add('$name',NumberType::class,";
                             break;
                     case 'telephone':
-                        $attrs['data-controller'] = 'mask';
-                        $attrs['data-mask-alias-value'] = 'telephone';
+                        $attrs['data-controller'] = 'base--mask';
+                        $attrs['data-base--mask-alias-value'] = 'telephone';
                         $uses[] =
                             'use Symfony\Component\Form\Extension\Core\Type\TelType;';
                         $tempadds = "\n->add('$name',TelType::class,";
