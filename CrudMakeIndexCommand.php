@@ -131,6 +131,7 @@ class CrudMakeIndexCommand extends Command
                     case 'text':
                      case 'siret':
                     case 'string':
+                        case 'readonlyroot':
                     case 'email':
                         $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
