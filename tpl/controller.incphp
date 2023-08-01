@@ -50,9 +50,7 @@ class ¤Entity¤Controller extends AbstractController
     /* -------------------------------------------------------------------------- */
     /*                                    CHAMP                                    */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/champ/{id}/{type}/{valeur}/{one}", name="¤entity¤_champ", methods={"GET"})
-     */
+     #[Route('/champ/{id}/{type}/{valeur}/{one}', name: '¤entity¤_champ', methods: ['GET'])]
     public function champ(¤Entity¤Repository $¤entity¤Repository,¤Entity¤ $¤entity¤, $type = null, $valeur = null,$one=false): Response
     {
         if($one){

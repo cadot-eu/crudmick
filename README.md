@@ -209,6 +209,16 @@ Utilise le stimulus readonlyroot et se sert de l'email m@cadot.eu*
 
 `money`
 
+# un champ du type adresse qui propose une liste d'adresse de openstreetmaps
+
+```php
+     * adresse
+     * attr:{"data-base--adresse-limit-value":"15"}
+     * attr:{"data-base--adresse-proprietes-value":"bien_adresseproprietes"}
+     * attr:{"data-base--adresse-latitude-value":"bien_latitude"}
+     * attr:{"data-base--adresse-longitude-value":"bien_longitude"}
+```
+
 # un champ type téléphone => STRING
 
 [doc](https://symfony.com/doc/current/reference/forms/types/tel.html)

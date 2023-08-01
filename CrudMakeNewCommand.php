@@ -121,6 +121,14 @@ class CrudMakeNewCommand extends Command
                     case 'invisible':
                         $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
                         break;
+                    case 'collection':
+                        //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js
+                        $rows[] = '
+                        {% for item in  form.vars.value.'.$name.'  %}
+			<input type="hidden" champ="bien_'.$name.'_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
+		{% endfor %}
+        {{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
+                        break;
                     case 'entity':
                         $rows[] = '
                         <div class="mb-3 row">

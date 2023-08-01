@@ -95,6 +95,9 @@ class CrudMakeIndexCommand extends Command
         }
         /* ---------------------------------- body ---------------------------------- */
         $tableauChoice = '';
+        $td = []; //contient les td pour le corps du tableau
+       
+     
         foreach ($docs->getOptions() as $name => $options) {
             $class = []; //contient les class à insérer
 
@@ -106,7 +109,8 @@ class CrudMakeIndexCommand extends Command
             $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|raw';
             /* ----------------------------- création des td ---------------------------- */
             if (!isset($options['tpl']['no_index'])) {
-                switch ($select = $docs->getSelect($name)) {
+                foreach ($docs->getSelect($name) as $select) {
+                switch ($select ) {
                     case 'generatedvalue': //id
                            //si on a un slug on ajoute un tooltip pour voir le slug
                         if ($docs->propertyExist('slug')) {
@@ -129,6 +133,7 @@ class CrudMakeIndexCommand extends Command
                     case 'normal':
                     case 'annonce':
                     case 'text':
+                        case 'integer':
                      case 'siret':
                     case 'string':
                         case 'readonlyroot':
@@ -137,7 +142,12 @@ class CrudMakeIndexCommand extends Command
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
-                   
+                        case 'integer':
+                            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
+                            $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
+                            break;
+
                     case 'adresse':
                         $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
@@ -160,7 +170,7 @@ class CrudMakeIndexCommand extends Command
                         $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                         $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         break;
-                    case 'integer':
+                    case 'order':
                         if (isset($IDOptions['order']) && array_key_exists($name, $IDOptions['order'])) {
                             $actions = ['top' => 'arrow-bar-up', 'up' => 'arrow-up', 'down' => 'arrow-down', 'bottom' => 'arrow-bar-down'];
                             $chaine = '';
@@ -293,6 +303,7 @@ class CrudMakeIndexCommand extends Command
                         $td[] = '<td class="my-auto text-center' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-zoom-in"></i>' . "\n";
                         break;
                     case 'pass':
+                        case 'hidden':
                         break;
                        
 
@@ -304,6 +315,7 @@ class CrudMakeIndexCommand extends Command
 
                         break;
                 }
+            }
             }
             //gestion de certain par les noms de champs
             if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {

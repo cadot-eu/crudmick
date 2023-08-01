@@ -87,10 +87,11 @@ class CrudMakeTypeCommand extends Command
                 continue;
             }
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
-                switch ($select = $docs->getSelect($name)) {
+                foreach ($docs->getSelect($name) as $select) {
+                    switch ($select ) {
                     case 'json':
                         $transform[] =
-                            "\$builder->get('keywords')\n->addModelTransformer(new CallbackTransformer(\n" .
+                            "\$builder->get('$name')\n->addModelTransformer(new CallbackTransformer(\n" .
                             "function (\$keywordsAsArray) {\n" .
                             "return implode(',', \$keywordsAsArray);\n" .
                             "},\n" .
@@ -360,7 +361,7 @@ class CrudMakeTypeCommand extends Command
                             $opts['choice_label'] = key($options['label']);
                         }
                         break;
-                    case 'generatedvalue': //id
+                         case 'generatedvalue': //id
                         break;
                     case 'datetime':
                         //$opts['widget'] = 'single_text';
@@ -391,6 +392,7 @@ class CrudMakeTypeCommand extends Command
                             $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
                         }
                 }
+            }
                 //gestion de certain par les noms de champs
                 if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
                     switch ($name) {
