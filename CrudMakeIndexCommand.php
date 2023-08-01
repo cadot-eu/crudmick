@@ -133,7 +133,6 @@ class CrudMakeIndexCommand extends Command
                     case 'normal':
                     case 'annonce':
                     case 'text':
-                        case 'integer':
                      case 'siret':
                     case 'string':
                         case 'readonlyroot':
@@ -311,7 +310,11 @@ class CrudMakeIndexCommand extends Command
                     default:
                         if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {
                             $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
+                            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
+                            $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                         }
+                        
 
                         break;
                 }
