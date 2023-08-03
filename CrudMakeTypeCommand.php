@@ -169,14 +169,16 @@ class CrudMakeTypeCommand extends Command
                         $opts['mapped'] = false;
                         $opts['required'] = false;
                         break;
+                        case 'video':
                     case 'image':
                         $uses[] =
                             'use Symfony\Component\Form\Extension\Core\Type\FileType;';
                         $tempadds = "\n->add('$name',FileType::class,";
-                        $attrs['accept'] = 'image/*';
+                        $attrs['accept'] = $select.'/*';
                         $opts['mapped'] = false;
                         $opts['required'] = false;
                         break;
+                       
                     case 'email':
                         $uses[] =
                             'use Symfony\Component\Form\Extension\Core\Type\EmailType;';
