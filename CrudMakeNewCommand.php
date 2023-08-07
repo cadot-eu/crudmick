@@ -30,8 +30,7 @@ class CrudMakeNewCommand extends Command
                 's',
                 InputOption::VALUE_NONE,
                 'Pour passer le formatage des fichiers'
-            )
-            ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -81,56 +80,56 @@ class CrudMakeNewCommand extends Command
                 continue;
             }
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
-                switch ($select = $docs->getSelect($name)) {
-                    case 'fichier':
-                    case 'image':
-                        $texterow =  '<div class="mb-3 row"> 
+                foreach ($docs->getSelect($name) as $select) {
+                    switch ($select) {
+                        case 'fichier':
+                        case 'image':
+                            $texterow =  '<div class="mb-3 row"> 
                         <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
                         {{form_label(form.' . $name . ')}}
                         </label>
                         <div class="col-sm-8">
                         ';
-                        if(isset($options['opt']['help'])){
-                            $texterow.='{{form_help(form.'.$name.')}}';
-                        }
-                        else{
-                            $texterow.='<p class="form-text mb-0 help-text"><i>pensez à nommer le fichier pour le SEO (accents , majuscule et minuscule, espace, -_. conservés)</i></p>';
-                        }
-                        $texterow.='{{form_widget(form.' . $name . ')}}
+                            if (isset($options['opt']['help'])) {
+                                $texterow .= '{{form_help(form.' . $name . ')}}';
+                            } else {
+                                $texterow .= '<p class="form-text mb-0 help-text"><i>pensez à nommer le fichier pour le SEO (accents , majuscule et minuscule, espace, -_. conservés)</i></p>';
+                            }
+                            $texterow .= '{{form_widget(form.' . $name . ')}}
                         {% if ' . $entity . '.' . $name . ' %}
                         <p data-controller="base--resetfile" data-base--resetfile-nom-value="' . $entity . '_' . $name . '" id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text"><a target="_blank" href="' . '/{{form.vars.value.' . $name . '}}">{{form.vars.value.' . $name . '}}</a></p>
                         {% endif %}
                         </div>
                         <div class="col-sm-2 d-flex align-items-center">';
-                        if($select=='image'){
-                            $texterow.=' {% if form.vars.value.'.$name.' %}<img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
+                            if ($select == 'image') {
+                                $texterow .= ' {% if form.vars.value.' . $name . ' %}<img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
                             data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"petit\")}}' />{% endif %}";
-                        }
-                        $texterow.='</div>
+                            }
+                            $texterow .= '</div>
                 </div>';
-                $rows[] = $texterow;
-                        break;
-                   
-                        // case 'readonlyroot': {
-                        //         $resattrs = '';
-                        //         $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . $resattrs . ',{"disabled":disabled}) }}' . "\n";
-                        //     }
-                        //     break;
-                    case 'pass':
-                        break;
-                    case 'invisible':
-                        $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
-                        break;
-                    case 'collection':
-                        //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js
-                        $rows[] = '
-                        {% for item in  form.vars.value.'.$name.'  %}
-			<input type="hidden" champ="bien_'.$name.'_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
+                            $rows[] = $texterow;
+                            break;
+
+                            // case 'readonlyroot': {
+                            //         $resattrs = '';
+                            //         $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . $resattrs . ',{"disabled":disabled}) }}' . "\n";
+                            //     }
+                            //     break;
+                        case 'pass':
+                            break;
+                        case 'invisible':
+                            $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
+                            break;
+                        case 'collection':
+                            //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js
+                            $rows[] = '
+                        {% for item in  form.vars.value.' . $name . '  %}
+			<input type="hidden" champ="bien_' . $name . '_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
 		{% endfor %}
         {{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
-                        break;
-                    case 'entity':
-                        $rows[] = '
+                            break;
+                        case 'entity':
+                            $rows[] = '
                         <div class="mb-3 row">
                             <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
                             {{form_label(form.' . $name . ')}}
@@ -139,12 +138,14 @@ class CrudMakeNewCommand extends Command
                             {{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
                             </div>
                         </div>';
-                        break;
+                            break;
+                        case 'json':
+                            break;
+                        default: {
 
-                    default: {
-
-                            $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
-                            $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
+                                $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
+                                $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
+                            }
                     }
                 }
             }

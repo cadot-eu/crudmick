@@ -18,6 +18,7 @@ use Psy\Formatter\CodeFormatter;
 use jetstreamlabs\PHPIndent\PHPIndent;
 use Tidy;
 use HTMLModule;
+use ReflectionClass;
 
 #[AsCommand(name: 'crud:init', description: 'Initialise une entity')]
 class CrudInitCommand extends Command
@@ -35,13 +36,12 @@ class CrudInitCommand extends Command
             InputOption::VALUE_NONE,
             'Pour afficher les commentaires'
         )
-        ->addOption(
-            'speed',
-            's',
-            InputOption::VALUE_NONE,
-            'Pour passer le formatage des fichiers'
-        )
-        ;
+            ->addOption(
+                'speed',
+                's',
+                InputOption::VALUE_NONE,
+                'Pour passer le formatage des fichiers'
+            );
     }
 
     protected function execute(
@@ -77,11 +77,38 @@ class CrudInitCommand extends Command
         ];
         $fentity = 'src/Entity/' . ucfirst($entity) . '.php';
         $this->add_in_file($trait, $fentity);
+        //on vérifie que l'on a SEARCH
+        //on récupère les commentaires de id dans l'entité
+        $class = 'App\Entity\\' . ucfirst($entity);
+        $reflexion = new ReflectionClass($class);
+        $idcomments = ($reflexion->getProperty('id')->getDocComment());
+        $expIdComments = explode("\n", $idcomments);
 
-//iem pour le repository
+        if (strpos($idcomments, 'SEARCH:[') === false) {
+            $save = $expIdComments[count($expIdComments) - 1];
+            $expIdComments[count($expIdComments) - 1] = "* SEARCH:['id']";
+            $expIdComments[] = $save;
+            if ($idcomments)
+                $changement = \str_replace($idcomments, "\n" . implode("\n", $expIdComments) . "\n", \file_get_contents($fentity));
+            else // si on a pas de commentaire pour id
+                $changement = \str_replace('private ?int $id', "/**\n" . implode("\n", $expIdComments) . '*/' . "\n" . 'private ?int $id', \file_get_contents($fentity));
+            \file_put_contents($fentity, $changement);
+        }
+        //protection contre l'erreur de mettre un ligne vide juste après une annontation
+        //ouvrir le fichier $fentity et supprimer les lignes vides et réenregistrer le  fichier
+        // Lire le contenu du fichier
+        $fileContent = file_get_contents($fentity);
+
+        // Supprimer les lignes vides
+        $fileContent = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $fileContent);
+
+        // Réécrire le fichier avec le contenu modifié
+        file_put_contents($fentity, $fileContent);
+
+        //iem pour le repository
         $trait = [
-        'use App\Repository\base\SearchRepositoryTrait;' => 'use',
-        'use SearchRepositoryTrait;' => '{',
+            'use App\Repository\base\SearchRepositoryTrait;' => 'use',
+            'use SearchRepositoryTrait;' => '{',
 
         ];
         $frepository = 'src/Repository/' . ucfirst($entity) . 'Repository.php';
