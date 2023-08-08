@@ -86,6 +86,16 @@ le plus simple => STRING
 * options:["question","réponse"]
 ```
 
+ou un array qui vient d'une méthode dans une entity (attention demande à relancer le crud pour maj du type, vaux mieux se servir de entity)
+
+```php
+     * choice
+     * xtra:{"entity":"\\App\\Entity\\Supercategorie","method":"getListChoices"}
+     * TWIG:join(',')
+     * OPT:{"multiple":true,"expanded":true}
+     * ATTR:{"class":"d-flex flex-wrap gap-2"}
+```
+
 ou choix simple avec retour différents =>STRING
 
 ```php
@@ -138,6 +148,7 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
      * label:nom
      * OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"}
      * OPT:{"required":false}
+     * OPT:{ "group_by":"§function($choice, $key, $value) {return $choice->getSuperCategorie()->getNom();}§"}
      * tpl:no_index
 ```
 
@@ -354,3 +365,7 @@ il n'est pas possible de les intégrer dans la recherche, donc il faut mettre un
 ```php
  * SEARCH:['id','nom']
 ```
+
+### pour retirer les guillemets
+
+utilisation de § exemple "§code sans guillement §"

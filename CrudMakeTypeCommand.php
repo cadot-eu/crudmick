@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[
     AsCommand(
@@ -27,6 +28,11 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 ]
 class CrudMakeTypeCommand extends Command
 {
+    public function __construct(
+        private EntityManagerInterface $em,
+    ) {
+        parent::__construct();
+    }
     protected function configure(): void
     {
         $this->addArgument(
@@ -39,13 +45,12 @@ class CrudMakeTypeCommand extends Command
             InputOption::VALUE_NONE,
             'Pour afficher les commentaires'
         )
-        ->addOption(
-            'speed',
-            's',
-            InputOption::VALUE_NONE,
-            'Pour passer le formatage des fichiers'
-        )
-            ;
+            ->addOption(
+                'speed',
+                's',
+                InputOption::VALUE_NONE,
+                'Pour passer le formatage des fichiers'
+            );
     }
 
     protected function execute(
@@ -88,313 +93,323 @@ class CrudMakeTypeCommand extends Command
             }
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 foreach ($docs->getSelect($name) as $select) {
-                    switch ($select ) {
-                    case 'json':
-                        $transform[] =
-                            "\$builder->get('$name')\n->addModelTransformer(new CallbackTransformer(\n" .
-                            "function (\$keywordsAsArray) {\n" .
-                            "return implode(',', \$keywordsAsArray);\n" .
-                            "},\n" .
-                            "function (\$keywordsAsString) {\n" .
-                            "return explode(',', \$keywordsAsString);\n" .
-                            "}\n" .
-                            "));\n";
-                        $uses[] = 'use Symfony\Component\Form\CallbackTransformer;';
-                        break;
-                    case 'simple':
-                        $attrs['data-controller'] = 'base--suneditor';
-                        $attrs['data-base--suneditor-toolbar-value'] = 'simple';
-                        if (
-                            !isset(
-                                $options['attr']['data-base--suneditor-upload-value']
-                            )
-                        ) {
-                            $attrs['data-base--suneditor-upload-value'] = $entity;
-                        }
-                        break;
-                    case 'stars':
-                        //$uses[] =
-                        //'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                        //$tempadds = "\n->add('$name',HiddenType::class,";
-                        //$rowattrs['class'] = 'd-none mb-3 text-warning';
-                        $attrs['class'] = 'd-none';
-                        $stars = isset($options['options']) ? key($options['options']) : 5;
-                        $attrs['data-controller'] = 'base--stars';
-                        $attrs['data-base--stars-max-value'] = $stars;
+                    switch ($select) {
+                        case 'json':
+                            $transform[] =
+                                "\$builder->get('$name')\n->addModelTransformer(new CallbackTransformer(\n" .
+                                "function (\$keywordsAsArray) {\n" .
+                                "return implode(',', \$keywordsAsArray);\n" .
+                                "},\n" .
+                                "function (\$keywordsAsString) {\n" .
+                                "return explode(',', \$keywordsAsString);\n" .
+                                "}\n" .
+                                "));\n";
+                            $uses[] = 'use Symfony\Component\Form\CallbackTransformer;';
+                            break;
+                        case 'simple':
+                            $attrs['data-controller'] = 'base--suneditor';
+                            $attrs['data-base--suneditor-toolbar-value'] = 'simple';
+                            if (
+                                !isset(
+                                    $options['attr']['data-base--suneditor-upload-value']
+                                )
+                            ) {
+                                $attrs['data-base--suneditor-upload-value'] = $entity;
+                            }
+                            break;
+                        case 'stars':
+                            //$uses[] =
+                            //'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                            //$tempadds = "\n->add('$name',HiddenType::class,";
+                            //$rowattrs['class'] = 'd-none mb-3 text-warning';
+                            $attrs['class'] = 'd-none';
+                            $stars = isset($options['options']) ? key($options['options']) : 5;
+                            $attrs['data-controller'] = 'base--stars';
+                            $attrs['data-base--stars-max-value'] = $stars;
 
-                        break;
-                    case 'vide':
-                        $attrs['data-controller'] = 'base--suneditor';
-                        $attrs['data-base--suneditor-toolbar-value'] = 'vide';
-                        break;
-                    case 'simplelanguage':
-                        $attrs['data-base--suneditor-toolbar-value'] =
-                            'simplelanguage';
-                        $attrs['data-controller'] = 'base--suneditor';
-                        if(isset($options['options']['init']))$attrs['data-base--suneditor-init-value'] = json_encode($options['options']['init']);
-                        break;
-                    case 'annonce':
-                    case 'full':
-                    case 'normal':
-                        $attrs['data-controller'] = 'base--suneditor';
-                        $attrs['data-base--suneditor-toolbar-value'] = $select;
-                        if (
-                            !isset(
-                                $options['attr']['data-base--suneditor-upload-value']
-                            )
-                        ) {
-                            $attrs['data-base--suneditor-upload-value'] = $entity;
-                        }
-                        if(isset($options['options']['init']))$attrs['data-base--suneditor-init-value'] = json_encode($options['options']['init']);
-                        break;
-                    case 'password':
-                        $tempadds = "->add('$name',RepeatedType::class,";
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\RepeatedType;';
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\PasswordType;';
-                        $opts['type'] = 'PasswordType::class';
-                        $opts['mapped'] = false;
-                        $opts['first_options'] = ['label' => 'Mot de passe'];
-                        $opts['second_options'] = ['label' => 'Répétez le'];
-                        $opts['invalid_message'] =
-                            'Les mots de passe ne correspondent pas';
-                        break;
-                    case 'fichier':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\FileType;';
-                        $tempadds = "\n->add('$name',FileType::class,";
-                        $attrs['accept'] =
-                            'image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/zip,application/x-rar-compressed,application/x-7z-compressed';
-                        $opts['mapped'] = false;
-                        $opts['required'] = false;
-                        break;
+                            break;
+                        case 'vide':
+                            $attrs['data-controller'] = 'base--suneditor';
+                            $attrs['data-base--suneditor-toolbar-value'] = 'vide';
+                            break;
+                        case 'simplelanguage':
+                            $attrs['data-base--suneditor-toolbar-value'] =
+                                'simplelanguage';
+                            $attrs['data-controller'] = 'base--suneditor';
+                            if (isset($options['options']['init'])) $attrs['data-base--suneditor-init-value'] = json_encode($options['options']['init']);
+                            break;
+                        case 'annonce':
+                        case 'full':
+                        case 'normal':
+                            $attrs['data-controller'] = 'base--suneditor';
+                            $attrs['data-base--suneditor-toolbar-value'] = $select;
+                            if (
+                                !isset(
+                                    $options['attr']['data-base--suneditor-upload-value']
+                                )
+                            ) {
+                                $attrs['data-base--suneditor-upload-value'] = $entity;
+                            }
+                            if (isset($options['options']['init'])) $attrs['data-base--suneditor-init-value'] = json_encode($options['options']['init']);
+                            break;
+                        case 'password':
+                            $tempadds = "->add('$name',RepeatedType::class,";
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\RepeatedType;';
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\PasswordType;';
+                            $opts['type'] = 'PasswordType::class';
+                            $opts['mapped'] = false;
+                            $opts['first_options'] = ['label' => 'Mot de passe'];
+                            $opts['second_options'] = ['label' => 'Répétez le'];
+                            $opts['invalid_message'] =
+                                'Les mots de passe ne correspondent pas';
+                            break;
+                        case 'fichier':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\FileType;';
+                            $tempadds = "\n->add('$name',FileType::class,";
+                            $attrs['accept'] =
+                                'image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/zip,application/x-rar-compressed,application/x-7z-compressed';
+                            $opts['mapped'] = false;
+                            $opts['required'] = false;
+                            break;
                         case 'video':
-                    case 'image':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\FileType;';
-                        $tempadds = "\n->add('$name',FileType::class,";
-                        $attrs['accept'] = $select.'/*';
-                        $opts['mapped'] = false;
-                        $opts['required'] = false;
-                        break;
-                       
-                    case 'email':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\EmailType;';
-                        $tempadds = "\n->add('$name',EmailType::class,";
-                        break;
+                        case 'image':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\FileType;';
+                            $tempadds = "\n->add('$name',FileType::class,";
+                            $attrs['accept'] = $select . '/*';
+                            $opts['mapped'] = false;
+                            $opts['required'] = false;
+                            break;
+
+                        case 'email':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\EmailType;';
+                            $tempadds = "\n->add('$name',EmailType::class,";
+                            break;
                         case 'siret':
                             $attrs['data-controller'] = 'base--mask';
                             $attrs['data-base--mask-alias-value'] = 'siret';
                             break;
-                    case 'hidden':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                        $tempadds = "\n->add('$name',HiddenType::class,";
-                        break;
-                    case 'hiddenroot':
-                        $rowattrs['class'] = 'd-none mb-3 text-warning';
-                        $attrs['class'] = 'form-control';
-                        $attrs['data-controller'] = 'base--hiddenroot';
-                        $attrs['data-base--hiddenroot-code-value'] =
-                            "§\$AtypeOption[\"username\"]§";
-                        $vars['username'] = "''";
-                        $resolver['hiddenroot'] =
-                            '$resolver->setAllowedTypes(\'username\', \'string\')';
-                        //mis le nom pour ne pas avoir de doublon
-                        break;
-                    case 'readonlyroot':
-                        $rowattrs['class'] = 'd-none ';
-                        $attrs['data-controller'] = 'base--readonlyroot';
-                        $attrs['data-base--readonlyroot-code-value'] =
-                            "§\$AtypeOption[\"username\"]§";
-                        $vars['username'] = "''";
-                        $resolver['hiddenroot'] =
-                            '$resolver->setAllowedTypes(\'username\', \'string\')';
-                        //mis le nom pour ne pas avoir de doublon
-                        break;
-                    case 'adresse':
-                        $attrs['data-controller'] = 'base--adresse';
-                        break;
-                    case 'money':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\MoneyType;';
-                        $tempadds = "\n->add('$name',MoneyType::class,";
-                        break;
+                        case 'hidden':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                            $tempadds = "\n->add('$name',HiddenType::class,";
+                            break;
+                        case 'hiddenroot':
+                            $rowattrs['class'] = 'd-none mb-3 text-warning';
+                            $attrs['class'] = 'form-control';
+                            $attrs['data-controller'] = 'base--hiddenroot';
+                            $attrs['data-base--hiddenroot-code-value'] =
+                                "§\$AtypeOption[\"username\"]§";
+                            $vars['username'] = "''";
+                            $resolver['hiddenroot'] =
+                                '$resolver->setAllowedTypes(\'username\', \'string\')';
+                            //mis le nom pour ne pas avoir de doublon
+                            break;
+                        case 'readonlyroot':
+                            $rowattrs['class'] = 'd-none ';
+                            $attrs['data-controller'] = 'base--readonlyroot';
+                            $attrs['data-base--readonlyroot-code-value'] =
+                                "§\$AtypeOption[\"username\"]§";
+                            $vars['username'] = "''";
+                            $resolver['hiddenroot'] =
+                                '$resolver->setAllowedTypes(\'username\', \'string\')';
+                            //mis le nom pour ne pas avoir de doublon
+                            break;
+                        case 'adresse':
+                            $attrs['data-controller'] = 'base--adresse';
+                            break;
+                        case 'money':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\MoneyType;';
+                            $tempadds = "\n->add('$name',MoneyType::class,";
+                            break;
                         case 'nombre':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\NumberType;';
                             $tempadds = "\n->add('$name',NumberType::class,";
                             break;
-                    case 'telephone':
-                        $attrs['data-controller'] = 'base--mask';
-                        $attrs['data-base--mask-alias-value'] = 'telephone';
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\TelType;';
-                        $tempadds = "\n->add('$name',TelType::class,";
-                        break;
-                    case 'collection':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\CollectionType;';
-                        $target = substr(
-                            $docs->getArgumentOfAttributes($name, 0, 'targetEntity'),
-                            strlen('App\Entity\\')
-                        );
-                        $uses[] = 'use App\Form\\' . $target . 'Type;';
-                        $tempadds = "->add('$name',CollectionType::class,";
-                        $opts['entry_type!'] = $target . 'Type::class';
-                        //$attrs['data-controller'] = 'base--collection';
-                        //$attrs['data-base--collection-valeurs-value!'] = 'json_encode($' . $name . ')';
-                        //for entry use xtra for add option
-                        if (isset($options['xtra'])) {
-                            foreach ($options['xtra'] as $clef => $entry) {
-                                $opts[$clef] = $entry;
+                        case 'telephone':
+                            $attrs['data-controller'] = 'base--mask';
+                            $attrs['data-base--mask-alias-value'] = 'telephone';
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\TelType;';
+                            $tempadds = "\n->add('$name',TelType::class,";
+                            break;
+                        case 'collection':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\CollectionType;';
+                            $target = substr(
+                                $docs->getArgumentOfAttributes($name, 0, 'targetEntity'),
+                                strlen('App\Entity\\')
+                            );
+                            $uses[] = 'use App\Form\\' . $target . 'Type;';
+                            $tempadds = "->add('$name',CollectionType::class,";
+                            $opts['entry_type!'] = $target . 'Type::class';
+                            //$attrs['data-controller'] = 'base--collection';
+                            //$attrs['data-base--collection-valeurs-value!'] = 'json_encode($' . $name . ')';
+                            //for entry use xtra for add option
+                            if (isset($options['xtra'])) {
+                                foreach ($options['xtra'] as $clef => $entry) {
+                                    $opts[$clef] = $entry;
+                                }
                             }
-                        }
-                        $opts['by_reference'] = false;
-                        $boucle[] =
-                            '$' .
-                            $name .
-                            ' = [];' .
-                            "\n" .
-                            'foreach ($AtypeOption[\'data\']->get' .
-                            ucfirst($name) .
-                            '() as $prod) {' .
-                            "\n" .
-                            '$' .
-                            $name .
-                            '[] = $prod->get' .
-                            ucfirst($options['options']['field']) .
-                            '();' .
-                            "\n" .
-                            '}';
-                        break;
-                    case 'choice':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\ChoiceType;';
-                        $tempadds = "->add('$name',ChoiceType::class,";
-                        $finalOpts = [];
-                        if (ArrayHelper::isAssoc($options['options'])) {
+                            $opts['by_reference'] = false;
+                            $boucle[] =
+                                '$' .
+                                $name .
+                                ' = [];' .
+                                "\n" .
+                                'foreach ($AtypeOption[\'data\']->get' .
+                                ucfirst($name) .
+                                '() as $prod) {' .
+                                "\n" .
+                                '$' .
+                                $name .
+                                '[] = $prod->get' .
+                                ucfirst($options['options']['field']) .
+                                '();' .
+                                "\n" .
+                                '}';
+                            break;
+                        case 'choice':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\ChoiceType;';
+                            $tempadds = "->add('$name',ChoiceType::class,";
+                            $finalOpts = [];
+                            //si on a options
+                            if (isset($options['options'])) {
+                                if (ArrayHelper::isAssoc($options['options'])) {
+                                    foreach ($options['options'] as $key => $value) {
+                                        $finalOpts[$key] = $value;
+                                    }
+                                } else {
+                                    foreach ($options['options'] as $value) {
+                                        $finalOpts[$value] = $value;
+                                    }
+                                }
+                            }
+                            //si on a extra et que l'on veut envoyer un array par un repository
+                            if (isset($options['xtra'])) {
+                                $method = $options['xtra']['method'];
+                                $entite = $options['xtra']['entity'];
+                                //on renvoie le retour de la method par entitymanagerinterface
+                                $finalOpts = $this->em->getRepository($entite)->$method();
+                            }
+                            $opts['choices'] = $finalOpts;
+                            break;
+                        case 'onechoiceenplace':
+                        case 'choiceenplace':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\ChoiceType;';
+                            $tempadds = "\n->add('$name',ChoiceType::class,";
+                            //on garde que ce qui est affiché
+                            $finalOpts = [];
                             foreach ($options['options'] as $key => $value) {
-                                $finalOpts[$key] = $value;
+                                $finalOpts[$key] = $key;
                             }
-                        } else {
-                            foreach ($options['options'] as $value) {
-                                $finalOpts[$value] = $value;
-                            }
-                        }
-                        $opts['choices'] = $finalOpts;
-                        break;
-                    case 'onechoiceenplace':
-                    case 'choiceenplace':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\ChoiceType;';
-                        $tempadds = "\n->add('$name',ChoiceType::class,";
-                        //on garde que ce qui est affiché
-                        $finalOpts = [];
-                        foreach ($options['options'] as $key => $value) {
-                            $finalOpts[$key] = $key;
-                        }
-                        $opts['choices'] = $finalOpts;
-                        break;
-                    case 'color':
-                        $uses[] =
-                            'use Symfony\Component\Form\Extension\Core\Type\ColorType;';
-                        $tempadds = "\n->add('$name',ColorType::class,";
-                        break;
-                    case 'entity':
-                        //get name of entity
-                        $target = $docs->getArgumentOfAttributes(
-                            $name,
-                            0,
-                            'targetEntity'
-                        );
-                        $EntityTarget = array_reverse(explode('\\', $target))[0];
-                        $uses[] = 'use Symfony\Bridge\Doctrine\Form\Type\EntityType;';
-                        $uses[] = 'use Doctrine\ORM\EntityRepository;';
-                        $uses[] = "use $target;";
-                        $tempadds = "\n->add('$name',EntityType::class,";
-                        $opts['class'] = "¤$EntityTarget::class¤";
-                        $opts['query_builder'] = "¤
+                            $opts['choices'] = $finalOpts;
+                            break;
+                        case 'color':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\ColorType;';
+                            $tempadds = "\n->add('$name',ColorType::class,";
+                            break;
+                        case 'entity':
+                            //get name of entity
+                            $target = $docs->getArgumentOfAttributes(
+                                $name,
+                                0,
+                                'targetEntity'
+                            );
+                            $EntityTarget = array_reverse(explode('\\', $target))[0];
+                            $uses[] = 'use Symfony\Bridge\Doctrine\Form\Type\EntityType;';
+                            $uses[] = 'use Doctrine\ORM\EntityRepository;';
+                            $uses[] = "use $target;";
+                            $tempadds = "\n->add('$name',EntityType::class,";
+                            $opts['class'] = "¤$EntityTarget::class¤";
+                            $opts['query_builder'] = "¤
                         function (EntityRepository \$er)";
-                        if ($options) {
-                            $opts['query_builder'] .= 'use ($AtypeOption) ';
-                        }
+                            if ($options) {
+                                $opts['query_builder'] .= 'use ($AtypeOption) ';
+                            }
 
-                        $opts['query_builder'] .= "{
+                            $opts['query_builder'] .= "{
                             return \$er->createQueryBuilder(\"u\")
                                 ->orderBy(\"u.nom\", \"ASC\")
                                 ->andwhere(\"u.deletedAt IS  NULL\")";
-                        if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
-                            $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
-                            $opts['query_builder'] .= "->andWhere(\"u." .
-                                $mappedby . " IS NULL\")";
-                        }
-                        //si on a un formoptions
-                        if (isset($options['form'])) {
-                            $opts['query_builder'] .=
-                                "\n->andWhere(\"u." .
-                                $options['form'] .
-                                " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" .
-                                $options['form'] .
-                                "_id\"])";
-                            $vars[$options['form'] . '_id'] = 0;
-                            $resolver[] =
-                                '$resolver->setAllowedTypes(\'' .
-                                $options['form'] .
-                                '_id\', \'int\')';
-                        }
-                        $opts['query_builder'] .= ";}
+                            if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
+                                $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
+                                $opts['query_builder'] .= "->andWhere(\"u." .
+                                    $mappedby . " IS NULL\")";
+                            }
+                            //si on a un formoptions
+                            if (isset($options['form'])) {
+                                $opts['query_builder'] .=
+                                    "\n->andWhere(\"u." .
+                                    $options['form'] .
+                                    " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" .
+                                    $options['form'] .
+                                    "_id\"])";
+                                $vars[$options['form'] . '_id'] = 0;
+                                $resolver[] =
+                                    '$resolver->setAllowedTypes(\'' .
+                                    $options['form'] .
+                                    '_id\', \'int\')';
+                            }
+                            $opts['query_builder'] .= ";}
                         ¤";
-                        if (
-                            substr($docs->getAttributes($name)[0]->getName(), -4) ==
-                            'Many'
-                        ) {
-                            $opts['multiple'] = true;
-                        }
-                        if (!$options['label']) {
-                            die('Il manque l\'option label pour le champ ' .
-                                $name .
-                                ' de l\'entité ' .
-                                $entity .
-                                "\n");
-                        } else {
-                            $opts['choice_label'] = key($options['label']);
-                        }
-                        break;
-                         case 'generatedvalue': //id
-                        break;
-                    case 'datetime':
-                        //$opts['widget'] = 'single_text';
-                        if ($name == 'createdAt') {
-                            $uses[] =
-                                'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                            $tempadds = "\n->add('$name',HiddenType::class,";
-                        }
-                        if (
-                            $name == 'updatedAt' &&
-                            !isset($IDOptions['tpl']['no_updated'])
-                        ) {
-                            $uses[] =
-                                'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                            $opts['help'] =
-                                "Vide pour la date et l'heure d'enregistrement";
-                            $adds[] =
-                                "->add('exupdatedAt',HiddenType::class,\narray ('mapped'=>false,'data'=>\$AtypeOption['data']->getupdatedAt()?\$AtypeOption['data']->getupdatedAt()->format('Y-m-d H:i:s'):null,\n'attr' =>\narray (\n),\n))";
-                        }
-                        break;
-                    case 'integer':
-                    case 'string':
-                        break;
-                    case 'pass':
-                        break;
-                    default:
-                        if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
-                            $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
-                        }
+                            if (
+                                substr($docs->getAttributes($name)[0]->getName(), -4) ==
+                                'Many'
+                            ) {
+                                $opts['multiple'] = true;
+                            }
+                            if (!$options['label']) {
+                                die('Il manque l\'option label pour le champ ' .
+                                    $name .
+                                    ' de l\'entité ' .
+                                    $entity .
+                                    "\n");
+                            } else {
+                                $opts['choice_label'] = key($options['label']);
+                            }
+                            break;
+                        case 'generatedvalue': //id
+                            break;
+                        case 'datetime':
+                            //$opts['widget'] = 'single_text';
+                            if ($name == 'createdAt') {
+                                $uses[] =
+                                    'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                                $tempadds = "\n->add('$name',HiddenType::class,";
+                            }
+                            if (
+                                $name == 'updatedAt' &&
+                                !isset($IDOptions['tpl']['no_updated'])
+                            ) {
+                                $uses[] =
+                                    'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                                $opts['help'] =
+                                    "Vide pour la date et l'heure d'enregistrement";
+                                $adds[] =
+                                    "->add('exupdatedAt',HiddenType::class,\narray ('mapped'=>false,'data'=>\$AtypeOption['data']->getupdatedAt()?\$AtypeOption['data']->getupdatedAt()->format('Y-m-d H:i:s'):null,\n'attr' =>\narray (\n),\n))";
+                            }
+                            break;
+                        case 'integer':
+                        case 'string':
+                            break;
+                        case 'pass':
+                            break;
+                        default:
+                            if ($input->getOption('comment') != false && !in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+                                $output->writeln('- non géré dans maketype:' . $select . '[' . $name . ']');
+                            }
+                    }
                 }
-            }
                 //gestion de certain par les noms de champs
                 if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
                     switch ($name) {
