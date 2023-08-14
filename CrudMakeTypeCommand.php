@@ -445,7 +445,7 @@ class CrudMakeTypeCommand extends Command
                     $finalOpts['attr'] = $finalAttrs;
                 }
                 //add row_attrs in opt
-                if (isset($finalAttrs)) {
+                if (isset($finalAttrs) and $finalRowAttrs != []) {
                     $finalOpts['row_attr'] = $finalRowAttrs;
                 }
                 $tempopts = isset($finalOpts)

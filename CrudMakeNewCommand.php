@@ -103,7 +103,7 @@ class CrudMakeNewCommand extends Command
                         <div class="col-sm-2 d-flex align-items-center">';
                             if ($select == 'image') {
                                 $texterow .= ' {% if form.vars.value.' . $name . ' %}<img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
-                            data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}' alt=\"\" src='{{asset(form.vars.value.$name)|imagine_filter(\"petit\")}}' />{% endif %}";
+                            data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}'  />{% endif %}";
                             }
                             $texterow .= '</div>
                 </div>';
@@ -124,7 +124,7 @@ class CrudMakeNewCommand extends Command
                             //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js
                             $rows[] = '
                         {% for item in  form.vars.value.' . $name . '  %}
-			<input type="hidden" champ="bien_' . $name . '_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
+			<input type="hidden" champ="' . $entity . '_' . $name . '_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
 		{% endfor %}
         {{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
                             break;

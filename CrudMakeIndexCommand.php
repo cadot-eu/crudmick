@@ -115,30 +115,33 @@ class CrudMakeIndexCommand extends Command
                             if ($docs->propertyExist('slug')) {
                                 $td[] = '<td  data-toggle="tooltip" 
                             title="{{' . "$Entity.slug" . '}}"' .
-                            ' {{ ' . "$Entity.slug" . '!=""? "data-clipboard-text="~' . "$Entity.slug" . '~' . "\" class=clipboard \""   .
-                            ':"class=my-auto"}} > {{' . "$Entity.$name$twig" . '}}' . "\n";
-                        } else {
-                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
-                        }
-                        break;
-                    case 'hiddenroot':
-                        $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
-                        ;
-                        break;
-                    case 'vide':
-                    case 'simple':
-                    case 'simplelanguage':
-                    case 'full':
-                    case 'normal':
-                    case 'annonce':
-                    case 'text':
-                     case 'siret':
-                    case 'string':
+                                    ' {{ ' . "$Entity.slug" . '!=""? "data-clipboard-text="~' . "$Entity.slug" . '~' . "\" class=clipboard \""   .
+                                    ':"class=my-auto"}} > {{' . "$Entity.$name$twig" . '}}' . "\n";
+                            } else {
+                                $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
+                            }
+                            break;
+                        case 'hiddenroot':
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";;
+                            break;
+                        case 'vide':
+                        case 'simple':
+                        case 'simplelanguage':
+                        case 'full':
+                        case 'normal':
+                        case 'annonce':
+                        case 'text':
+                        case 'siret':
+                        case 'string':
                         case 'readonlyroot':
                         case 'email':
                             $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
                             $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
+                            break;
+                        case 'datetime':
+                            $td[] .= "<td>{{ $Entity.$name is not empty ? $Entity.$name|date('d/m à H:i', 'Europe/Paris'):'---'}}";
+
                             break;
                         case 'integer': //gère integer et ordre
                             if (isset($IDOptions['order']) && array_key_exists($name, $IDOptions['order'])) {
@@ -300,16 +303,16 @@ class CrudMakeIndexCommand extends Command
                             break;
 
 
-                    default:
-                        if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {
-                            $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
-                            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
-                            $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
-                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
-                        }
-                        
+                        default:
+                            if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {
+                                $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
+                                $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
+                                $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
+                                $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
+                            }
 
-                       
+
+
 
                             break;
                     }
