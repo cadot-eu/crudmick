@@ -102,7 +102,7 @@ class CrudMakeNewCommand extends Command
                         </div>
                         <div class="col-sm-2 d-flex align-items-center">';
                             if ($select == 'image') {
-                                $texterow .= ' {% if form.vars.value.' . $name . ' %}<img  title="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
+                                $texterow .= ' {% if form.vars.value.' . $name . ' %}<img  src="{{asset(form.vars.value.' . $name . ')}}" class="img-fluid border " data-controller="base--bigpicture" ' . "
                             data-base--bigpicture-options-value='{\"imgSrc\": \"{{asset(form.vars.value.$name)}}\"}'  />{% endif %}";
                             }
                             $texterow .= '</div>

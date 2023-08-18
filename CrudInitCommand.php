@@ -94,17 +94,18 @@ class CrudInitCommand extends Command
                 $changement = \str_replace('private ?int $id', "/**\n" . implode("\n", $expIdComments) . '*/' . "\n" . 'private ?int $id', \file_get_contents($fentity));
             \file_put_contents($fentity, $changement);
         }
+
         //protection contre l'erreur de mettre un ligne vide juste après une annontation
         //ouvrir le fichier $fentity et supprimer les lignes vides et réenregistrer le  fichier
         // Lire le contenu du fichier
         $fileContent = file_get_contents($fentity);
 
+        //on ajoute une ligne pour séparer les parties
+        $fileContent = $this->addEmptyLineAfterPrivate($fileContent);
         // Supprimer les lignes vides
         $fileContent = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $fileContent);
-
         // Réécrire le fichier avec le contenu modifié
         file_put_contents($fentity, $fileContent);
-
         //iem pour le repository
         $trait = [
             'use App\Repository\base\SearchRepositoryTrait;' => 'use',
@@ -141,7 +142,7 @@ class CrudInitCommand extends Command
 
         // on format le fichier au besoin
         if (!$input->getOption('speed')) {
-            $cmd = "vendor/bin/phpcbf /app/src/Repository/" . ucfirst($entity) . 'Repository.php';
+            $cmd = "vendor/bin/phpcbf --standard=PSR12 /app/src/Repository/" . ucfirst($entity) . 'Repository.php';
             shell_exec($cmd);
         }
         return Command::SUCCESS;
@@ -176,6 +177,56 @@ class CrudInitCommand extends Command
      */
     public static function updateFile(string $filename, $html, $comment = false, $speed = false)
     {
+        //si le fichier est un twig
+        if (strpos($filename, '.html.twig') !== false) {
+            //on vérifie si on a des balises if inutile et un commentaire au dessus pour retrouver le end if
+            $finds = ['{% if not false %}', '{% if true %}', '{% true !="false" %}'];
+            $lines = explode(PHP_EOL, $html);
+            $indicesToRemove = [];
+            foreach ($finds as $find) {
+                for ($i = 0; $i < count($lines); $i++) {
+                    $line = trim($lines[$i]);
+                    if ($line === $find) {
+                        if (isset($lines[$i - 1]) && trim($lines[$i - 1]) === trim($lines[$i - 1])) {
+                            $else = null;
+                            for ($j = $i + 1; $j < count($lines); $j++) {
+                                if (trim($lines[$j]) === trim($lines[$i - 1]) and trim($lines[$j + 1]) === trim('{% else %}')) {
+                                    $else = $j;
+                                }
+                                if (trim($lines[$j]) === trim($lines[$i - 1]) and trim($lines[$j + 1]) === '{% endif %}') {
+                                    $indicesToRemove[] = $i - 1;  // Marquer la ligne de commentaire précédente pour suppression
+                                    $indicesToRemove[] = $i;  // Marquer la ligne `{% if not false %}` pour suppression
+                                    //si on a pas de else
+                                    $indicesToRemove[] = $j;  // Marquer le commentaire pour 
+                                    $indicesToRemove[] = $j + 1;  // Marquer la ligne `{% endif %}` pour suppression
+                                    if ($else != null) {
+                                        for ($k = $else; $k < $j; $k++) {
+                                            $indicesToRemove[] = $k;  // Marquer les lignes entre else et endif
+                                        }
+                                    }
+                                    break;  // Sortir de la boucle interne
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Supprimez les lignes à partir des indices recueillis
+            foreach ($indicesToRemove as $index) {
+                unset($lines[$index]);
+            }
+
+            $html = implode(PHP_EOL, $lines);
+
+
+
+
+
+            // Si vous souhaitez sauvegarder le résultat dans un fichier:
+            // file_put_contents('path_to_output_twig_file.twig', $cleanedHtml);
+
+
+        }
         // save new file
         $retour = file_put_contents($filename, $html);
         if ($retour === false) {
@@ -247,5 +298,20 @@ class CrudInitCommand extends Command
             '',
             $string
         );
+    }
+    //function qui ajoute créé une ligne de commentaire après une ligne qui commence par private
+    public function addEmptyLineAfterPrivate($contenu)
+    {
+        $sigle = "    //_____________________________________________";
+        //on supprime dans contenu les anciennes lignes avec sigle
+        $contenu = str_replace($sigle, '', $contenu);
+        $newLines = [];
+        foreach (explode("\n", $contenu) as $line) {
+            $newLines[] = $line;
+            if (strpos(trim($line), 'private') === 0) {
+                $newLines[] = $sigle;
+            }
+        }
+        return implode("\n", $newLines);
     }
 }

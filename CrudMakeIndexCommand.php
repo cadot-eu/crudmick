@@ -368,10 +368,11 @@ class CrudMakeIndexCommand extends Command
             }
         }
         /* --------------------------------- hide BY ID -------------------------------- */
-        $ifhide = 'true ';
+        $ifhide = 'true';
         if ((isset($IDOptions['hide']))) {
             foreach ($IDOptions['hide'] as $champ => $hide) {
-                $ifhide .= "and $Entity." . $champ . "  != '" . $hide . "'";
+                $userhide = "$Entity." . $champ . "  != '" . $hide . "'";
+                $ifhide .= " and " . $userhide;
             }
         }
 
@@ -381,6 +382,7 @@ class CrudMakeIndexCommand extends Command
             throw new Exception("Le fichier " . $fileIndex . " est introuvable", 1);
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileIndex), [
+            'userhide' => isset($userhide) ? $userhide : '',
             'hide' => $ifhide,
             'rows' => implode("\n", $td),
             'entete' => implode("\n", $th),

@@ -19,32 +19,7 @@ title %}
 	{{¤entity¤.id}}
 {% endblock %}
 {% block body %}
-	<script>
-		function waitForElm( selector ) {
-return new Promise( resolve => {
-if ( document.querySelector( selector ) ) {
-return resolve( document.querySelector( selector ) );
-}
-
-const observer = new MutationObserver( mutations => {
-if ( document.querySelector( selector ) ) {
-resolve( document.querySelector( selector ) );
-observer.disconnect();
-}
-} );
-
-observer.observe( document.body, {
-childList: true,
-subtree: true
-} );
-} );
-}
-waitForElm( '.sun-editor' ).then( ( elm ) => {
-if ( {{ is_granted('ROLE_SUPERADMIN')?:0 }} == 0 ) {
-document.querySelector( '.se-code-view-enabled' ).remove();
-}
-} );
-	</script>
+	<input type="hidden" id="rolesp" value="{{ is_granted('ROLE_SUPERADMIN') }}"/>
 	<input type="hidden" id="TBuploadmax" value="{{ TBuploadmax() }}"/>
 
 	<div class="col-12 text-center">
@@ -60,12 +35,14 @@ document.querySelector( '.se-code-view-enabled' ).remove();
 			{{TBgetClass(¤entity¤)|lower|slice(0,1) in ['a','e','i','o','u','y'] ? "de l'¤Entity¤" : "du ¤Entity¤"}}
 
 			{{¤entity¤.id}}
+			{# viewerUrl #}
 			{% if "¤viewerUrl¤" !="false" %}
 				<span>
 					<a href="¤viewerUrl¤/{{¤entity¤.¤viewerChamp¤}}" title="Afficher dans un autre onglet la page" target="_blank">
 						<em class="bi bi-display"></em>
 					</a>
 				</span>
+				{# viewerUrl #}
 			{% endif %}
 			<span
 				class="text-right">{# <h5> taille maxi d'envoie:<span id="TBuploadmax">{{ TBuploadmax() }}</span >Mo </h5> #}
@@ -75,14 +52,9 @@ document.querySelector( '.se-code-view-enabled' ).remove();
 
 	<div class="col-12" data-turbo="false">
 		{{ form_start(form,{'attr':{'class':'row'}}
-		) }}
-					¤form_rows¤
+		) }}¤form_rows¤
 		<button class="btn btn-primary mb-2" id="bouton_submit" type="submit">
-			{% if action=='new' %}
-				Créer
-			{% else %}
-				Mettre à jour
-			{% endif %}
+			{{ action=='new' ? 'Créer' : 'Mettre à jour' }}
 		</button>
 		<a href="{{ path('¤entity¤_index') }}">
 			<button class="btn btn-secondary" type="button">
@@ -90,7 +62,6 @@ document.querySelector( '.se-code-view-enabled' ).remove();
 			</button>
 		</a>
 		<input type="hidden" id="token" value="{{ csrf_token('upload') }}"/>
-
 		{{ form_end(form) }}
 	</div>
 

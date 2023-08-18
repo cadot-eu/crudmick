@@ -19,26 +19,18 @@ use App\Service\base\ToolsHelper;
 class ¤Entity¤Controller extends AbstractController
 {
     protected $em;
-    public function __construct(
-        EntityManagerInterface $em
-    ) {
-        $this->em = $em;
-    }
-    /* -------------------------------------------------------------------------- */
-    /*                                    INDEX                                   */
-    /* -------------------------------------------------------------------------- */
+    public function __construct(EntityManagerInterface $em) {$this->em = $em;}
+
+    /*------------------------INDEX------------------------*/
     #[Route('/', name: '¤entity¤_index', methods: ['GET'])]
     public function index(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
         ¤search¤
         $request->query->set('knpChampsRecherche', ToolsHelper::knpChampsRecherche('¤entity¤'));
-        return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
-            'pagination' =>$paginator->paginate($dql,¤paginator¤)
-        ]);
+        return $this->render('¤sdir¤/¤entity¤/index.html.twig', ['pagination' =>$paginator->paginate($dql,¤paginator¤)]);
     }
-    /* -------------------------------------------------------------------------- */
-    /*                                   DELETED                                  */
-    /* -------------------------------------------------------------------------- */
+    
+    /*------------------------DELETED------------------------*/
     #[Route('/deleted', name: '¤entity¤_deleted', methods: ['GET'])]
     public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -47,9 +39,8 @@ class ¤Entity¤Controller extends AbstractController
             'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
         ]);
     }
-    /* -------------------------------------------------------------------------- */
-    /*                                    CHAMP                                    */
-    /* -------------------------------------------------------------------------- */
+    
+    /*------------------------CHAMP------------------------*/
      #[Route('/champ/{id}/{type}/{valeur}/{one}', name: '¤entity¤_champ', methods: ['GET'])]
     public function champ(¤Entity¤Repository $¤entity¤Repository,¤Entity¤ $¤entity¤, $type = null, $valeur = null,$one=false): Response
     {
@@ -67,13 +58,10 @@ class ¤Entity¤Controller extends AbstractController
             $this->em->persist($¤entity¤);
             $this->em->flush();
             }
-           
-        
         return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
     }
-    /* -------------------------------------------------------------------------- */
-    /*                                NEW AND EDIT                                */
-    /* -------------------------------------------------------------------------- */
+    
+    /*------------------------NEW/EDIT------------------------*/
     #[Route('/new', name: '¤entity¤_new', methods: ['GET', 'POST'])]
     #[Route('/{id}/edit', name: '¤entity¤_edit', methods: ['GET', 'POST'])]
     public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null, EntityManagerInterface $em): Response
@@ -114,7 +102,6 @@ class ¤Entity¤Controller extends AbstractController
                          }
                     }
                 }
-            //TODO: par listener
             ¤gets¤
             
             if (property_exists($¤entity¤, 'slug')) {
@@ -129,22 +116,13 @@ class ¤Entity¤Controller extends AbstractController
             'form' => $form->createView()
         ]);
     }
-       /* -------------------------------------------------------------------------- */
-    /*                                   ALL DELETE                                 */
-    /* -------------------------------------------------------------------------- */
+     
+    /*------------------------ALL DELETE------------------------*/
     #[Route('/toutsupprimer', name: '¤entity¤_alldelete', methods: ['POST'])]
     public function alldelete(Request $request, EntityManagerInterface $em): Response
     {
         foreach ($em->getRepository(¤Entity¤::class)->findAll() as $item) {
             if ($this->isCsrfTokenValid('delete_¤Entity¤', $request->request->get('_alltoken')) and $item->getDeletedAt() != null) {
-                if ('¤entity¤' == 'user') {
-                    $id = $item->getId();
-                    // on supprime la FOREIGN KEY pour le bundle reset-password-bundle et on vérifie que user_id existe bien dans la table reset_password_request 
-                    $res=$em->createQuery("SELECT r FROM App\Entity\ResetPasswordRequest r WHERE r.user = $id")->getResult();
-                    if($res){
-                            $em->remove($res[0]);
-                    }
-                }
                 $em->remove($item);
             }
         }
@@ -152,16 +130,13 @@ class ¤Entity¤Controller extends AbstractController
         $this->addFlash('success', 'La corbeille est vidée');
         return $this->redirectToRoute('¤entity¤_deleted', [], Response::HTTP_SEE_OTHER);
     }
-    /* -------------------------------------------------------------------------- */
-    /*                                    SHOW                                    */
-    /* -------------------------------------------------------------------------- */
+    /* ------------------------------------SHOW-------------------------------------- */
     #[Route('/{id}', name: '¤entity¤_show', methods: ['GET'])]
     public function show(¤Entity¤ $¤entity¤): Response
     {
     }
-    /* -------------------------------------------------------------------------- */
-    /*                                    CLONE                                   */
-    /* -------------------------------------------------------------------------- */
+    
+    /*------------------------CLONE------------------------*/
     #[Route('/{id}/clone', name: '¤entity¤_clone', methods: ['GET', 'POST'])]
     public function clone(¤Entity¤ $¤entity¤c, EntityManagerInterface $em): Response
     {
@@ -174,20 +149,13 @@ class ¤Entity¤Controller extends AbstractController
         $em->flush();
         return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
     }
-    /* -------------------------------------------------------------------------- */
-    /*                                   DELETE                                   */
-    /* -------------------------------------------------------------------------- */
+
+    /*------------------------DELETE------------------------*/
     #[Route('/{id}', name: '¤entity¤_delete', methods: ['POST'])]
     public function delete(Request $request, ¤Entity¤ $¤entity¤, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete' . $¤entity¤->getId(), $request->request->get('_token')) ¤delete¤) {
             if ($request->request->has('delete_delete')) {
-                if('¤entity¤'=='user')
-                {
-                $id=$user->getId();
-                // on supprime la FOREIGN KEY pour le bundle reset-password-bundle
-                $em->createQuery('UPDATE App\Entity\ResetPasswordRequest r SET r.user = NULL WHERE r.user = :id')->setParameter('id', $id)->execute();
-                }
                 $em->remove($¤entity¤);
                 $this->addFlash('success', '¤entity¤ supprimé');
             }
