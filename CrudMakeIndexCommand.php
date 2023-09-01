@@ -139,10 +139,6 @@ class CrudMakeIndexCommand extends Command
                             $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                             break;
-                        case 'datetime':
-                            $td[] .= "<td>{{ $Entity.$name is not empty ? $Entity.$name|date('d/m à H:i', 'Europe/Paris'):'---'}}";
-
-                            break;
                         case 'integer': //gère integer et ordre
                             if (isset($IDOptions['order']) && array_key_exists($name, $IDOptions['order'])) {
                                 $actions = ['top' => 'arrow-bar-up', 'up' => 'arrow-up', 'down' => 'arrow-down', 'bottom' => 'arrow-bar-down'];
@@ -300,6 +296,11 @@ class CrudMakeIndexCommand extends Command
                             break;
                         case 'pass':
                         case 'hidden':
+                            break;
+                        case 'datetime':
+                            if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug']))
+                                $td[] .= "<td>{{ $Entity.$name is not empty ? $Entity.$name|date('d/m à H:i', 'Europe/Paris'):'---'}}";
+
                             break;
 
 

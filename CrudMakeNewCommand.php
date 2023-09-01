@@ -139,8 +139,7 @@ class CrudMakeNewCommand extends Command
                             </div>
                         </div>';
                             break;
-                        case 'json':
-                            break;
+
                         default: {
 
                                 $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
