@@ -201,7 +201,7 @@ class CrudMakeIndexCommand extends Command
                             break;
                         case 'choiceenplace':
                             $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '';
-                            $tableauChoice .= '{% set choice_' . $name . '=' . json_encode($options['options']) . ' %}' . "\n";
+                            $tableauChoice .= '{% set choice_' . $name . '=' . json_encode($options['options'], JSON_UNESCAPED_UNICODE) . ' %}' . "\n";
                             //création de la ligne
                             $td[] = "<td class=\"my-auto\">
                                 {% set retour=0 %}

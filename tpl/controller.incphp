@@ -82,7 +82,7 @@ class ¤Entity¤Controller extends AbstractController
                                     $fichierName = $fileUploader->upload($data[$num][key($data[$num])], "¤entity¤/$name/" . key($data[$num]),¤filter¤);
                                     $functionE = 'set' . ucfirst(key($data[$num]));
                                     $fiche->$functionE($fichierName);
-                                    $function = 'add' . end($class);
+                                     $function = 'add' . substr(\ucfirst($name),0,-1);
                                     $¤entity¤->$function($fiche);
                                 }
                             }

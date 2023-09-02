@@ -325,6 +325,7 @@ class CrudMakeTypeCommand extends Command
                                 0,
                                 'targetEntity'
                             );
+                            if (!$target) dd('pas de target entity pour ' . $name);
                             $EntityTarget = array_reverse(explode('\\', $target))[0];
                             $uses[] = 'use Symfony\Bridge\Doctrine\Form\Type\EntityType;';
                             $uses[] = 'use Doctrine\ORM\EntityRepository;';
