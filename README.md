@@ -269,6 +269,13 @@ Utiliser MANYTOMANY ou ONETOMANY
 
 `color`
 
+# ajout d'une class à la ligne de form
+
+Par emple deux col-6
+`* row_attr:{"class":"col-6"}`
+et
+`* row_attr:{"class":"col-6 m-0 p-0 mb-3"}`
+
 # ID
 
 ## Fortement conseillé:

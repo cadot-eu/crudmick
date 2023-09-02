@@ -23,7 +23,7 @@
 			<div class="col-4 my-auto">
 				{% if pagination.getTotalItemCount>0 %}
 					<strong class="ms-auto text-bold">
-						{{ pagination.getTotalItemCount ~'trouvés'}}
+						{{ pagination.getTotalItemCount ~' trouvés'}}
 					</strong>
 				{% endif %}
 			</div>
@@ -62,7 +62,7 @@
 				<tbody class="sortable">
 					{% for ¤Entity¤ in pagination %}
 						{# if hide #}
-						{% if ¤hide¤ %}
+						{% if (¤hide¤)  or is_granted('ROLE_SUPERADMIN') %}
 							<tr
 								data-num="{{¤Entity¤.id }}" class="text-center">
 								{# if viewerurl2 #}

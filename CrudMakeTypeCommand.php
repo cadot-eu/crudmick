@@ -190,9 +190,12 @@ class CrudMakeTypeCommand extends Command
                             $tempadds = "\n->add('$name',EmailType::class,";
                             break;
                         case 'siret':
+                        case 'iban':
+                        case 'bic':
                             $attrs['data-controller'] = 'base--mask';
-                            $attrs['data-base--mask-alias-value'] = 'siret';
+                            $attrs['data-base--mask-alias-value'] = $select;
                             break;
+
                         case 'hidden':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';

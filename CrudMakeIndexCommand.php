@@ -369,11 +369,11 @@ class CrudMakeIndexCommand extends Command
             }
         }
         /* --------------------------------- hide BY ID -------------------------------- */
-        $ifhide = 'true';
+        $ifhide = [];
         if ((isset($IDOptions['hide']))) {
             foreach ($IDOptions['hide'] as $champ => $hide) {
                 $userhide = "$Entity." . $champ . "  != '" . $hide . "'";
-                $ifhide .= " and " . $userhide;
+                $ifhide[] = $userhide;
             }
         }
 
@@ -384,7 +384,7 @@ class CrudMakeIndexCommand extends Command
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileIndex), [
             'userhide' => isset($userhide) ? $userhide : '',
-            'hide' => $ifhide,
+            'hide' => implode(' and ', $ifhide),
             'rows' => implode("\n", $td),
             'entete' => implode("\n", $th),
             'entity' => $entity,
