@@ -383,8 +383,8 @@ class CrudMakeIndexCommand extends Command
             throw new Exception("Le fichier " . $fileIndex . " est introuvable", 1);
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileIndex), [
-            'userhide' => isset($userhide) ? $userhide : '',
-            'hide' => implode(' and ', $ifhide),
+            'userhide' => isset($userhide) ? $userhide : 'true',
+            'hide' => isset($ifhide) ? "true" : ('(' . implode(' and ', $ifhide) . ') or is_granted(\'ROLE_SUPERADMIN\')'),
             'rows' => implode("\n", $td),
             'entete' => implode("\n", $th),
             'entity' => $entity,

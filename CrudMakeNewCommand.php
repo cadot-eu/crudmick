@@ -81,6 +81,7 @@ class CrudMakeNewCommand extends Command
             }
             if (!isset($options['tpl']['no_form']) && $name != 'id') {
                 foreach ($docs->getSelect($name) as $select) {
+                    $resattrs = isset($options['resattrs']) ? $options['resattrs'] : '';
                     switch ($select) {
                         case 'fichier':
                         case 'image':
