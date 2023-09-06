@@ -83,19 +83,13 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/toutsupprimer', name: '¤entity¤_alldelete', methods: ['POST'])]
     public function alldelete(Request $request, EntityManagerInterface $em): Response
     {
-        foreach ($em->getRepository(¤Entity¤::class)->findAll() as $item) {
-            if ($this->isCsrfTokenValid('delete_¤Entity¤', $request->request->get('_alltoken')) and $item->getDeletedAt() != null) {
-                $em->remove($item);
-            }
-        }
-        $em->flush();
-        $this->addFlash('success', 'La corbeille est vidée');
-        return $this->redirectToRoute('¤entity¤_deleted', [], Response::HTTP_SEE_OTHER);
+       return $this->toolsentityController->toutSupprimer('¤entity¤',$request, $this->em);
     }
     /* ------------------------------------SHOW-------------------------------------- */
     #[Route('/{id}', name: '¤entity¤_show', methods: ['GET'])]
     public function show(¤Entity¤ $¤entity¤): Response
     {
+          return $this->toolsentityController->voir($¤entity¤);
     }
     
     /*------------------------CLONE------------------------*/
@@ -114,29 +108,9 @@ class ¤Entity¤Controller extends ToolsController
 
     /*------------------------DELETE------------------------*/
     #[Route('/{id}', name: '¤entity¤_delete', methods: ['POST'])]
-    public function delete(Request $request, ¤Entity¤ $¤entity¤, EntityManagerInterface $em): Response
+    public function delete(Request $request, ¤Entity¤ $¤entity¤,$id): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $¤entity¤->getId(), $request->request->get('_token')) ¤delete¤) {
-            if ($request->request->has('delete_delete')) {
-                $em->remove($¤entity¤);
-                $this->addFlash('success', '¤entity¤ supprimé');
-            }
-            if ($request->request->has('delete_restore'))
-            {
-             $this->addFlash('success', '¤entity¤ restauré');
-                $¤entity¤->setDeletedAt(null);
-            }
-            if ($request->request->has('delete_softdelete'))
-            {
-            $this->addFlash('success', '¤entity¤ mis à la corbeille');
-                $¤entity¤->setDeletedAt(new DateTime('now'));
-            }
-            $em->flush();
-        }
-        if ($request->request->has('delete_softdelete'))
-            return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
-        else
-            return $this->redirectToRoute('¤entity¤_deleted', [], Response::HTTP_SEE_OTHER);
+        return $this->toolsentityController->supprimer($¤entity¤,$id, $request, $this->em);
     }
     
 }

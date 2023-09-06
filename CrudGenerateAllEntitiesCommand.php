@@ -26,12 +26,12 @@ class CrudGenerateAllEntitiesCommand extends Command
             InputOption::VALUE_NONE,
             'Pour afficher les commentaires'
         )
-        ->addOption(
-            'speed',
-            's',
-            InputOption::VALUE_NONE,
-            'Pour passer le formatage des fichiers'
-        );
+            ->addOption(
+                'speed',
+                's',
+                InputOption::VALUE_NONE,
+                'Pour passer le formatage des fichiers'
+            );
     }
 
     protected function execute(
@@ -42,15 +42,13 @@ class CrudGenerateAllEntitiesCommand extends Command
         /* -------------------------------- constant -------------------------------- */
         $tabentities = [];
         //secure $this->entity in minus
-        foreach (
-            array_diff(scandir('src/Entity'), [
-                '..',
-                '.',
-                'ResetPasswordRequest.php',
-                'base',
-            ])
-            as $entity
-        ) {
+        foreach (array_diff(scandir('src/Entity'), [
+            '..',
+            '.',
+            'ResetPasswordRequest.php',
+            'base',
+        ])
+            as $entity) {
             $tentitie = false;
             $entity = strTolower(substr($entity, 0, -strlen('.php')));
             $Finput = new ArrayInput([
@@ -74,6 +72,9 @@ class CrudGenerateAllEntitiesCommand extends Command
                     $new->run($Finput, $output);
 
                     $index = $this->getApplication()->find('crud:generate:index');
+                    $index->run($Finput, $output);
+
+                    $index = $this->getApplication()->find('crud:generate:voir');
                     $index->run($Finput, $output);
 
                     $controller = $this->getApplication()->find(

@@ -35,7 +35,7 @@
 				<form method="post" action="{{ path('¤entity¤_alldelete') }}" class="text-end">
 					<input type="hidden" name="_alltoken" value="{{ csrf_token('delete_¤Entity¤') }}"/>
 
-					<button class="btn btn-xs btn-danger " title="supprimer TOUT définitivement" onclick="return confirm('Etes-vous sûr de vouloir effacer TOUS ces items?');">
+					<button class="btn btn-xs btn-danger " title="supprimer TOUT définitivement" data-controller="base--confirm" data-base--confirm-action-value="supprimer TOUT définitivement">
 						<i class="icone bi bi-trash text-red"></i>
 					</button>
 
@@ -89,7 +89,7 @@
 													<button class="btn btn-xs btn-warning" title="restaurer" name="delete_restore" value="1">
 														<i class="icone bi bi-life-preserver"></i>
 													</button>
-													<button class="btn btn-xs btn-danger" title="supprimer définitivement" onclick="return confirm('Etes-vous sûr de vouloir effacer cet item?');" name="delete_delete" value="1">
+													<button class="btn btn-xs btn-danger" title="supprimer définitivement" data-controller="base--confirm" name="delete_delete" data-base--confirm-action-value="supprimer définitivement le n°={{¤Entity¤.id}}" value="1">
 														<i class="icone bi bi-trash"></i>
 													</button>
 												{% else %}
