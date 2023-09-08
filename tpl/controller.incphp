@@ -43,7 +43,7 @@ class ¤Entity¤Controller extends ToolsController
      #[Route('/champ/{id}/{type}/{valeur}/{one}', name: '¤entity¤_champ', methods: ['GET'])]
     public function champ(¤Entity¤Repository $¤entity¤Repository,¤Entity¤ $¤entity¤, $type = null, $valeur = null,$one=false): Response
     {
-       return $this->toolsentityController->champ($¤entity¤, $type, $valeur, $one, $this->em);
+       return $this->toolsentityController->champ($¤entity¤, $type, $valeur, $one);
     }
     
     /*------------------------NEW/EDIT------------------------*/
@@ -58,7 +58,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/toutsupprimer', name: '¤entity¤_alldelete', methods: ['POST'])]
     public function alldelete(Request $request): Response
     {
-       return $this->toolsentityController->toutSupprimer('¤entity¤',$request, $this->em);
+       return $this->toolsentityController->toutSupprimer('¤entity¤',$request);
     }
     /* ------------------------------------SHOW-------------------------------------- */
     #[Route('/{id}', name: '¤entity¤_show', methods: ['GET'])]
@@ -71,14 +71,14 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/{id}/clone', name: '¤entity¤_clone', methods: ['GET', 'POST'])]
     public function clone(¤Entity¤ $¤entity¤c): Response
     {
-       return $this->toolsentityController->clone($¤entity¤c, $this->em);
+       return $this->toolsentityController->clone($¤entity¤c);
     }
 
     /*------------------------DELETE------------------------*/
     #[Route('/{id}', name: '¤entity¤_delete', methods: ['POST'])]
     public function delete(Request $request, ¤Entity¤ $¤entity¤,$id): Response
     {
-        return $this->toolsentityController->supprimer($¤entity¤,$id, $request, $this->em);
+        return $this->toolsentityController->supprimer($¤entity¤,$id, $request);
     }
     
 }
