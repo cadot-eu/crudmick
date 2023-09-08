@@ -43,45 +43,20 @@ class ¤Entity¤Controller extends ToolsController
      #[Route('/champ/{id}/{type}/{valeur}/{one}', name: '¤entity¤_champ', methods: ['GET'])]
     public function champ(¤Entity¤Repository $¤entity¤Repository,¤Entity¤ $¤entity¤, $type = null, $valeur = null,$one=false): Response
     {
-        if($one){
-         foreach($¤entity¤Repository->findAll() as $objet)
-            {
-                $method = 'set' . $type;
-                $objet->$method(false);
-                $this->em->persist($objet);
-            }
-            }
-        if ($type) {
-            $method = 'set' . $type;
-            $¤entity¤->$method($valeur);
-            $this->em->persist($¤entity¤);
-            $this->em->flush();
-            }
-        return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
+       return $this->toolsentityController->champ($¤entity¤, $type, $valeur, $one, $this->em);
     }
     
     /*------------------------NEW/EDIT------------------------*/
     #[Route('/new', name: '¤entity¤_new', methods: ['GET', 'POST'])]
     #[Route('/{id}/edit', name: '¤entity¤_edit', methods: ['GET', 'POST'])]
-    public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null, EntityManagerInterface $em): Response
+    public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null): Response
     {
-        if (!$¤entity¤) $¤entity¤ = new ¤Entity¤(); //for new
-        $form = $this->createForm(¤Entity¤Type::class, $¤entity¤,[¤formoptions¤]);
-        if ($this->processFiles($form, $request, $¤entity¤)) {
-            $this->em->persist($¤entity¤);
-            $this->em->flush();
-            return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
-        }
-        
-        return $this->render('¤sdir¤/¤entity¤/new.html.twig', [
-            '¤entity¤' => $¤entity¤,
-            'form' => $form->createView()
-        ]);
+        return $this->toolsentityController->newEdit($¤entity¤?:'¤entity¤',$request,$this->em);
     }
      
     /*------------------------ALL DELETE------------------------*/
     #[Route('/toutsupprimer', name: '¤entity¤_alldelete', methods: ['POST'])]
-    public function alldelete(Request $request, EntityManagerInterface $em): Response
+    public function alldelete(Request $request): Response
     {
        return $this->toolsentityController->toutSupprimer('¤entity¤',$request, $this->em);
     }
@@ -94,16 +69,9 @@ class ¤Entity¤Controller extends ToolsController
     
     /*------------------------CLONE------------------------*/
     #[Route('/{id}/clone', name: '¤entity¤_clone', methods: ['GET', 'POST'])]
-    public function clone(¤Entity¤ $¤entity¤c, EntityManagerInterface $em): Response
+    public function clone(¤Entity¤ $¤entity¤c): Response
     {
-        $¤entity¤ = clone $¤entity¤c;
-        if (property_exists($¤entity¤, 'slug')) {
-            $¤entity¤->setslug($¤entity¤c->getslug().uniqid());
-        }
-         $¤entity¤=ToolsHelper::SetSlug($em, $¤entity¤);
-        $em->persist($¤entity¤);
-        $em->flush();
-        return $this->redirectToRoute('¤entity¤_index', [], Response::HTTP_SEE_OTHER);
+       return $this->toolsentityController->clone($¤entity¤c, $this->em);
     }
 
     /*------------------------DELETE------------------------*/

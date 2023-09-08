@@ -10,24 +10,27 @@
 		</h1>
 	</div>
 	<div class="row">
+		{% set noshow='¤noshow¤'|split(',') %}
 		{% for method in methods %}
-			<div class="col-4 mb-2">
-				<div class="card">
-					<div class="card-body">
-						<h2 class="card-title">{{method.nom|capitalize}}</h3>
-						<p class="card-text">
-							{% if method.valeur|TBisArray %}
-								{{method.valeur|json_encode}}
-							{% elseif method.valeur|TBisDate %}
-								{{method.valeur|date('d/m/Y à H:i')}}
-							{% else %}
-								{{method.valeur}}
-							{% endif %}
+			{% if method.nom not in noshow %}
+				<div class="col-4 mb-2">
+					<div class="card">
+						<div class="card-body">
+							<h2 class="card-title">{{method.nom|capitalize}}</h3>
+							<p class="card-text">
+								{% if method.valeur|TBisArray %}
+									{{method.valeur|json_encode}}
+								{% elseif method.valeur|TBisDate %}
+									{{method.valeur|date('d/m/Y à H:i')}}
+								{% else %}
+									{{method.valeur}}
+								{% endif %}
 
-						</p>
+							</p>
+						</div>
 					</div>
 				</div>
-			</div>
+			{% endif %}
 		{% endfor %}
 	</div>
 {% endblock %}

@@ -215,7 +215,7 @@ class CrudMakeIndexCommand extends Command
                                 {% else %}
                                     {% set numr=retour+1 %}
                                 {% endif %}
-                                <a href=\"{{path('" . $entity . "_champ',{'id':$Entity.id,'type':'" . $name . "','valeur':choice_" . $name . "|keys[numr]})}}\" style='font-size:2rem;'  title='{{ choice_" . $name . "|keys[retour]}}'> {{ choice_" . $name . "[ choice_" . $name . "|keys[retour]]$twig|raw}}</a>\n";
+                                <a href=\"{{path('" . $entity . "_champ',{'id':$Entity.id,'type':'" . $name . "','valeur':choice_" . $name . "|keys[numr]})}}\" style='font-size:2rem;' data-turbo=\"false\"  title='{{ choice_" . $name . "|keys[retour]}}'> {{ choice_" . $name . "[ choice_" . $name . "|keys[retour]]$twig|raw}}</a>\n";
                             break;
                         case 'onechoiceenplace':
                             $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '';

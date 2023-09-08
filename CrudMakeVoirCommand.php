@@ -58,7 +58,7 @@ class CrudMakeVoirCommand extends Command
             switch ($IDOption) {
             }
         }
-
+        $noshows = [];
         foreach ($docs->getOptions() as $name => $options) {
             //timetrait
             if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created'])) {
@@ -77,6 +77,8 @@ class CrudMakeVoirCommand extends Command
                             }
                     }
                 }
+            } else {
+                $noshows[] = $name;
             }
         }
         //open model controller
@@ -88,6 +90,7 @@ class CrudMakeVoirCommand extends Command
             'entity' => $entity,
             'Entity' => $Entity,
             'extends' => '/admin/base.html.twig',
+            'noshow' => implode(',', $noshows)
         ));
         CrudInitCommand::updateFile("templates/" . $entity . '/voir.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
 
