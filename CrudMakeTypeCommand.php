@@ -168,7 +168,7 @@ class CrudMakeTypeCommand extends Command
                         case 'fichier':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\FileType;';
-                            $tempadds = "\n->add('$name',FileType::class,";
+                            $tempadds = "->add('$name',FileType::class,";
                             $attrs['accept'] =
                                 'image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/zip,application/x-rar-compressed,application/x-7z-compressed';
                             $opts['mapped'] = false;
@@ -178,7 +178,7 @@ class CrudMakeTypeCommand extends Command
                         case 'image':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\FileType;';
-                            $tempadds = "\n->add('$name',FileType::class,";
+                            $tempadds = "->add('$name',FileType::class,";
                             $attrs['accept'] = $select . '/*';
                             $opts['mapped'] = false;
                             $opts['required'] = false;
@@ -187,7 +187,7 @@ class CrudMakeTypeCommand extends Command
                         case 'email':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\EmailType;';
-                            $tempadds = "\n->add('$name',EmailType::class,";
+                            $tempadds = "->add('$name',EmailType::class,";
                             break;
                         case 'siret':
                         case 'iban':
@@ -198,13 +198,13 @@ class CrudMakeTypeCommand extends Command
                         case 'id':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                            $tempadds = "\n->add('$name',null,";
+                            $tempadds = "->add('$name',HiddenType::class,";
                             $rowattrs['class'] = 'd-none ';
                             break;
                         case 'hidden':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                            $tempadds = "\n->add('$name',HiddenType::class,";
+                            $tempadds = "->add('$name',HiddenType::class,";
                             break;
                         case 'hiddenroot':
                             $rowattrs['class'] = 'd-none mb-3 text-warning';
@@ -233,19 +233,19 @@ class CrudMakeTypeCommand extends Command
                         case 'money':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\MoneyType;';
-                            $tempadds = "\n->add('$name',MoneyType::class,";
+                            $tempadds = "->add('$name',MoneyType::class,";
                             break;
                         case 'nombre':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\NumberType;';
-                            $tempadds = "\n->add('$name',NumberType::class,";
+                            $tempadds = "->add('$name',NumberType::class,";
                             break;
                         case 'telephone':
                             $attrs['data-controller'] = 'base--mask';
                             $attrs['data-base--mask-alias-value'] = 'telephone';
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\TelType;';
-                            $tempadds = "\n->add('$name',TelType::class,";
+                            $tempadds = "->add('$name',TelType::class,";
                             break;
                         case 'collection':
                             $uses[] =
@@ -296,7 +296,7 @@ class CrudMakeTypeCommand extends Command
                         case 'choiceenplace':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\ChoiceType;';
-                            $tempadds = "\n->add('$name',ChoiceType::class,";
+                            $tempadds = "->add('$name',ChoiceType::class,";
                             //on garde que ce qui est affiché
                             $finalOpts = [];
                             foreach ($options['options'] as $key => $value) {
@@ -307,7 +307,7 @@ class CrudMakeTypeCommand extends Command
                         case 'color':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\ColorType;';
-                            $tempadds = "\n->add('$name',ColorType::class,";
+                            $tempadds = "->add('$name',ColorType::class,";
                             break;
                         case 'entity':
                             //get name of entity
@@ -317,7 +317,7 @@ class CrudMakeTypeCommand extends Command
                             $uses[] = 'use Symfony\Bridge\Doctrine\Form\Type\EntityType;';
                             $uses[] = 'use Doctrine\ORM\EntityRepository;';
                             $uses[] = "use $target;";
-                            $tempadds = "\n->add('$name',EntityType::class,";
+                            $tempadds = "->add('$name',EntityType::class,";
                             $opts['class'] = "¤$EntityTarget::class¤";
                             $opts['query_builder'] = "¤function (EntityRepository \$er)";
                             if ($options) {
@@ -357,7 +357,7 @@ class CrudMakeTypeCommand extends Command
                             if ($name == 'createdAt') {
                                 $uses[] =
                                     'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                                $tempadds = "\n->add('$name',HiddenType::class,";
+                                $tempadds = "->add('$name',HiddenType::class,";
                             }
                             if (
                                 $name == 'updatedAt' &&
@@ -403,28 +403,20 @@ class CrudMakeTypeCommand extends Command
                     }
                 }
                 //surcharge opt
-                $finalOpts = isset($options['opt'])
-                    ? array_merge($options['opt'], $opts)
-                    : $opts;
-                $finalAttrs = isset($options['attr'])
-                    ? array_merge($options['attr'], $attrs)
-                    : $attrs;
-                $finalRowAttrs = isset($options['row_attr'])
-                    ? array_merge($options['row_attr'], $rowattrs)
-                    : $rowattrs;
+                $finalOpts = (isset($options['opt']) and $options['opt'] != []) ? array_merge($options['opt'], $opts) : $opts;
+                $finalAttrs = isset($options['attr']) ? array_merge($options['attr'], $attrs) : $attrs;
+                $finalRowAttrs = isset($options['row_attr']) ? array_merge($options['row_attr'], $rowattrs) : $rowattrs;
                 //add attrs in opt
-                dd($finalAttrs);
-                if (isset($finalAttrs)) {
+                if (isset($finalAttrs) and $finalAttrs != []) {
                     $finalOpts['attr'] = $finalAttrs;
                 }
                 //add row_attrs in opt
                 if (isset($finalAttrs) and $finalRowAttrs != []) {
                     $finalOpts['row_attr'] = $finalRowAttrs;
                 }
-                $tempopts = isset($finalOpts)
-                    ? CrudInitCommand::ArrayToKeyValue($finalOpts)
-                    : '';
-
+                $tempopts = (isset($finalOpts) and $finalOpts != []) ? CrudInitCommand::ArrayToKeyValue($finalOpts) : '';
+                if (substr($tempadds, -6) == ',null,' and $tempopts == '')
+                    $tempadds = substr($tempadds, 0, -6);
                 $chaine = $tempadds . "\n" . $tempopts . ')';
                 //on modifie les champs qui doivent ne pas être entre apostrophe
                 $pos = 0;
@@ -437,7 +429,7 @@ class CrudMakeTypeCommand extends Command
                     $tab[] = $ligne;
                 }
 
-                $adds[] = implode("\n", $tab);
+                $adds[] = implode("", $tab);
             }
         }
         $Lvars = '';
