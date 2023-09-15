@@ -413,6 +413,7 @@ class CrudMakeTypeCommand extends Command
                     ? array_merge($options['row_attr'], $rowattrs)
                     : $rowattrs;
                 //add attrs in opt
+                dd($finalAttrs);
                 if (isset($finalAttrs)) {
                     $finalOpts['attr'] = $finalAttrs;
                 }
