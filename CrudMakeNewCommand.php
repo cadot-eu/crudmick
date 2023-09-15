@@ -79,7 +79,7 @@ class CrudMakeNewCommand extends Command
             if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
                 continue;
             }
-            if (!isset($options['tpl']['no_form']) && $name != 'id') {
+            if (!isset($options['tpl']['no_form'])) {
                 foreach ($docs->getSelect($name) as $select) {
                     $resattrs = isset($options['resattrs']) ? $options['resattrs'] : '';
                     switch ($select) {
@@ -122,10 +122,12 @@ class CrudMakeNewCommand extends Command
                             $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
                             break;
                         case 'collection':
-                            //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js
+                            //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js si on a des fichiers
                             $rows[] = '
                         {% for item in  form.vars.value.' . $name . '  %}
+                        {% if item.fichier is defined %}
 			<input type="hidden" champ="' . $entity . '_' . $name . '_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
+                        {% endif %}
 		{% endfor %}
         {{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
                             break;

@@ -91,7 +91,7 @@ class CrudMakeTypeCommand extends Command
             if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
                 continue;
             }
-            if (!isset($options['tpl']['no_form']) && $name != 'id') {
+            if (!isset($options['tpl']['no_form'])) {
                 foreach ($docs->getSelect($name) as $select) {
                     switch ($select) {
                         case 'json':
@@ -195,7 +195,12 @@ class CrudMakeTypeCommand extends Command
                             $attrs['data-controller'] = 'base--mask';
                             $attrs['data-base--mask-alias-value'] = $select;
                             break;
-
+                        case 'id':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                            $tempadds = "\n->add('$name',null,";
+                            $rowattrs['class'] = 'd-none ';
+                            break;
                         case 'hidden':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
@@ -252,8 +257,6 @@ class CrudMakeTypeCommand extends Command
                             $uses[] = 'use App\Form\\' . $target . 'Type;';
                             $tempadds = "->add('$name',CollectionType::class,";
                             $opts['entry_type!'] = $target . 'Type::class';
-                            //$attrs['data-controller'] = 'base--collection';
-                            //$attrs['data-base--collection-valeurs-value!'] = 'json_encode($' . $name . ')';
                             //for entry use xtra for add option
                             if (isset($options['xtra'])) {
                                 foreach ($options['xtra'] as $clef => $entry) {
@@ -261,22 +264,7 @@ class CrudMakeTypeCommand extends Command
                                 }
                             }
                             $opts['by_reference'] = false;
-                            $boucle[] =
-                                '$' .
-                                $name .
-                                ' = [];' .
-                                "\n" .
-                                'foreach ($AtypeOption[\'data\']->get' .
-                                ucfirst($name) .
-                                '() as $prod) {' .
-                                "\n" .
-                                '$' .
-                                $name .
-                                '[] = $prod->get' .
-                                ucfirst($options['options']['field']) .
-                                '();' .
-                                "\n" .
-                                '}';
+                            $boucle[] = '$' . $name . ' = [];' . "\n" . 'foreach ($AtypeOption[\'data\']->get' . ucfirst($name) . '() as $prod) {' . "\n" . '$' . $name . '[] = $prod->get' . ucfirst($options['options']['field']) . '();' . "\n" . '}';
                             break;
                         case 'choice':
                             $uses[] =
@@ -323,11 +311,7 @@ class CrudMakeTypeCommand extends Command
                             break;
                         case 'entity':
                             //get name of entity
-                            $target = $docs->getArgumentOfAttributes(
-                                $name,
-                                0,
-                                'targetEntity'
-                            );
+                            $target = $docs->getArgumentOfAttributes($name, 0, 'targetEntity');
                             if (!$target) dd('pas de target entity pour ' . $name);
                             $EntityTarget = array_reverse(explode('\\', $target))[0];
                             $uses[] = 'use Symfony\Bridge\Doctrine\Form\Type\EntityType;';
@@ -335,15 +319,14 @@ class CrudMakeTypeCommand extends Command
                             $uses[] = "use $target;";
                             $tempadds = "\n->add('$name',EntityType::class,";
                             $opts['class'] = "¤$EntityTarget::class¤";
-                            $opts['query_builder'] = "¤
-                        function (EntityRepository \$er)";
+                            $opts['query_builder'] = "¤function (EntityRepository \$er)";
                             if ($options) {
                                 $opts['query_builder'] .= 'use ($AtypeOption) ';
                             }
-
+                            $ordre = isset($options['ordre']) ? key($options['ordre']) : 'id';
                             $opts['query_builder'] .= "{
                             return \$er->createQueryBuilder(\"u\")
-                                ->orderBy(\"u.nom\", \"ASC\")
+                                ->orderBy(\"u.$ordre\", \"ASC\")
                                 ->andwhere(\"u.deletedAt IS  NULL\")";
                             if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
                                 $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
@@ -352,32 +335,17 @@ class CrudMakeTypeCommand extends Command
                             }
                             //si on a un formoptions
                             if (isset($options['form'])) {
-                                $opts['query_builder'] .=
-                                    "\n->andWhere(\"u." .
-                                    $options['form'] .
-                                    " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" .
-                                    $options['form'] .
-                                    "_id\"])";
+                                $opts['query_builder'] .= "\n->andWhere(\"u." . $options['form'] . " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" . $options['form'] . "_id\"])";
                                 $vars[$options['form'] . '_id'] = 0;
-                                $resolver[] =
-                                    '$resolver->setAllowedTypes(\'' .
-                                    $options['form'] .
-                                    '_id\', \'int\')';
+                                $resolver[] = '$resolver->setAllowedTypes(\'' . $options['form'] . '_id\', \'int\')';
                             }
                             $opts['query_builder'] .= ";}
                         ¤";
-                            if (
-                                substr($docs->getAttributes($name)[0]->getName(), -4) ==
-                                'Many'
-                            ) {
+                            if (substr($docs->getAttributes($name)[0]->getName(), -4) == 'Many') {
                                 $opts['multiple'] = true;
                             }
                             if (!$options['label']) {
-                                die('Il manque l\'option label pour le champ ' .
-                                    $name .
-                                    ' de l\'entité ' .
-                                    $entity .
-                                    "\n");
+                                die('Il manque l\'option label pour le champ ' . $name . ' de l\'entité ' . $entity . "\n");
                             } else {
                                 $opts['choice_label'] = key($options['label']);
                             }

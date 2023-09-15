@@ -147,6 +147,7 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
 ```php
    * entity
      * label:nom
+     * ordre:nom
      * OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"}
      * OPT:{"required":false}
      * OPT:{ "group_by":"§function($choice, $key, $value) {return $choice->getSuperCategorie()->getNom();}§"}
@@ -273,7 +274,7 @@ Utiliser MANYTOMANY ou ONETOMANY
 # ajout d'une class à la ligne de form
 
 Par emple deux col-6
-`* row_attr:{"class":"col-6"}`
+`* row_attr:{"class":"col-6 m-0"}`
 et
 `* row_attr:{"class":"col-6 m-0 p-0 mb-3"}`
 
