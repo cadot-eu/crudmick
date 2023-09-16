@@ -417,7 +417,8 @@ class CrudMakeTypeCommand extends Command
                 $tempopts = (isset($finalOpts) and $finalOpts != []) ? CrudInitCommand::ArrayToKeyValue($finalOpts) : '';
                 if (substr($tempadds, -6) == ',null,' and $tempopts == '')
                     $tempadds = substr($tempadds, 0, -6);
-                $chaine = $tempadds . "\n" . $tempopts . ')';
+                $chaine = $tempadds .  $tempopts . ')';
+
                 //on modifie les champs qui doivent ne pas être entre apostrophe
                 $pos = 0;
                 foreach (explode("\n", $chaine) as $key => $ligne) {
@@ -429,7 +430,7 @@ class CrudMakeTypeCommand extends Command
                     $tab[] = $ligne;
                 }
 
-                $adds[] = implode("", $tab);
+                $adds[] = implode("\n", $tab);
             }
         }
         $Lvars = '';
