@@ -161,6 +161,11 @@ class CrudMakeIndexCommand extends Command
                             }
                             $td[] = " <td class='my-auto " . implode(' ', $class) . "' >" . $chaine . "";
                             break;
+                        case 'money':
+                            $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  "|number_format(2,'.',' ')";
+                            $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : "|number_format(2,'.',' ')";
+                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
+                            break;
                         case 'integer':
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
@@ -183,7 +188,7 @@ class CrudMakeIndexCommand extends Command
                             $twig = isset($options['twig']) ?  $twig : '|striptags|u.truncate(40, \'...\')';
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name?$Entity.$name.$champ" . '}}"> {{' . "$Entity.$name? $Entity.$name.$champ$twig" . '}}' . "\n";
                             break;
-                        case 'money':
+
                         case 'choice':
                             $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";

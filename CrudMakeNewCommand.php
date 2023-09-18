@@ -79,6 +79,9 @@ class CrudMakeNewCommand extends Command
             if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
                 continue;
             }
+            if ($name == 'id' && !isset($IDOptions['tpl']['id'])) {
+                continue;
+            }
             if (!isset($options['tpl']['no_form'])) {
                 foreach ($docs->getSelect($name) as $select) {
                     $resattrs = isset($options['resattrs']) ? $options['resattrs'] : '';

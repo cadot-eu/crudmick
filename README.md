@@ -152,6 +152,7 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
      * OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"}
      * OPT:{"required":false}
      * OPT:{ "group_by":"§function($choice, $key, $value) {return $choice->getSuperCategorie()->getNom();}§"}
+     * OPT:{"multiple":true,"expanded":true}
      * tpl:no_index
 ```
 

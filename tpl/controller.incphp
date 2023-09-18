@@ -51,7 +51,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/{id}/edit', name: '¤entity¤_edit', methods: ['GET', 'POST'])]
     public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null): Response
     {
-        return $this->toolsentityController->newEdit($¤entity¤?:'¤entity¤',$request,$this->em);
+        return $this->toolsentityController->newEdit($¤entity¤?:'¤entity¤',$request);
     }
      
     /*------------------------ALL DELETE------------------------*/
