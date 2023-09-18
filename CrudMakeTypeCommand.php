@@ -234,6 +234,9 @@ class CrudMakeTypeCommand extends Command
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\MoneyType;';
                             $tempadds = "->add('$name',MoneyType::class,";
+                            $attrs['step'] = '0.01';
+                            $opts['currency'] = 'EUR';
+                            $opts['html5'] = true;
                             break;
                         case 'nombre':
                             $uses[] =
