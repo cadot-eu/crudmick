@@ -41,6 +41,7 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 - no_index (n'affiche pas dans index)
 - no_form (n'affiche pas dans new et edit)
 - no_show (na'affiche pas dans voir)
+- id (affiche l'id en caché)
 
 # Textarea => TEXTE
 

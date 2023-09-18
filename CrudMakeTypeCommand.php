@@ -91,6 +91,9 @@ class CrudMakeTypeCommand extends Command
             if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
                 continue;
             }
+            if ($name == 'id' && !isset($IDOptions['tpl']['id'])) {
+                continue;
+            }
             if (!isset($options['tpl']['no_form'])) {
                 foreach ($docs->getSelect($name) as $select) {
                     switch ($select) {
@@ -196,10 +199,12 @@ class CrudMakeTypeCommand extends Command
                             $attrs['data-base--mask-alias-value'] = $select;
                             break;
                         case 'id':
-                            $uses[] =
-                                'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                            $tempadds = "->add('$name',HiddenType::class,";
-                            $rowattrs['class'] = 'd-none ';
+                            if (isset($IDOptions['tpl']['id'])) {
+                                $uses[] =
+                                    'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                                $tempadds = "->add('$name',HiddenType::class,";
+                                $rowattrs['class'] = 'd-none ';
+                            }
                             break;
                         case 'hidden':
                             $uses[] =
@@ -433,7 +438,7 @@ class CrudMakeTypeCommand extends Command
                     $tab[] = $ligne;
                 }
 
-                $adds[] = implode("\n", $tab);
+                $adds[] = implode("", $tab);
             }
         }
         $Lvars = '';
@@ -446,7 +451,7 @@ class CrudMakeTypeCommand extends Command
             'Entity' => $Entity,
             'extends' => '/admin/base.html.twig',
             'sdir' => '',
-            'adds' => ' $builder' . implode("\n", $adds),
+            'adds' => ' $builder' . "\n" . implode("\n", $adds),
             'uses' => implode("\n", array_unique($uses)),
             'vars' => isset($Lvars) ? $Lvars : '',
             'resolver' => isset($resolver) ? implode("\n,", $resolver) : '',

@@ -143,6 +143,7 @@ class CrudMakeIndexCommand extends Command
                         case 'string':
                         case 'readonlyroot':
                         case 'email':
+                        case 'id':
                             $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
                             $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
