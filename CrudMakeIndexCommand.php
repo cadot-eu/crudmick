@@ -391,6 +391,13 @@ class CrudMakeIndexCommand extends Command
                 $ifhide[] = $userhide;
             }
         }
+        /* -------------------------- création des actions -------------------------- */
+        $actions = [];
+        if (isset($IDOptions['actions'])) {
+            foreach ($IDOptions['actions'] as $key => $action) {
+                $actions[] = "<a class='btn btn-xs btn-primary'   data-turbo='false' title='" . $key . "' href='{{ path('" . $action['route'] . "', {'id': " . $Entity . ".id }) }}'><i class='icone icone bi bi-" . $action["icon"] . "'></i></a>";
+            }
+        }
 
         //open model controller
         $fileIndex = __DIR__ . '/tpl/index.html.twig';
@@ -411,7 +418,8 @@ class CrudMakeIndexCommand extends Command
             'no_access_deleted' => !isset($IDOptions['tpl']['no_action_deleted']) ? "true" : "false",
             'tableauChoice' => $tableauChoice,
             'viewerUrl' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['url'] : "false",
-            'viewerChamp' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['champ'] : "false"
+            'viewerChamp' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['champ'] : "false",
+            'actions' => isset($actions) ? implode("\n", $actions) : ''
         ]);
         /** @var string $html */
         CrudInitCommand::updateFile("templates/" . $entity . '/index.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
