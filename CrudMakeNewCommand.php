@@ -3,6 +3,7 @@
 namespace App\Command\crudmick;
 
 use App\Service\base\ParserDocblock;
+use PhpParser\Node\Stmt\Break_;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -144,6 +145,8 @@ class CrudMakeNewCommand extends Command
                             {{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
                             </div>
                         </div>';
+                            break;
+                        case 'drag':
                             break;
 
                         default: {

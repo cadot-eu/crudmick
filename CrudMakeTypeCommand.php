@@ -131,6 +131,15 @@ class CrudMakeTypeCommand extends Command
                             $attrs['data-base--stars-max-value'] = $stars;
 
                             break;
+                        case 'drag':
+                            $attrs['data-controller'] = 'base--drag';
+                            if (\in_array('entity', $docs->getSelect($name))) {
+                                $target = $docs->getArgumentOfAttributes($name, 0, 'targetEntity');
+                                $EntityTarget = array_reverse(explode('\\', $target))[0];
+                                $attrs['data-base--drag-entity-value'] = $EntityTarget;
+                            } else
+                                $attrs['data-base--drag-entity-value'] = $entity;
+                            break;
                         case 'vide':
                             $attrs['data-controller'] = 'base--suneditor';
                             $attrs['data-base--suneditor-toolbar-value'] = 'vide';

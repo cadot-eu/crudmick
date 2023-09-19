@@ -317,7 +317,8 @@ class CrudMakeIndexCommand extends Command
 
                             break;
 
-
+                        case 'drag':
+                            break;
                         default:
                             if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {
                                 $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
