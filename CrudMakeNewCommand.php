@@ -145,7 +145,9 @@ class CrudMakeNewCommand extends Command
                             </label>
                             <div class="col-sm-10" >
                             {{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
+                            <div id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form_help(form.' . $name . ')}}</div>
                             </div>
+                            
                         </div>';
                             break;
                         case 'drag':
