@@ -412,7 +412,7 @@ class CrudMakeIndexCommand extends Command
             'entity' => $entity,
             'Entity' => $Entity,
             'no_action_edit' => isset($resaction) ? implode("\n", $resaction) : '',
-            'order' => $order ?: 'false',
+            'order' => !isset($IDOptions['tpl']['search']) && $order ?: 'false',
             'extends' => '/admin/base.html.twig',
             'no_action_add' => !isset($IDOptions['tpl']['no_action_add']) ? "true" : "false",
             'no_access_deleted' => !isset($IDOptions['tpl']['no_action_deleted']) ? "true" : "false",

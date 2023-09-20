@@ -292,6 +292,7 @@ et
 - tpl:no_created
 - tpl:no_deleted
 - tpl:no_updated
+- tpl:search //laisse la recherche malgré l'ordre
 - nocrud //pour protéger une entité des modificatio nde crudmick
 - no_action_edit //pour ne pas afficher le bouton éditer
 - no_access_deleted //pour ne pas voir les accès pour supprimer
