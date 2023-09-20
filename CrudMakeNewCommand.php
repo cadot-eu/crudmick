@@ -122,6 +122,8 @@ class CrudMakeNewCommand extends Command
                             //     break;
                         case 'pass':
                             break;
+                        case 'hidden':
+                            break;
                         case 'invisible':
                             $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
                             break;
