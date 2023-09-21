@@ -148,19 +148,7 @@ class CrudMakeIndexCommand extends Command
                             $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                             break;
-                        case 'order':
-                            $order = true;
-                            $actions = ['top' => 'arrow-bar-up', 'up' => 'arrow-up', 'down' => 'arrow-down', 'bottom' => 'arrow-bar-down'];
-                            $chaine = '';
-                            foreach ($actions as $action => $icon) {
-                                $chaine .= "
-                                    <a href=\"{{path('change_ordre',{'entity':'$Entity','id':$Entity.id,'ordre':'$Entity.$name','action':'$action'})}}\" class=\"text-decoration-none\" title=\"$action\">
-                                    <i class=\"bi bi-$icon\"></i>
-                                    </a>
-                                ";
-                            }
-                            $td[] = " <td class='my-auto " . implode(' ', $class) . "' >" . $chaine . "";
-                            break;
+
                         case 'money':
                             $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  "|number_format(2,'.',' ')";
                             $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : "|number_format(2,'.',' ')";

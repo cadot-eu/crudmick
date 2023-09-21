@@ -300,7 +300,7 @@ et
 - no_action_add // pour ne pas voir le bouton ajouter
 - slug:champ (sinon généré automatiquement)
 - onlytype (crud mick génère que le fichier form, sert pour les entités que l'on veut juste mettre dans une connection par exmple)
-- ordre:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}, order est nécessaire
+- ordre:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}, order est nécessaire ajouter tpl:drag pour autoriser drag and drop
 - filter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
 - ajouter des boutons à l'index `* actions:{"edit":{"route":"menu_export","id":"Menu.id","icon":"filetype-pdf"}}`
 
