@@ -51,8 +51,8 @@ class CrudMakeIndexCommand extends Command
         $docs = new ParserDocblock($entity);
         //gestion de l'ordertrait
         $order = false;
-        if (isset($docs->getOptions()['ordre']))
-            if (\array_values($docs->getOptions()['ordre'])[0] == 'order') $order = true;
+        if (isset($docs->getOptions()['id']['ordre']))
+            $order = true;
 
         foreach ($docs->getOptions() as $name => $options) {
             if (isset($options['opt']['label'])) {
@@ -391,6 +391,7 @@ class CrudMakeIndexCommand extends Command
                 $ifhide[] = $userhide;
             }
         }
+
         /* -------------------------- création des actions -------------------------- */
         $actions = [];
         if (isset($IDOptions['actions'])) {
@@ -410,6 +411,7 @@ class CrudMakeIndexCommand extends Command
             'rows' => implode("\n", $td),
             'entete' => implode("\n", $th),
             'entity' => $entity,
+            'drag' => isset($IDOptions['tpl']['drag']) ? 'data-controller="base--drag" data-base--drag-query-value="tr" data-base--drag-entity-value="' . $entity . '"' : '',
             'Entity' => $Entity,
             'no_action_edit' => isset($resaction) ? implode("\n", $resaction) : '',
             'order' => !isset($IDOptions['tpl']['search']) && $order ?: 'false',

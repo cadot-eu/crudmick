@@ -28,6 +28,8 @@
 				{% endif %}
 			</div>
 			{# if order #}
+		{% else %}
+			<blockquote>Vous pouvez modifier l'ordre des lignes par un drag and drop</blockquote>
 		{% endif %}
 		{# if noaccess #}
 		{% if ¤no_access_deleted¤ %}
@@ -59,7 +61,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody class="sortable">
+				<tbody ¤drag¤>
 					{% for ¤Entity¤ in pagination %}
 						{# if hide #}
 						{% if (¤hide¤)  %}

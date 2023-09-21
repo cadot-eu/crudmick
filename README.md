@@ -42,6 +42,7 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 - no_form (n'affiche pas dans new et edit)
 - no_show (na'affiche pas dans voir)
 - id (affiche l'id en caché)
+- drag (pour déplacer les lignes dans index)
 
 # Textarea => TEXTE
 
@@ -299,7 +300,7 @@ et
 - no_action_add // pour ne pas voir le bouton ajouter
 - slug:champ (sinon généré automatiquement)
 - onlytype (crud mick génère que le fichier form, sert pour les entités que l'on veut juste mettre dans une connection par exmple)
-- order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}
+- order:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}, order est nécessaire
 - filter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
 - ajouter des boutons à l'index `* actions:{"edit":{"route":"menu_export","id":"Menu.id","icon":"filetype-pdf"}}`
 
