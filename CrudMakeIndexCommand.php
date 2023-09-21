@@ -318,6 +318,7 @@ class CrudMakeIndexCommand extends Command
                             break;
 
                         case 'drag':
+
                             break;
                         default:
                             if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {

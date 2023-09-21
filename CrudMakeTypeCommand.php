@@ -139,6 +139,7 @@ class CrudMakeTypeCommand extends Command
                                 $attrs['data-base--drag-entity-value'] = $EntityTarget;
                             } else
                                 $attrs['data-base--drag-entity-value'] = $entity;
+                            $attrs['data-base--drag-queryid-value'] = 'input.value';
                             break;
                         case 'vide':
                             $attrs['data-controller'] = 'base--suneditor';
