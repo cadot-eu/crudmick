@@ -113,7 +113,7 @@ class CrudMakeControllerCommand extends Command
             'Entity' => $Entity,
             'extends' => '/admin/base.html.twig',
             'paginator' => $paginator,
-            'limit' => isset($IDOptions['limit']) ? str_replace("'", "", 'if ($' . $entity . '->get' . ucfirst(str_replace(['=>', "'"], ['()!=', ""], key($IDOptions['limit']))) . ') {'  . '$this->addFlash("danger","Accès non autorisé");'  . 'return $this->redirectToRoute("' . $entity . '_index");' . '}') : null,
+            'limit' => isset($IDOptions['limit']) ? str_replace("'", "", 'if (isset($' . $entity . ') && $' . $entity . '->get' . ucfirst(str_replace(['=>', "'"], ['()!=', ""], key($IDOptions['limit']))) . ') {'  . '$this->addFlash("danger","Accès non autorisé");'  . 'return $this->redirectToRoute("' . $entity . '_index");' . '}') : null,
             'sdir' =>  '',
             'ssdir' => '',
             'search' => $search,
