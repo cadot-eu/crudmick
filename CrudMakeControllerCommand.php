@@ -89,14 +89,23 @@ class CrudMakeControllerCommand extends Command
         }
 
         $fields = isset($IDOptions['search']) ? array_key_first($IDOptions['search']) : "[" . "'" . implode("', '", \array_keys($docs->getAllAlias())) . "'" . "]";
+        $fields = 'fields:' . $fields;
+        /* ------------------------- on limite la recherche ------------------------- */
+        $limitSearch = null;
+        if (isset($IDOptions['limit'])) {
+            $limitSearch =  key($IDOptions['limit']);
+        }
+        /* -------------------- fin de la détection de limitation ------------------- */
+
         if (isset($IDOptions['ordre'])) {
-            $search = '$dql= $' . $entity . 'Repository->findby([\'deletedAt\'=>null],[\'ordre\'=>\'ASC\']);';
+            $limitVirgule = isset($limitSearch) ? ',' . $limitSearch : '';
+            $search = '$dql= $' . $entity . 'Repository->findby([\'deletedAt\'=>null' . $limitSearch . '],[\'ordre\'=>\'ASC\']);';
             $paginator = "1, 1000";
         } else {
-            $search = '$dql = $' . $entity . 'Repository->index($request->query->get(\'filterValue\', \'\'),' . $fields . ', $request->query->get(\'sort\'), $request->query->get(\'direction\'),false);';
+            $limitCrochets = isset($limitSearch) ? (',conditions:[' . $limitSearch . ']') : '';
+            $search = '$dql = $' . $entity . 'Repository->index(search:$request->query->get(\'filterValue\', \'\'),' . $fields . $limitCrochets . ', sort:$request->query->get(\'sort\'),direction:$request->query->get(\'direction\'),deleted:false);';
             $paginator = "\$request->query->getInt('page', 1)";
         }
-
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
             'partie' => "/admin//",
             'fieldslug' => $fieldslug,
@@ -104,6 +113,7 @@ class CrudMakeControllerCommand extends Command
             'Entity' => $Entity,
             'extends' => '/admin/base.html.twig',
             'paginator' => $paginator,
+            'limit' => isset($IDOptions['limit']) ? str_replace("'", "", 'if ($' . $entity . '->get' . ucfirst(str_replace(['=>', "'"], ['()!=', ""], key($IDOptions['limit']))) . ') {'  . '$this->addFlash("danger","Accès non autorisé");'  . 'return $this->redirectToRoute("' . $entity . '_index");' . '}') : null,
             'sdir' =>  '',
             'ssdir' => '',
             'search' => $search,

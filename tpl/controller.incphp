@@ -33,7 +33,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/deleted', name: '¤entity¤_deleted', methods: ['GET'])]
     public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
-         $dql = $¤entity¤Repository->index($request->query->get('filterValue', ''),¤fields¤, $request->query->get('sort', 'a.id'), $request->query->get('direction'),null,true);
+         $dql = $¤entity¤Repository->index(search:$request->query->get('filterValue', ''),¤fields¤, sort:$request->query->get('sort', 'a.id'),direction: $request->query->get('direction'),delted:null,etat:true);
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
         ]);
@@ -51,6 +51,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/{id}/edit', name: '¤entity¤_edit', methods: ['GET', 'POST'])]
     public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null): Response
     {
+        ¤limit¤
         return $this->toolsentityController->newEdit($¤entity¤?:'¤entity¤',$request);
     }
      
@@ -64,6 +65,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/{id}', name: '¤entity¤_show', methods: ['GET'])]
     public function show(¤Entity¤ $¤entity¤): Response
     {
+        ¤limit¤
           return $this->toolsentityController->voir($¤entity¤);
     }
     
@@ -71,6 +73,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/{id}/clone', name: '¤entity¤_clone', methods: ['GET', 'POST'])]
     public function clone(¤Entity¤ $¤entity¤c): Response
     {
+        ¤limit¤
        return $this->toolsentityController->clone($¤entity¤c);
     }
 
@@ -78,6 +81,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/{id}', name: '¤entity¤_delete', methods: ['POST'])]
     public function delete(Request $request, ¤Entity¤ $¤entity¤,$id): Response
     {
+        ¤limit¤
         return $this->toolsentityController->supprimer($¤entity¤,$id, $request);
     }
     

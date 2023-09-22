@@ -120,13 +120,16 @@ class CrudMakeNewCommand extends Command
                             //         $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . $resattrs . ',{"disabled":disabled}) }}' . "\n";
                             //     }
                             //     break;
+
                         case 'pass':
                             break;
                         case 'hidden':
+                            if (isset($options['value']))
+                                $rows[] = '{{ form_row(form.' . $name . ',{"attr":{\'value\':' . key($options['value']) . '}}) }}' . "\n";
                             break;
-                        case 'invisible':
-                            $rows[] = '{{ form_row(form.' . $name . $resattrs . ',{"attr":{\'hidden\':""}}) }}' . "\n";
-                            break;
+                            // case 'invisible':
+                            //     $rows[] = '{{ form_row(form.' . $name  . ',{"attr":{\'hidden\':""}}) }}' . "\n";
+                            //     break;
                         case 'collection':
                             //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js si on a des fichiers
                             $rows[] = '
@@ -154,8 +157,7 @@ class CrudMakeNewCommand extends Command
                             break;
 
                         default: {
-
-                                $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
+                                if (!isset($options['resattrs'])) $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
                                 $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
                             }
                     }

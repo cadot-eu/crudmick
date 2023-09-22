@@ -18,6 +18,7 @@ use CategoriesTrait;
 - SlugTrait: permet d'avoir un slug (il est généré à chaque enregistrement ou modif d'une entité. Pour une ancienne base on peut se servir de sc setslug), de plus le slug est peut être généré automatiquement (name,nom,titre,title,label ou id) si on indique pas de slugs
 - VerifedTrait: permet d'avoir un switch on/off dans index
 - VuesTrait: ne se voit nul part, sert à enregistrer le nombres de vues par exmple
+- UseridTrait: ajout un champ userid avec la valeur de l'user.id en cours
 
 
 Les traits sont interessants, c'est des bonnes base pour voir comment utiliser crudmick dedans.
@@ -303,6 +304,8 @@ et
 - ordre:ordre (champ de rangement) et ajouter OrdreTrait ou créer un champ int ex:* ORDRE:{"id":"DESC"}, order est nécessaire ajouter tpl:drag pour autoriser drag and drop
 - filter pour donner un filtre liip au envoie de fichier par les inupt file tpl:{"filter":"petitcarree"}
 - ajouter des boutons à l'index `* actions:{"edit":{"route":"menu_export","id":"Menu.id","icon":"filetype-pdf"}}`
+- limiter la recherche dans les controller `limit:'userid' => $this->getUser()->getId()` pour limiter les recherches si userid est égal à l'id de l'user e n cours (dans ce cas combiner avec useridtrait)
+
 
 ## Particulier
 

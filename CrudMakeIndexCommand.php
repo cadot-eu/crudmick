@@ -139,6 +139,7 @@ class CrudMakeIndexCommand extends Command
                         case 'normal':
                         case 'annonce':
                         case 'text':
+                        case 'hidden':
                         case 'siret':
                         case 'string':
                         case 'readonlyroot':
@@ -297,8 +298,6 @@ class CrudMakeIndexCommand extends Command
                             $td[] = '<td class="my-auto text-center' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> ' . '<i class="bi bi-zoom-in"></i>' . "\n";
                             break;
                         case 'pass':
-                        case 'hidden':
-                            break;
                         case 'datetime':
                             if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug']))
                                 $td[] .= "<td>{{ $Entity.$name is not empty ? $Entity.$name|date('d/m à H:i', 'Europe/Paris'):'---'}}";
