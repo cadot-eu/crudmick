@@ -33,7 +33,7 @@ class ¤Entity¤Controller extends ToolsController
     #[Route('/deleted', name: '¤entity¤_deleted', methods: ['GET'])]
     public function deleted(¤Entity¤Repository $¤entity¤Repository, Request $request, PaginatorInterface $paginator): Response
     {
-         $dql = $¤entity¤Repository->index(search:$request->query->get('filterValue', ''),¤fields¤, sort:$request->query->get('sort', 'a.id'),direction: $request->query->get('direction'),delted:null,etat:true);
+         $dql = $¤entity¤Repository->index(search:$request->query->get('filterValue', ''),¤fields¤, sort:$request->query->get('sort', 'a.id'),direction: $request->query->get('direction'),deleted:true);
         return $this->render('¤sdir¤/¤entity¤/index.html.twig', [
             'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
         ]);
