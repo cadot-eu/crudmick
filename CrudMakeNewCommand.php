@@ -155,10 +155,16 @@ class CrudMakeNewCommand extends Command
                             break;
                         case 'drag':
                             break;
-
+                        case 'timestampable':
+                            if ($name == 'updatedAt')
+                                $rows[] = '{{ form_row(form.' . $name . $resattrs . ",{'attr':{'value':date('now')|date('Y-m-d H:i:s')}}) }}" . "\n";
+                            break;
+                            $rows[] = '{{ form_row(form.' . $name . $resattrs . ",{'attr':{'value':date('now')|date('Y-m-d H:i:s')}}) }}" . "\n";
+                            break;
                         default: {
                                 if (!isset($options['resattrs'])) $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
                                 $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
+                                $output->writeln('- non géré dans makenew(' . $Entity . '.' . $name . '):' . $select);
                             }
                     }
                 }

@@ -377,10 +377,7 @@ class CrudMakeTypeCommand extends Command
                                     'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
                                 $tempadds = "->add('$name',HiddenType::class,";
                             }
-                            if (
-                                $name == 'updatedAt' &&
-                                !isset($IDOptions['tpl']['no_updated'])
-                            ) {
+                            if ($name == 'updatedAt' && !isset($IDOptions['tpl']['no_updated'])) {
                                 $uses[] =
                                     'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
                                 $opts['help'] =
