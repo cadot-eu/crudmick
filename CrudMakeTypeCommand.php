@@ -240,7 +240,9 @@ class CrudMakeTypeCommand extends Command
                             $vars['username'] = "''";
                             $resolver['hiddenroot'] =
                                 '$resolver->setAllowedTypes(\'username\', \'string\')';
-                            //mis le nom pour ne pas avoir de doublon
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                            $tempadds = "->add('$name',HiddenType::class,";
                             break;
                         case 'adresse':
                             $attrs['data-controller'] = 'base--adresse';
@@ -256,6 +258,7 @@ class CrudMakeTypeCommand extends Command
                         case 'nombre':
                             $uses[] =
                                 'use Symfony\Component\Form\Extension\Core\Type\NumberType;';
+                            $opts['html5'] = true;
                             $tempadds = "->add('$name',NumberType::class,";
                             break;
                         case 'telephone':
@@ -387,6 +390,10 @@ class CrudMakeTypeCommand extends Command
                             }
                             break;
                         case 'integer':
+                            $uses[] =
+                                'use Symfony\Component\Form\Extension\Core\Type\IntegerType;';
+                            $tempadds = "->add('$name',IntegerType::class,";
+                            break;
                         case 'string':
                             break;
                         case 'pass':

@@ -103,7 +103,7 @@ class CrudMakeControllerCommand extends Command
             $paginator = "1, 1000";
         } else {
             $limitCrochets = isset($limitSearch) ? (',conditions:[' . $limitSearch . ']') : '';
-            $search = '$dql = $' . $entity . 'Repository->index(search:$request->query->get(\'filterValue\', \'\'),' . $fields . $limitCrochets . ', sort:$request->query->get(\'sort\'),direction:$request->query->get(\'direction\'),deleted:false);';
+            $search = '$dql = $' . $entity . 'Repository->index(search:$request->query->get(\'filterValue\', \'\'),' . $fields . $limitCrochets . ', sort:$request->query->get(\'sort\',\'a.id\'),direction:$request->query->get(\'direction\',\'desc\'),deleted:false);';
             $paginator = "\$request->query->getInt('page', 1)";
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileController), [
