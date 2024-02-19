@@ -56,6 +56,7 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 - annonce
 - string
 - textarea
+- mini
 
 ```
 /**
@@ -69,6 +70,8 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 il est possible de modifier l'initialisation par
 
 `* options:{"init":{"height":200}}`
+ou
+`ATTR:{"data-base--suneditor-height-value":"100"}`s
 
 Suneditor est en cours de finition
 
