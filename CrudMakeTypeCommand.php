@@ -96,6 +96,9 @@ class CrudMakeTypeCommand extends Command
             }
             if (!isset($options['tpl']['no_form'])) {
                 foreach ($docs->getSelect($name) as $select) {
+                    $null = $docs->getArgumentOfAttributes($name, 0, 'nullable');
+                    if ($null)
+                        $opts['required'] = false;
                     switch ($select) {
                         case 'json':
                             $transform[] =

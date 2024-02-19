@@ -20,7 +20,6 @@ use CategoriesTrait;
 - VuesTrait: ne se voit nul part, sert à enregistrer le nombres de vues par exmple
 - UseridTrait: ajout un champ userid avec la valeur de l'user.id en cours
 
-
 Les traits sont interessants, c'est des bonnes base pour voir comment utiliser crudmick dedans.
 
 # pour tous les champs
@@ -37,6 +36,7 @@ Exemple pour [entité](https://symfony.com/doc/current/reference/forms/types/ent
 IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par exemple dans password il met l'option first_option="Mot de passe" si tu veux le changer il te suffit de mettre OPT:{"first_option":"Un super password"}
 
 ## TPL (template)
+
 - no_created
 - no_updated
 - no_index (n'affiche pas dans index)
@@ -50,10 +50,21 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 - vide
 - simple
 - simplelanguage
-- normal possibilité d'ajouter un filtre 
+- normal possibilité d'ajouter un filtre
 `* attr:{"data-base--suneditor-upload-value":"article/hd"}` pour choisir un répertoire de destination pour les images  (pas obligatoire)
 - full
 - annonce
+- string
+- textarea
+
+```
+/**
+  * attr:{"data-controller" : "base--suneditor"}
+  * attr:{"data-base--suneditor-toolbar-value": "§$AtypeOption[\"data\"]->getTypevaleur()§"}
+  ou
+  attr:{"data-base--suneditor-toolbar-value": "normal"}
+  */
+```
 
 il est possible de modifier l'initialisation par
 
@@ -63,7 +74,7 @@ Suneditor est en cours de finition
 
 # JSON =>ARRAY/JSON
 
-quand tu chois array avec sc m:e, en fait il te cré un array. Donc pour gérer ça en json
+quand tu choisis array avec sc m:e, en fait il te cré un array. Donc pour gérer ça en json
 
 ` *json `
 
@@ -169,8 +180,6 @@ nb: toujours un problème sur le OneToMany qui n'enregistre pas.
      */
 ```
 
-
-
 # mot de passe => STRING
 
 [doc](https://symfony.com/doc/current/reference/forms/types/repeated.html)
@@ -182,7 +191,7 @@ Crudmick, affiche deux inputs et oblige à ce que les mots de passe soit identiq
 
 [doc](https://symfony.com/doc/current/reference/forms/types/file.html)
 
-`* fichier `
+`* fichier`
 
 Crudmick met d'office les extensions de fichiers les plus classiques comme possible.
 Il ajoute également un lien quand on clique sur le nom du fichier dans index (limité à 50 caractères)
@@ -204,7 +213,7 @@ Il ajoute également un lien quand on clique sur le nom du fichier dans index (l
 
 # cache un champ pour tout le monde sauf pour le superadmin
 
-Utilise le stimulus hiddenroot et se sert de l'email m@cadot.eu
+Utilise le stimulus hiddenroot et se sert de l'email <m@cadot.eu>
 
 ```php
 *hiddenroot
@@ -213,7 +222,7 @@ Utilise le stimulus hiddenroot et se sert de l'email m@cadot.eu
 
 # affiche en lecture seule sauf pour root
 
-Utilise le stimulus readonlyroot et se sert de l'email m@cadot.eu*
+Utilise le stimulus readonlyroot et se sert de l'email <m@cadot.eu>*
 
 ```php
 *readonlyroot
@@ -241,7 +250,8 @@ Utilise le stimulus readonlyroot et se sert de l'email m@cadot.eu*
 [doc](https://symfony.com/doc/current/reference/forms/types/tel.html)
 
 ajouter
-#[Assert\Regex(pattern: '/^(\+33|0)[1-9](\d{2}){4}$/', message: 'Le numéro de téléphone doit être au format +33 ou 0 suivi de 9 chiffres')]
+
+# [Assert\Regex(pattern: '/^(\+33|0)[1-9](\d{2}){4}$/', message: 'Le numéro de téléphone doit être au format +33 ou 0 suivi de 9 chiffres')]
 
 `telephone`
 
@@ -253,6 +263,7 @@ ajouter
 * image 
 * tpl:index_FileImage (miniature) ou index_FileImageNom (minature et nom) sinon retourne que le nom de fichier
 ```
+
 Crudmick met d'office les extensions de images les plus classiques comme possible.(image/*)
 
 # permettre d'ajouter ou supprimer une entité dans une autre (collection)
@@ -284,11 +295,11 @@ et
 
 # ID
 
-## Fortement conseillé:
+## Fortement conseillé
 
 - search: pour donner les champs de recherche pour knp ex: *  SEARCH:['id','titre','article']
 
-## Optionnels:
+## Optionnels
 
 - hide:{"roles[0]":"ROLE_SUPERADMIN"} //cache sauf pour
 - tpl:no_created
@@ -306,7 +317,6 @@ et
 - ajouter des boutons à l'index `* actions:{"edit":{"route":"menu_export","id":"Menu.id","icon":"filetype-pdf"}}`
 - limiter la recherche dans les controller `limit:'userid' => $this->getUser()->getId()` pour limiter les recherches si userid est égal à l'id de l'user e n cours (dans ce cas combiner avec useridtrait)
 
-
 ## Particulier
 
 Créé un sélecteur sur une entité et copy la sélection dans le presse papier
@@ -319,7 +329,6 @@ Créé un sélecteur sur une entité et copy la sélection dans le presse papier
 * VIEWER:{"url":"/les-articles","champ":"slug"}
 ```
 
-
 ### Quelques exemples TWIG
 
 ```php
@@ -329,7 +338,7 @@ TWIG=u.truncate(8, '...')
 split('¤')[1]
 ```
 
-### un champ peut accéder à la valeur d'un autre champ 
+### un champ peut accéder à la valeur d'un autre champ
 
 par exemple pour que le champ suneditor toolbar value prennent la valeur du champ getTypenom
 
@@ -340,11 +349,10 @@ par exemple pour que le champ suneditor toolbar value prennent la valeur du cham
 
 ### Erreurs fréquentes
 
-- An invalid form control with name='' is not focusable est du à un champ qui est required et `hiddden ` ou  `display:none `, suneditor cache le champ et donc si il est required crè cette erreur. On peut utiliser `* OPT:{"required":false}`
+- An invalid form control with name='' is not focusable est du à un champ qui est required et `hiddden` ou  `display:none`, suneditor cache le champ et donc si il est required crè cette erreur. On peut utiliser `* OPT:{"required":false}`
 
 - `Warning: include(/app/vendor/composer/ ... ): Failed to open stream: No such file or directory`
 faire un `composer dump-autoload`cela réactualise les fichiers mémorisé par composer
-
 
 ### Slug
 
@@ -355,7 +363,7 @@ il est possible de choisir un champ en mettant dans l'id
 ### PASS
 
 Quand tu lances la génération par sc crud, tu peux avoir un message du genre "non géré ..." cela signifie que crudmick n'a rien fait pour ces valeurs. Cela permet de ne pas en oublier.
-Si tu veux lui dire de ne pas s'en occuper tu peux mettre 
+Si tu veux lui dire de ne pas s'en occuper tu peux mettre
 
 `* pass`
 
