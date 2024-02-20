@@ -182,7 +182,7 @@ class CrudMakeNewCommand extends Command
             throw new Exception("Le fichier " . $fileNew . " est introuvable", 1);
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileNew), array(
-            'form_rows' => implode("\n\n", $rows),
+            'form_rows' => '{% include("."templates/" . $entity . '/newForm.html.twig'.") %}',
             'entity' => $entity,
             'Entity' => $Entity,
             'viewerUrl' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['url'] : "false",
@@ -191,6 +191,7 @@ class CrudMakeNewCommand extends Command
             'sdir' => ''
         ));
         CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
+        \file_put_contents("templates/" . $entity . '/newForm.html.twig',implode("\n\n", $rows))
 
         return Command::SUCCESS;
     }
