@@ -86,6 +86,9 @@ class CrudMakeNewCommand extends Command
             if (!isset($options['tpl']['no_form'])) {
                 foreach ($docs->getSelect($name) as $select) {
                     $resattrs = isset($options['resattrs']) ? $options['resattrs'] : '';
+                    if (isset($options['tpl']['row'])) {
+                        $rows[] = '<div class="row">';
+                    }
                     switch ($select) {
                         case 'fichier':
                         case 'image':
@@ -166,6 +169,9 @@ class CrudMakeNewCommand extends Command
                                 $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
                                 $output->writeln('- non géré dans makenew(' . $Entity . '.' . $name . '):' . $select);
                             }
+                    }
+                    if (isset($options['tpl']['row'])) {
+                        $rows[] = '</div>';
                     }
                 }
             }

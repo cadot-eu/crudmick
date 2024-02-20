@@ -320,6 +320,10 @@ et
 - ajouter des boutons à l'index `* actions:{"edit":{"route":"menu_export","id":"Menu.id","icon":"filetype-pdf"}}`
 - limiter la recherche dans les controller `limit:'userid' => $this->getUser()->getId()` pour limiter les recherches si userid est égal à l'id de l'user e n cours (dans ce cas combiner avec useridtrait)
 
+### pour les options des propiétés d'entités
+
+- tpl:row
+
 ## Particulier
 
 Créé un sélecteur sur une entité et copy la sélection dans le presse papier
