@@ -348,16 +348,18 @@ class CrudMakeTypeCommand extends Command
                                 $opts['query_builder'] .= 'use ($AtypeOption) ';
                             }
                             $ordre = isset($options['ordre']) ? key($options['ordre']) : 'id';
-                            $opts['query_builder'] .= "{
-                            return \$er->createQueryBuilder(\"u\")
+                            $opts['query_builder'] .= "{";
+                            if (isset($options['predql'])) $opts['query_builder'] .= key($options['predql']);
+                            $opts['query_builder'] .= "   
+                            return \$er->createQueryBuilder(\"u\")" . (isset($options['dql']) ? key($options['dql']) : '') . "
                                 ->orderBy(\"u.$ordre\", \"ASC\")
-                                ->andwhere(\"u.deletedAt IS  NULL\")";
+                                ->andwhere(\"u.deletedAt IS  NULL\")" . (isset($options['andwhere']) ? "->andwhere(\"" . key($options['andwhere']) . "\")" : '');
                             if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
                                 $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
                                 $opts['query_builder'] .= "->andWhere(\"u." .
                                     $mappedby . " IS NULL\")";
                             }
-                            //si on a un formoptions
+                            //si on a un formoptions pour ne prendre que des utilisateurs par exemple
                             if (isset($options['form'])) {
                                 $opts['query_builder'] .= "\n->andWhere(\"u." . $options['form'] . " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" . $options['form'] . "_id\"])";
                                 $vars[$options['form'] . '_id'] = 0;

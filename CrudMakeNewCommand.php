@@ -85,10 +85,17 @@ class CrudMakeNewCommand extends Command
             }
             if (!isset($options['tpl']['no_form'])) {
                 foreach ($docs->getSelect($name) as $select) {
-                    $resattrs = isset($options['resattrs']) ? $options['resattrs'] : '';
+                    $resattrs = [];
+                    $resclass = [];
                     if (isset($options['tpl']['row'])) {
                         $rows[] = '<div class="row">';
                     }
+                    if (isset($options['row_attr']))
+                        foreach ($options['row_attr'] as $key => $value) {
+                            $resattrs[] = '"' . $key . '":"' . $value . '"';
+                            if (trim($key) == 'class')
+                                $resclass[] = $value;
+                        }
                     switch ($select) {
                         case 'fichier':
                         case 'image':
@@ -120,7 +127,7 @@ class CrudMakeNewCommand extends Command
 
                             // case 'readonlyroot': {
                             //         $resattrs = '';
-                            //         $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . $resattrs . ',{"disabled":disabled}) }}' . "\n";
+                            //         $rows[] = '{% if app.user.email=="m@cadot.eu" %}{% set disabled=false %}{% else %} {% set disabled=true %}{% endif %}{{ form_row(form.' . $name . ',{"disabled":disabled}) }}' . "\n";
                             //     }
                             //     break;
 
@@ -141,11 +148,11 @@ class CrudMakeNewCommand extends Command
 			<input type="hidden" champ="' . $entity . '_' . $name . '_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
                         {% endif %}
 		{% endfor %}
-        {{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
+        {{ form_row(form.' . $name . ') }}' . "\n";
                             break;
                         case 'entity':
                             $rows[] = '
-                        <div class="mb-3 row">
+                        <div class="mb-3 row ' . implode(',', $resclass) . '">
                             <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
                             {{form_label(form.' . $name . ')}}
                             </label>
@@ -160,13 +167,15 @@ class CrudMakeNewCommand extends Command
                             break;
                         case 'timestampable':
                             if ($name == 'updatedAt')
-                                $rows[] = '{{ form_row(form.' . $name . $resattrs . ",{'attr':{'value':date('now')|date('Y-m-d H:i:s')}}) }}" . "\n";
+                                $rows[] = '{{ form_row(form.' . $name . ",{'attr':{'value':date('now')|date('Y-m-d H:i:s')}}) }}" . "\n";
                             break;
-                            $rows[] = '{{ form_row(form.' . $name . $resattrs . ",{'attr':{'value':date('now')|date('Y-m-d H:i:s')}}) }}" . "\n";
+                            $rows[] = '{{ form_row(form.' . $name . ",{'attr':{'value':date('now')|date('Y-m-d H:i:s')}}) }}" . "\n";
                             break;
                         default: {
-                                if (!isset($options['resattrs'])) $resattrs = ''; // count($attrs) > 1 ? ", { 'attr':{\n" . implode(",\n", $attrs) . "\n}\n}" : '';
-                                $rows[] = '{{ form_row(form.' . $name . $resattrs . ') }}' . "\n";
+                                if (isset($options['tpl']['widget']))
+                                    $rows[] = '{{ form_widget(form.' . $name  . ',{attr:{' . implode(',', $resattrs) . '}}) }}' . "\n";
+                                else
+                                    $rows[] = '{{ form_row(form.' . $name . ') }}' . "\n";
                                 $output->writeln('- non géré dans makenew(' . $Entity . '.' . $name . '):' . $select);
                             }
                     }
@@ -182,7 +191,7 @@ class CrudMakeNewCommand extends Command
             throw new Exception("Le fichier " . $fileNew . " est introuvable", 1);
         }
         $html = CrudInitCommand::twigParser(file_get_contents($fileNew), array(
-            'form_rows' => '{% include("."templates/" . $entity . '/newForm.html.twig'.") %}',
+            'form_rows' => '{% include("' . "/" . $entity . '/newForm.html.twig' . '") %}',
             'entity' => $entity,
             'Entity' => $Entity,
             'viewerUrl' => isset($IDOptions['viewer']) ? $IDOptions['viewer']['url'] : "false",
@@ -191,7 +200,7 @@ class CrudMakeNewCommand extends Command
             'sdir' => ''
         ));
         CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
-        \file_put_contents("templates/" . $entity . '/newForm.html.twig',implode("\n\n", $rows))
+        \file_put_contents("templates/" . $entity . '/newForm.html.twig', implode("\n\n", $rows));
 
         return Command::SUCCESS;
     }

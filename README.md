@@ -168,8 +168,12 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
      * OPT:{"help":"multiple sélection et retirer une sélection avec CTRL + click"}
      * OPT:{"required":false}
      * OPT:{ "group_by":"§function($choice, $key, $value) {return $choice->getSuperCategorie()->getNom();}§"}
+     * andwhere:u.pov = 1
+     * dql:->leftJoin(\"u.redaction\", \"r\")->where(\"u.deletedAt IS NULL\")->andWhere(\"r.id IS NULL or u.id=\".$AtypeOption[\"data\"]->getEtape()->getId())
+     * opt:{"data":"§$AtypeOption[\"data\"]->getEtape()§"}
      * OPT:{"multiple":true,"expanded":true}
      * tpl:no_index
+     * 
 ```
 
 Dans l'autre entity pour afficher autre chose que l'id
@@ -401,3 +405,7 @@ il n'est pas possible de les intégrer dans la recherche, donc il faut mettre un
 ### pour retirer les guillemets
 
 utilisation de § exemple "§code sans guillement §"
+
+### pour l'erreur "pas de target entity pour ..."
+
+  ' #[ORM\ManyToOne(targetEntity: Meta::class, inversedBy: 'etapes')]'
