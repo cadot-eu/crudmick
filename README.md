@@ -69,11 +69,9 @@ IMPORTANT par ATTR ou OPT il est possible de modifier les choix de crudmick. Par
 
 il est possible de modifier l'initialisation par
 
-`* options:{"init":{"height":200}}`
-ou
-`ATTR:{"data-base--suneditor-height-value":"100"}`s
+`* ATTR:{"data-base--suneditor-init-value":"{\"defaultStyle\":\"font-size:22px;\",\"width\":\"100%\"}"}`
 
-Suneditor est en cours de finition
+`ATTR:{"data-base--suneditor-height-value":"100"}`
 
 # JSON =>ARRAY/JSON
 
@@ -176,9 +174,24 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
      * 
 ```
 
-Dans l'autre entity pour afficher autre chose que l'id
+exemple d'un manytoone qui fontionne (créé par un sc m:e ... et relation manytoone) avec ajout manuel du targetentity et rien dans le onetomany
 
-nb: toujours un problème sur le OneToMany qui n'enregistre pas.
+```
+ #[ORM\ManyToOne(inversedBy: 'intrigues', targetEntity: Categorie::class)]
+    /**
+     * entity
+     * label:nom
+     * ordre:nom
+     * OPT:{"required":false}
+     * OPT:{"expanded":false}
+     * tpl:no_index
+     */
+    private ?Categorie $categorie = null;
+    ```
+
+
+
+Dans l'autre entity pour afficher autre chose que l'id
 
 ```php
   #[ORM\ManyToOne(inversedBy: 'categories')]
@@ -344,7 +357,7 @@ Créé un sélecteur sur une entité et copy la sélection dans le presse papier
 
 ```php
 date('d/m à H:i', "Europe/Paris")
-TWIG=JsonPretty\|raw 
+TWIG=TBjsonpretty|raw 
 TWIG=u.truncate(8, '...')
 split('¤')[1]
 ```
