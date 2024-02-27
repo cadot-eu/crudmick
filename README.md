@@ -171,6 +171,7 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
      * opt:{"data":"§$AtypeOption[\"data\"]->getEtape()§"}
      * OPT:{"multiple":true,"expanded":true}
      * tpl:no_index
+     * tpl:inputselect
      * 
 ```
 
@@ -332,6 +333,7 @@ et
 - tpl:no_created
 - tpl:no_deleted
 - tpl:no_updated
+- tpl:inputselect //permet d'jouter un input au dessus d'un select d'entity
 - tpl:search //laisse la recherche malgré l'ordre
 - nocrud //pour protéger une entité des modificatio nde crudmick
 - no_action_edit //pour ne pas afficher le bouton éditer
