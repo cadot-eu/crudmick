@@ -151,17 +151,18 @@ class CrudMakeNewCommand extends Command
         {{ form_row(form.' . $name . ') }}' . "\n";
                             break;
                         case 'entity':
-                            $rows[] = '
+                            $temprows = '
                         <div class="mb-3 row ' . implode(',', $resclass) . '">
                             <label class="col-form-label col-sm-2" for="' . $entity . '_' . $name . '">
                             {{form_label(form.' . $name . ')}}
                             </label>
-                            <div class="col-sm-10" >
-                            {{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
+                            <div class="col-sm-10" >';
+                            if (isset($options['tpl']['inputselect'])) $temprows .= '<input class="form-control" type="text" id="nouvelle_' . $name . '" name="nouvelle_' . $name . '" placeholder="ajouter ' . $name . '">';
+                            $temprows .= '{{form_widget(form.' . $name . ',{"attr":{"class":"d-flex justify-content-between flex-wrap"} }) }}
                             <div id="' . $entity . '_' . $name . '_help" class="form-text mb-0 help-text">{{form_help(form.' . $name . ')}}</div>
                             </div>
-                            
                         </div>';
+                            $rows[] = $temprows;
                             break;
                         case 'drag':
                             break;
