@@ -354,11 +354,11 @@ class CrudMakeTypeCommand extends Command
                             return \$er->createQueryBuilder(\"u\")" . (isset($options['dql']) ? key($options['dql']) : '') . "
                                 ->orderBy(\"u.$ordre\", \"ASC\")
                                 ->andwhere(\"u.deletedAt IS  NULL\")" . (isset($options['andwhere']) ? "->andwhere(\"" . key($options['andwhere']) . "\")" : '');
-                            if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
-                                $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
-                                $opts['query_builder'] .= "->andWhere(\"u." .
-                                    $mappedby . " IS NULL\")";
-                            }
+                            // if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
+                            //     $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
+                            //     $opts['query_builder'] .= "->andWhere(\"u." .
+                            //         $mappedby . " IS NULL\")";
+                            // }
                             //si on a un formoptions pour ne prendre que des utilisateurs par exemple
                             if (isset($options['form'])) {
                                 $opts['query_builder'] .= "\n->andWhere(\"u." . $options['form'] . " = :user_id\")\n->setParameter(\"user_id\", \$AtypeOption[\"" . $options['form'] . "_id\"])";

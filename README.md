@@ -176,7 +176,7 @@ Utiliser MANYTOMANY ou MANYTOONE comme relation!!!!
 
 exemple d'un manytoone qui fontionne (créé par un sc m:e ... et relation manytoone) avec ajout manuel du targetentity et rien dans le onetomany
 
-```
+```php
  #[ORM\ManyToOne(inversedBy: 'intrigues', targetEntity: Categorie::class)]
     /**
      * entity
@@ -187,9 +187,16 @@ exemple d'un manytoone qui fontionne (créé par un sc m:e ... et relation manyt
      * tpl:no_index
      */
     private ?Categorie $categorie = null;
-    ```
+```
 
+Attention avec OneToMany, il faut ajouter dans le controller
 
+```php
+ foreach ($partie->getEtapes() as $etape) {
+                $etape->setPartie($partie);
+                $this->em->persist($etape);
+            }
+```
 
 Dans l'autre entity pour afficher autre chose que l'id
 
