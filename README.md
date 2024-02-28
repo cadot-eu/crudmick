@@ -302,9 +302,10 @@ Utiliser MANYTOMANY ou ONETOMANY
 
 ```php
 * collection
-* options:{"field":"label"}
+* options:{"field":"label"} //indique la propriété qui comporte le path (défaut:fichier).
 * xtra:{"allow_add":true,"prototype":true,"allow_delete":true,"entry_options!":"[\"label\"=>false]"}
 * tpl:no_index
+* tpl:hiddenCollection //pour demander d'ajouter un champ caché pour collection.js
 * opt:{"required":false}
 ```
 

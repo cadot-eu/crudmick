@@ -142,13 +142,17 @@ class CrudMakeNewCommand extends Command
                             //     break;
                         case 'collection':
                             //on utilise ce stratagème pour récupérer les noms de fichiers qui sont ensuite ajouter par collection.js si on a des fichiers
-                            $rows[] = '
-                        {% for item in  form.vars.value.' . $name . '  %}
-                        {% if item.fichier is defined %}
-			<input type="hidden" champ="' . $entity . '_' . $name . '_{{loop.index0}}_fichier" class="ex_valeurs_fichiers" value="{{item.fichier}}"/>
-                        {% endif %}
+                            $temprows = '{% for item in  form.vars.value.' . $name . '  %}';
+                            $field = isset($options['options']['field']) ? $options['options']['field'] : 'fichier';
+                            //on regarde si on a tpl:hiddenCollection
+                            if (isset($options['tpl']['hiddenCollection']))
+                                $temprows .= '{% if item.' . $field . ' is defined %}
+			<input type="hidden" champ="' . $entity . '_' . $name . '_{{loop.index0}}_' . $field . '" class="ex_valeurs_fichiers" value="{{item.' . $field . '}}"/>
+                        {% endif %}';
+                            $temprows .= '
 		{% endfor %}
         {{ form_row(form.' . $name . ') }}' . "\n";
+                            $rows[] = $temprows;
                             break;
                         case 'entity':
                             $temprows = '
