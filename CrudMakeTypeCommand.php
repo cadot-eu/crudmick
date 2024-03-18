@@ -20,6 +20,9 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Doctrine\ORM\EntityManagerInterface;
 
+use function Symfony\Component\Clock\now;
+use DateTime;
+
 #[
     AsCommand(
         name: 'crud:generate:type',
@@ -85,16 +88,16 @@ class CrudMakeTypeCommand extends Command
             $rowattrs = [];
             $tab = [];
             //timetrait
-            if ($name == 'createdAt' && isset($IDOptions['tpl']['no_created'])) {
+            if ($name == 'createdAt' && !isset($IDOptions['tpl']['created'])) {
                 continue;
             }
-            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
+            if ($name == 'deletedAt') {
                 continue;
             }
             if ($name == 'id' && !isset($IDOptions['tpl']['id'])) {
                 continue;
             }
-            if (!isset($options['tpl']['no_form'])) {
+            if (!isset($options['tpl']['no_form']) || in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
                 foreach ($docs->getSelect($name) as $select) {
                     $null = $docs->getArgumentOfAttributes($name, 0, 'nullable');
                     if ($null)
@@ -376,23 +379,25 @@ class CrudMakeTypeCommand extends Command
                                 $opts['choice_label'] = key($options['label']);
                             }
                             break;
-                        case 'generatedvalue': //id
+                        case 'generatedvalue':
                             break;
                         case 'datetime':
                             //$opts['widget'] = 'single_text';
-                            if ($name == 'createdAt') {
-                                $uses[] =
-                                    'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                                $tempadds = "->add('$name',HiddenType::class,";
-                            }
-                            // if ($name == 'updatedAt' && !isset($IDOptions['tpl']['no_updated'])) {
+                            // if ($name == 'createdAt' || $name == 'deletedAt') {
                             //     $uses[] =
                             //         'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                            //     $opts['help'] =
-                            //         "Vide pour la date et l'heure d'enregistrement";
-                            //     $adds[] =
-                            //         "->add('exupdatedAt',HiddenType::class,\narray ('mapped'=>false,'data'=>\$AtypeOption['data']->getupdatedAt()?\$AtypeOption['data']->getupdatedAt()->format('Y-m-d H:i:s'):null,\n'attr' =>\narray (\n),\n))";
+                            //     $tempadds = "->add('$name',HiddenType::class,";
                             // }
+                            if ($name == 'updatedAt') {
+                                if (isset($IDOptions['tpl']['no_updated'])) {
+                                    $uses[] =
+                                        'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
+                                    $tempadds = "->add('$name',HiddenType::class,";
+                                    unset($options['opt']);
+                                    unset($options['attr']);
+                                    $options['opt']['data'] = '';
+                                }
+                            }
                             break;
                         case 'integer':
                             $uses[] =
@@ -410,13 +415,10 @@ class CrudMakeTypeCommand extends Command
                     }
                 }
                 //gestion de certain par les noms de champs
-                if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt'])) {
+                if (!in_array($name, ['updatedAt'])) {
                     switch ($name) {
                         case 'slug':
                             $opts['required'] = false;
-                            // $uses[] =
-                            //  'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                            // $tempadds = "\n->add('$name',HiddenType::class,";
                             $attrs['data-controller'] = 'base--resetinput';
                             //ajoute l'id de l'entité
                             $opts['help'] = "Vide pour auto-génération du slug";
@@ -460,6 +462,7 @@ class CrudMakeTypeCommand extends Command
                 $adds[] = implode("", $tab);
             }
         }
+
         $Lvars = '';
         foreach ($vars as $key => $value) {
             $Lvars .= "'$key'" . '=>' . $value . ',';

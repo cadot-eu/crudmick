@@ -86,7 +86,7 @@ class CrudMakeIndexCommand extends Command
         EOT;
         }
         /* ------------------------- datetime avec knpsorted ------------------------ */
-        if (!isset($IDOptions['tpl']['no_created'])) {
+        if (isset($IDOptions['tpl']['created'])) {
             if ($order)
                 $th[] = "<th>créé";
             else $th[] = "<th {{pagination.isSorted('a.createdAt')?\"class='sorted'\"}}>
@@ -94,10 +94,9 @@ class CrudMakeIndexCommand extends Command
         }
         if (!isset($IDOptions['tpl']['no_updated'])) {
             if ($order) {
-                $th[] = "<th>Mis à jour";
+                $th[] = "<th>{{action=='deleted' ? 'effacé' : 'mis à jour'}}";
             } else {
-                $th[] = "<th {{pagination.isSorted('a.updatedAt')?\"class='sorted'\"}}>
-        {{ knp_pagination_sortable(pagination, 'mis à jour', 'a.updatedAt') }}";
+                $th[] = "{%if action=='deleted' %} <th {{pagination.isSorted('a.deletedAt')?\"class='sorted'\"}}>{{ knp_pagination_sortable(pagination, 'effacé', 'a.deleteddAt') }}{% else %}<th {{pagination.isSorted('a.updatedAt')?\"class='sorted'\"}}>{{ knp_pagination_sortable(pagination, 'mis à jour', 'a.updatedAt') }}{% endif %}";
             }
         }
         /* ---------------------------------- body ---------------------------------- */
@@ -156,7 +155,6 @@ class CrudMakeIndexCommand extends Command
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                             break;
                         case 'integer':
-                            $td[] = '<td class="my-auto ' . implode(' ', $class) . '" > {{' . "$Entity.$name$twig" . '}}' . "\n";
                             $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twig" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                             break;
 
@@ -299,8 +297,13 @@ class CrudMakeIndexCommand extends Command
                             break;
                         case 'pass':
                         case 'datetime':
-                            if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug']))
-                                $td[] .= "<td>{{ $Entity.$name is not empty ? $Entity.$name|date('d/m à H:i', 'Europe/Paris'):'---'}}";
+                            if (in_array($name, ['updatedAt', 'createdAt', 'deletedAt']))
+                                if (!isset($IDOptions['tpl']['no_' . substr($name, 0, -2)])) {
+                                    if ($name == 'createdAt' && isset($IDOptions['tpl'][substr($name, 0, -2)]) || $name != 'createdAt') {
+                                        $td[] = "{% if (action=='deleted' and '$name'=='deletedAt') or (action!='deleted' and '$name'!='deletedAt') %}<td>{{ $Entity.$name ? $Entity.$name|date('d/m à H:i', 'Europe/Paris'):'---'}}{% endif %}";
+                                    }
+                                }
+
 
                             break;
 
@@ -308,16 +311,13 @@ class CrudMakeIndexCommand extends Command
 
                             break;
                         default:
+
                             if (!in_array($name, ['updatedAt', 'createdAt', 'deletedAt', 'slug'])) {
                                 $output->writeln('- non géré dans makeindex(' . $Entity . '.' . $name . '):' . $select);
                                 $twig = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) :  '|striptags|u.truncate(40, \'...\')';
                                 $twigtitle = isset($options['twig']) ? '|' . implode('|', array_keys($options['twig'])) : '|striptags|u.truncate(200, \'...\')';
                                 $td[] = '<td class="my-auto ' . implode(' ', $class) . '" title="{{' . "$Entity.$name$twigtitle" . '}}"> {{' . "$Entity.$name$twig" . '}}' . "\n";
                             }
-
-
-
-
                             break;
                     }
                 }
@@ -359,18 +359,7 @@ class CrudMakeIndexCommand extends Command
         if (isset($IDOptions['tpl']['action_clone'])) {
             $resaction['clone'] =  "<a class='btn btn-xs btn-primary'  title='clone' href=\"{{ path('$entity" . "_clone" . "', {'id': $Entity.id }) }}\"><i class='icone  bi bi-file-earmark-plus'></i></a>";
         }
-        /* ----------------------------- timestamptable ----------------------------- */
-        //timestamptable
-        $timestamptable = ['createdAt', 'updatedAt', 'deletedAt'];
-        foreach ($timestamptable as $time) {
-            if (!isset($IDOptions['tpl']['no_' . substr($time, 0, -2)])) {
-                if ($time == 'deletedAt') {
-                    $td[] .= "{%if action==\"deleted\" %}<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris')}}{% endif %}";
-                } else {
-                    $td[] .= "<td>{{ $Entity.$time is not empty ? $Entity.$time|date('d/m à H:i', 'Europe/Paris'):'---'}}";
-                }
-            }
-        }
+
         /* --------------------------------- hide BY ID -------------------------------- */
         $ifhide = [];
         if ((isset($IDOptions['hide']))) {

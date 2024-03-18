@@ -170,7 +170,7 @@ class CrudMakeNewCommand extends Command
                             break;
                         case 'drag':
                             break;
-                        case 'timestampable':
+                        case 'datetime':
                             if ($name == 'updatedAt')
                                 $rows[] = '{{ form_row(form.' . $name . ",{'attr':{'value':date('now')|date('Y-m-d H:i:s')}}) }}" . "\n";
                             break;
