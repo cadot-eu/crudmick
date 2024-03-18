@@ -48,11 +48,12 @@ class ¤Entity¤Controller extends ToolsController
     
     /*------------------------NEW/EDIT------------------------*/
     #[Route('/new', name: '¤entity¤_new', methods: ['GET', 'POST'])]
+    #[Route('/new/{route}', name: '¤entity¤_new_route', methods: ['GET', 'POST'])]
     #[Route('/{id}/edit', name: '¤entity¤_edit', methods: ['GET', 'POST'])]
-    public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null): Response
+    public function new(Request $request, FileUploader $fileUploader, ¤Entity¤ $¤entity¤ = null, $route = null): Response
     {
         ¤limit¤
-        return $this->toolsentityController->newEdit($¤entity¤?:'¤entity¤',$request);
+        return $this->toolsentityController->newEdit($¤entity¤?:'¤entity¤',$request,$route);
     }
      
     /*------------------------ALL DELETE------------------------*/
@@ -79,10 +80,11 @@ class ¤Entity¤Controller extends ToolsController
 
     /*------------------------DELETE------------------------*/
     #[Route('/{id}', name: '¤entity¤_delete', methods: ['POST'])]
-    public function delete(Request $request, ¤Entity¤ $¤entity¤,$id): Response
+    #[Route('/{id}/{route}', name: '¤entity¤_delete_route', methods: ['POST'])]
+    public function delete(Request $request, ¤Entity¤ $¤entity¤,$id,$route=null): Response
     {
         ¤limit¤
-        return $this->toolsentityController->supprimer($¤entity¤,$id, $request);
+        return $this->toolsentityController->supprimer($¤entity¤,$id, $request,$route);
     }
     
 }

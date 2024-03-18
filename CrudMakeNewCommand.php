@@ -3,6 +3,7 @@
 namespace App\Command\crudmick;
 
 use App\Service\base\ParserDocblock;
+use App\Service\base\StringHelper;
 use PhpParser\Node\Stmt\Break_;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -205,7 +206,13 @@ class CrudMakeNewCommand extends Command
             'sdir' => ''
         ));
         CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
-        \file_put_contents("templates/" . $entity . '/newForm.html.twig', implode("\n\n", $rows));
+        //on boucle sur les form_row et form_widget pour ajouter une condition de contrôle .isRendered()
+        foreach ($rows as $key => $value) {
+            $nomfor = StringHelper::chaine_extract($value, "(", ")");
+            $chaine = str_replace('{{', '{{ ' . $nomfor . '.isRendered()?"":', $value);
+            $rows[$key] = $chaine;
+        }
+        \file_put_contents("templates/" . $entity . '/newForm.html.twig', implode("\n", $rows));
 
         return Command::SUCCESS;
     }
