@@ -91,6 +91,9 @@ class CrudMakeTypeCommand extends Command
             if ($name == 'createdAt' && !isset($IDOptions['tpl']['created'])) {
                 continue;
             }
+            if ($name == 'updatedAt' && isset($IDOptions['tpl']['no_updated'])) {
+                continue;
+            }
             if ($name == 'deletedAt') {
                 continue;
             }
@@ -388,16 +391,10 @@ class CrudMakeTypeCommand extends Command
                             //         'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
                             //     $tempadds = "->add('$name',HiddenType::class,";
                             // }
-                            if ($name == 'updatedAt') {
-                                if (isset($IDOptions['tpl']['no_updated'])) {
-                                    $uses[] =
-                                        'use Symfony\Component\Form\Extension\Core\Type\HiddenType;';
-                                    $tempadds = "->add('$name',HiddenType::class,";
-                                    unset($options['opt']);
-                                    unset($options['attr']);
-                                    $options['opt']['data'] = '';
-                                }
-                            }
+                            // if ($name == 'updatedAt') {
+                            //     if (isset($IDOptions['tpl']['no_updated'])) {
+                            //     }
+                            // }
                             break;
                         case 'integer':
                             $uses[] =
