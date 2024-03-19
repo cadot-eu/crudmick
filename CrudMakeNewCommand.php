@@ -208,7 +208,12 @@ class CrudMakeNewCommand extends Command
         CrudInitCommand::updateFile("templates/" . $entity . '/new.html.twig', $html, $input->getOption('comment'), $input->getOption('speed'));
         //on boucle sur les form_row et form_widget pour ajouter une condition de contrôle .isRendered()
         foreach ($rows as $key => $value) {
+            $reste = '';
             $nomfor = StringHelper::chaine_extract($value, "(", ")");
+            if (($posvirgule = strpos($nomfor, ',')) !== false) {
+                $reste = substr($nomfor, $posvirgule + 1);
+                $nomfor = substr($nomfor, 0, $posvirgule);
+            }
             $chaine = str_replace('{{', '{{ ' . $nomfor . '.isRendered()?"":', $value);
             $rows[$key] = $chaine;
         }
