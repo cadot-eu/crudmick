@@ -357,9 +357,12 @@ class CrudMakeTypeCommand extends Command
                             $opts['query_builder'] .= "{";
                             if (isset($options['predql'])) $opts['query_builder'] .= key($options['predql']);
                             $opts['query_builder'] .= "   
-                            return \$er->createQueryBuilder(\"u\")" . (isset($options['dql']) ? key($options['dql']) : '') . "
-                                ->orderBy(\"u.$ordre\", \"ASC\")
-                                ->andwhere(\"u.deletedAt IS  NULL\")" . (isset($options['andwhere']) ? "->andwhere(\"" . key($options['andwhere']) . "\")" : '');
+                            return \$er->createQueryBuilder(\"u\")" . (isset($options['dql']) ? key($options['dql']) : '');
+                            if (isset($options['dql']) && strpos(key($options['dql']), 'orderBy') === false)
+                                $opts['query_builder'] .= "->orderBy(\"u.$ordre\", \"ASC\")";
+                            if (isset($options['dql']) && strpos(key($options['dql']), 'deletedAt') === false)
+                                $opts['query_builder'] .= "->andwhere(\"u.deletedAt IS  NULL\")";
+                            $opts['query_builder'] .= (isset($options['andwhere']) ? "->andwhere(\"" . key($options['andwhere']) . "\")" : '');
                             // if (strpos($docs->getAttributes($name)[0]->getName(), 'OneToMany') !== false) {
                             //     $mappedby = ($docs->getAttributes($name)[0]->getArguments()['mappedBy']);
                             //     $opts['query_builder'] .= "->andWhere(\"u." .
